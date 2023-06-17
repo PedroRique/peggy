@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { Text, View, StyleSheet, ScrollView, TextInput } from "react-native";
 import { BiRightArrowAlt, BiMap } from "react-icons/bi";
 import NearbyProduct from "../components/NerbyProduct";
 
@@ -27,13 +27,15 @@ const CategoriesTitle = () => {
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <NearbyTitle />
-
-      <ScrollView style={styles.nearbyProducts} horizontal>
-        <View style={styles.nearbyProduct}>
-          <NearbyProduct />
-        </View>
-      </ScrollView>
+      <TextInput style={styles.input} placeholder="O que você precisa, Pedro?"/>
+      <View>
+        <NearbyTitle />
+        <ScrollView style={styles.nearbyProducts} horizontal>
+          <View style={styles.nearbyProduct}>
+            <NearbyProduct />
+          </View>
+        </ScrollView>
+      </View>
       <CategoriesTitle />
     </View>
   );
@@ -42,6 +44,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+  },
+  input: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
+    fontSize: 18,
+    marginVertical: 16,
   },
   titleContainer: {
     display: "flex",
