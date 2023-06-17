@@ -1,5 +1,6 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { BiRightArrowAlt, BiMap } from "react-icons/bi";
+import NearbyProduct from "../components/NerbyProduct";
 
 const NearbyTitle = () => {
   return (
@@ -27,7 +28,12 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <NearbyTitle />
-      
+
+      <ScrollView style={styles.nearbyProducts} horizontal>
+        <View style={styles.nearbyProduct}>
+          <NearbyProduct />
+        </View>
+      </ScrollView>
       <CategoriesTitle />
     </View>
   );
@@ -52,5 +58,12 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginLeft: 8,
+  },
+  nearbyProducts: {
+    paddingVertical: 16,
+    gap: 12,
+  },
+  nearbyProduct: {
+    marginRight: 12,
   },
 });
