@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 import { BiRightArrowAlt, BiMap } from "react-icons/bi";
 
-export default function HomeScreen() {
+const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
@@ -12,9 +12,31 @@ export default function HomeScreen() {
       <BiRightArrowAlt size={50} color="#FF9900" />
     </View>
   );
+};
+
+const CategoriesTitle = () => {
+  return (
+    <View style={styles.titleContainer}>
+      <Text style={styles.title}>Categorias</Text>
+      <BiRightArrowAlt size={50} color="#FF9900" />
+    </View>
+  );
+};
+
+export default function HomeScreen() {
+  return (
+    <View style={styles.container}>
+      <NearbyTitle />
+      
+      <CategoriesTitle />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
   titleContainer: {
     display: "flex",
     alignItems: "center",
@@ -27,7 +49,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
     marginLeft: 8,
   },
