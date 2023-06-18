@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, ScrollView, TextInput } from "react-native";
 import { BiRightArrowAlt, BiMap } from "react-icons/bi";
 import NearbyProduct from "../components/NerbyProduct";
+import CategoryBanner from "../components/CategoryBanner";
 
 const NearbyTitle = () => {
   return (
@@ -27,7 +28,10 @@ const CategoriesTitle = () => {
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <TextInput style={styles.input} placeholder="O que você precisa, Pedro?"/>
+      <TextInput
+        style={styles.input}
+        placeholder="O que você precisa, Pedro?"
+      />
       <View>
         <NearbyTitle />
         <ScrollView style={styles.nearbyProducts} horizontal>
@@ -36,7 +40,15 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
       </View>
-      <CategoriesTitle />
+
+      <View>
+        <CategoriesTitle />
+        <ScrollView style={styles.categoriesList}>
+          <View style={styles.category}>
+            <CategoryBanner />
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -46,7 +58,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 8,
     fontSize: 18,
@@ -75,4 +87,6 @@ const styles = StyleSheet.create({
   nearbyProduct: {
     marginRight: 12,
   },
+  categoriesList: {},
+  category: {},
 });
