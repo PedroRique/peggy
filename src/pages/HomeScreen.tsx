@@ -1,3 +1,4 @@
+import { FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import CategoryBanner from "../components/CategoryBanner";
 import NearbyProduct from "../components/NerbyProduct";
@@ -6,9 +7,11 @@ const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
+        <FontAwesome5 name="map-marker-alt" size={24} color="#00C2FF" />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
+      <FontAwesome5 name="arrow-right" size={32} color="#FF9900" />
     </View>
   );
 };

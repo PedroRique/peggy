@@ -1,3 +1,4 @@
+import { FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, View, ImageBackground, Text } from "react-native";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 
@@ -6,6 +7,7 @@ export default function NearbyProduct() {
     <View style={styles.productContainer}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.distanceContainer}>
+          <FontAwesome5 name="map-marker-alt" size={16} color="#00C2FF" />
           <Text style={styles.distance}>650m</Text>
         </View>
       </ImageBackground>
@@ -24,7 +26,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   distance: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    marginLeft: 4
   },
   product: {
     flex: 1,
