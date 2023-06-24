@@ -1,4 +1,3 @@
-import { BiMap } from "react-icons/bi";
 import { StyleSheet, View, ImageBackground, Text } from "react-native";
 const tech = require("../../assets/images/categories/tech.jpg");
 
@@ -7,7 +6,6 @@ export default function CategoryBanner() {
     <View style={styles.categoryContainer}>
       <ImageBackground style={styles.category} source={tech} resizeMode="cover">
         <View style={styles.distanceContainer}>
-          <BiMap color="#00C2FF" />
           <Text style={styles.distance}>Tecnologia</Text>
         </View>
       </ImageBackground>

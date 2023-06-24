@@ -1,4 +1,3 @@
-import { BiMap } from "react-icons/bi";
 import { StyleSheet, View, ImageBackground, Text } from "react-native";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 
@@ -7,7 +6,6 @@ export default function NearbyProduct() {
     <View style={styles.productContainer}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.distanceContainer}>
-          <BiMap color="#00C2FF" />
           <Text style={styles.distance}>650m</Text>
         </View>
       </ImageBackground>

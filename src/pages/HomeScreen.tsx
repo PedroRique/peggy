@@ -1,17 +1,14 @@
-import { Text, View, StyleSheet, ScrollView, TextInput } from "react-native";
-import { BiRightArrowAlt, BiMap } from "react-icons/bi";
-import NearbyProduct from "../components/NerbyProduct";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import CategoryBanner from "../components/CategoryBanner";
+import NearbyProduct from "../components/NerbyProduct";
 
 const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
-        <BiMap size={44} color="#00C2FF" />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
-      <BiRightArrowAlt size={50} color="#FF9900" />
     </View>
   );
 };
@@ -20,7 +17,6 @@ const CategoriesTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.title}>Categorias</Text>
-      <BiRightArrowAlt size={50} color="#FF9900" />
     </View>
   );
 };
