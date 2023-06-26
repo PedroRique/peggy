@@ -2,6 +2,7 @@ import * as React from "react";
 import HomeScreen from "./src/pages/HomeScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
+import ProductScreen from "./src/pages/ProductScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -9,6 +10,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Product"
+          component={ProductScreen}
+          options={{ title: "Produto" }}
+        />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
