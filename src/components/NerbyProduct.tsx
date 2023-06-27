@@ -1,17 +1,18 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { StyleSheet, View, ImageBackground, Text } from "react-native";
+import { StyleSheet, View, ImageBackground, Text, Pressable } from "react-native";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 
-export default function NearbyProduct() {
+export default function NearbyProduct(props: any) {
+  const { onPress } = props;
   return (
-    <View style={styles.productContainer}>
+    <Pressable style={styles.productContainer} onPress={() => onPress()}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.distanceContainer}>
           <FontAwesome5 name="map-marker-alt" size={16} color="#00C2FF" />
           <Text style={styles.distance}>650m</Text>
         </View>
       </ImageBackground>
-    </View>
+    </Pressable>
   );
 }
 

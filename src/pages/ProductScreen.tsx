@@ -1,20 +1,38 @@
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Button from "../components/Button";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from "../../App";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 const userAvatar = require("../../assets/images/users/lucas-maciel.png");
 
 export default function ProductScreen() {
+  const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.productInner}>
           <View style={styles.headerContainer}>
-            <FontAwesome5 name="arrow-left" size={32} color="#FFF" />
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <FontAwesome5 name="arrow-left" size={32} color="#FFF" />
+            </Pressable>
 
-            <BoldText style={styles.ratingText}>4.7</BoldText>
+            <BoldText style={styles.ratingText}>
+              4.7 <FontAwesome name="star" size={24} color="#FFF" />
+            </BoldText>
           </View>
         </View>
       </ImageBackground>

@@ -2,6 +2,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import CategoryBanner from "../components/CategoryBanner";
 import NearbyProduct from "../components/NerbyProduct";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from "../../App";
 
 const NearbyTitle = () => {
   return (
@@ -25,8 +27,11 @@ const CategoriesTitle = () => {
 };
 
 export default function HomeScreen() {
+  const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Vamos emprestar!</Text>
+      
       <TextInput
         style={styles.input}
         placeholder="O que você precisa, Pedro?"
@@ -35,7 +40,9 @@ export default function HomeScreen() {
         <NearbyTitle />
         <ScrollView style={styles.nearbyProducts} horizontal>
           <View style={styles.nearbyProduct}>
-            <NearbyProduct />
+            <NearbyProduct onPress={() => {
+              navigation.navigate("Product");
+            }}/>
           </View>
         </ScrollView>
       </View>
