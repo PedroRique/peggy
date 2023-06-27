@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: "#00C2FF",
   },
   text: {
-    fontSize: 16,
+    fontSize: 22,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
