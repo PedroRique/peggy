@@ -1,30 +1,10 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import Button from "../components/Button";
+import { BoldText } from "../components/Text/BoldText";
+import { Chip } from "../components/Text/Chip";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 const userAvatar = require("../../assets/images/users/lucas-maciel.png");
-
-const Chip = ({ children }: { children: any }) => {
-  return (
-    <View
-      style={{
-        backgroundColor: "#E5E5E5",
-        paddingVertical: 6,
-        paddingHorizontal: 16,
-        borderRadius: 7,
-        width: "min-content",
-      }}
-    >
-      <Text
-        style={{
-          fontWeight: "bold",
-          color: "#444444",
-        }}
-      >
-        {children}
-      </Text>
-    </View>
-  );
-};
 
 export default function ProductScreen() {
   return (
@@ -34,7 +14,7 @@ export default function ProductScreen() {
           <View style={styles.headerContainer}>
             <FontAwesome5 name="arrow-left" size={32} color="#FFF" />
 
-            <Text style={styles.ratingText}>4.7</Text>
+            <BoldText style={styles.ratingText}>4.7</BoldText>
           </View>
         </View>
       </ImageBackground>
@@ -54,12 +34,21 @@ export default function ProductScreen() {
         </Text>
 
         <View style={styles.userContainer}>
-          <Image source={userAvatar} style={styles.avatar}/>
+          <Image source={userAvatar} style={styles.avatar} />
           <View>
-            <Text style={{ fontWeight: 'bold', color: '#333333'}}>Emprestado por</Text>
-            <Text style={{fontSize: 24, fontWeight: 'bold', color: '#333333'}}>Lucas Maciel</Text>
+            <BoldText style={{ color: "#333333" }}>Emprestado por</BoldText>
+            <BoldText style={{ fontSize: 24, color: "#333333" }}>
+              Lucas Maciel
+            </BoldText>
           </View>
         </View>
+      </View>
+
+      <View style={styles.productFooter}>
+        <BoldText style={styles.price}>
+          P$80<BoldText style={styles.recurrence}>/dia</BoldText>
+        </BoldText>
+        <Button title="Emprestar" onPress={() => {}} />
       </View>
     </View>
   );
@@ -89,7 +78,6 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 32,
-    fontWeight: "600",
     color: "white",
   },
   productBody: {
@@ -99,7 +87,6 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontSize: 32,
-    fontWeight: "bold",
     marginBottom: 16,
   },
   chipsContainer: {
@@ -109,18 +96,34 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   productDescription: {
-    color: '#777777',
+    color: "#777777",
     marginBottom: 24,
   },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 50,
-    marginRight: 8
+    marginRight: 8,
   },
   userContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  }
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  productFooter: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+    borderTopColor: "#E5E5E5",
+    borderTopWidth: 1,
+    padding: 16,
+  },
+  price: {
+    fontSize: 32,
+  },
+  recurrence: {
+    fontSize: 16,
+  },
 });
