@@ -12,6 +12,8 @@ import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
+import { Avatar } from "../components/Avatar";
+import { Rating } from "../components/Rating";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 const userAvatar = require("../../assets/images/users/lucas-maciel.png");
 
@@ -30,9 +32,7 @@ export default function ProductScreen() {
               <FontAwesome5 name="arrow-left" size={32} color="#FFF" />
             </Pressable>
 
-            <BoldText style={styles.ratingText}>
-              4.7 <FontAwesome name="star" size={24} color="#FFF" />
-            </BoldText>
+            <Rating color='#FFF'/>
           </View>
         </View>
       </ImageBackground>
@@ -52,7 +52,7 @@ export default function ProductScreen() {
         </Text>
 
         <View style={styles.userContainer}>
-          <Image source={userAvatar} style={styles.avatar} />
+          <Avatar />
           <View>
             <BoldText style={{ color: "#333333" }}>Emprestado por</BoldText>
             <BoldText style={{ fontSize: 24, color: "#333333" }}>
@@ -94,10 +94,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  ratingText: {
-    fontSize: 32,
-    color: "white",
-  },
   productBody: {
     padding: 16,
     backgroundColor: "white",
@@ -116,12 +112,6 @@ const styles = StyleSheet.create({
   productDescription: {
     color: "#777777",
     marginBottom: 24,
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    marginRight: 8,
   },
   userContainer: {
     display: "flex",
