@@ -1,9 +1,17 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import CategoryBanner from "../components/CategoryBanner";
 import NearbyProduct from "../components/NerbyProduct";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
+import { Header } from "../components/Header";
 
 const NearbyTitle = () => {
   return (
@@ -30,19 +38,27 @@ export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Vamos emprestar!</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="O que você precisa, Pedro?"
-      />
+      <Header title="Vamos emprestar!"/>
+
+      <Pressable
+        onPress={() => {
+          navigation.navigate("Search");
+        }}
+      >
+        <TextInput
+          style={styles.input}
+          placeholder="O que você precisa, Pedro?"
+        />
+      </Pressable>
       <View>
         <NearbyTitle />
         <ScrollView style={styles.nearbyProducts} horizontal>
           <View style={styles.nearbyProduct}>
-            <NearbyProduct onPress={() => {
-              navigation.navigate("Product");
-            }}/>
+            <NearbyProduct
+              onPress={() => {
+                navigation.navigate("Product");
+              }}
+            />
           </View>
         </ScrollView>
       </View>
@@ -68,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     fontSize: 18,
-    marginVertical: 16,
+    marginBottom: 16,
   },
   titleContainer: {
     display: "flex",
