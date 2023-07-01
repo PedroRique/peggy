@@ -14,6 +14,7 @@ export default function SearchScreen() {
         placeholder="O que você precisa, Pedro?"
         value={searchText}
         onChangeText={(text) => setSearchText(text)}
+        autoFocus
       />
       <View style={styles.imageContainer}>
         <Image source={noSearch} style={styles.image} resizeMode="contain" />
