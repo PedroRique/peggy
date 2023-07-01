@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import { Rating } from "../components/Rating";
+import { Header } from "../components/Header";
 const goPro = require("../../assets/images/products/go-pro.jpg");
 const userAvatar = require("../../assets/images/users/lucas-maciel.png");
 
@@ -23,17 +24,7 @@ export default function ProductScreen() {
     <View style={styles.container}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.productInner}>
-          <View style={styles.headerContainer}>
-            <Pressable
-              onPress={() => {
-                navigation.goBack();
-              }}
-            >
-              <FontAwesome5 name="arrow-left" size={32} color="#FFF" />
-            </Pressable>
-
-            <Rating color='#FFF'/>
-          </View>
+          <Header title="4.7" hasBack />
         </View>
       </ImageBackground>
 
@@ -85,14 +76,7 @@ const styles = StyleSheet.create({
   productInner: {
     height: 200,
     width: "100%",
-    padding: 16,
-  },
-  headerContainer: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    paddingHorizontal: 16,
   },
   productBody: {
     padding: 16,

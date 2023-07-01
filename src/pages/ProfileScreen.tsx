@@ -6,13 +6,7 @@ import { Rating } from "../components/Rating";
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Header
-        title="Lucas Maciel"
-        hasBack={true}
-        onBack={() => {
-          console.log("voltar");
-        }}
-      />
+      <Header title="Lucas Maciel" hasBack />
       <View style={styles.avatarContainer}>
         <Avatar size={100} />
         <View>
@@ -31,7 +25,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
-    padding: 16
+    padding: 16,
   },
   avatarContainer: {
     display: "flex",

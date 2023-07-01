@@ -11,13 +11,7 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Buscar"
-        hasBack
-        onBack={() => {
-          navigation.goBack();
-        }}
-      />
+      <Header title="Buscar" hasBack />
       <TextInput
         style={styles.input}
         placeholder="O que você precisa, Pedro?"

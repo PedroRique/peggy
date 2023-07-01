@@ -1,6 +1,8 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { BoldText } from "./Text/BoldText";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from "../../App";
 
 interface HeaderProps {
   title: string;
@@ -9,10 +11,11 @@ interface HeaderProps {
 }
 
 export const Header = ({ title, hasBack, onBack }: HeaderProps) => {
+  const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.headerContainer}>
-      {hasBack && onBack && (
-        <Pressable onPress={() => onBack()}>
+      {hasBack && (
+        <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
           <FontAwesome5 name="arrow-left" size={32} color="#000" />
         </Pressable>
       )}
