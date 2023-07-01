@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 16,
     borderRadius: 7,
-    width: "min-content",
   },
   chipText: {
     color: "#444444",

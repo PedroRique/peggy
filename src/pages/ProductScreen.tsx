@@ -1,4 +1,5 @@
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
@@ -9,7 +10,7 @@ const goPro = require("../../assets/images/products/go-pro.jpg");
 
 export default function ProductScreen() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.productInner}>
           <Header hasBack color="#fff">
@@ -49,7 +50,7 @@ export default function ProductScreen() {
         </BoldText>
         <Button title="Emprestar" onPress={() => {}} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

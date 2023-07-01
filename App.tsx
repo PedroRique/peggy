@@ -15,10 +15,14 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 type StackNavigation = {
-  Home: undefined;
+  Main: undefined;
   Product: undefined;
-  Profile: undefined;
   Search: undefined;
+};
+
+const TabBarIconMapping: Record<string, string> = {
+  Home: "home",
+  Profile: "user",
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -28,20 +32,18 @@ function Main() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
-          let iconName: any;
-
-          if (route.name === "Home") {
-            iconName = "home";
-          } else if (route.name === "Profile") {
-            iconName = "user";
-          }
-
-          return <Feather name={iconName} size={40} color={color} />;
+          return (
+            <Feather
+              name={TabBarIconMapping[route.name] as any}
+              size={40}
+              color={color}
+            />
+          );
         },
         tabBarLabel: () => {
           return "";
         },
-        tabBarStyle: {backgroundColor: '#f3f3f3', height: 70},
+        tabBarStyle: { backgroundColor: "#f3f3f3", height: 70 },
         tabBarActiveTintColor: "#ff9900",
         tabBarInactiveTintColor: "#444",
         headerShown: false,

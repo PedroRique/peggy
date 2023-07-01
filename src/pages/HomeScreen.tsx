@@ -12,6 +12,7 @@ import { StackTypes } from "../../App";
 import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
 import NearbyProduct from "../components/NerbyProduct";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const NearbyTitle = () => {
   return (
@@ -37,7 +38,7 @@ const CategoriesTitle = () => {
 export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header>Vamos emprestar!</Header>
       <Pressable
         onPress={() => {
@@ -70,7 +71,7 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

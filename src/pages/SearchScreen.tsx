@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { Header } from "../components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
 const noSearch = require("../../assets/images/noSearch/noSearch.png");
 
 export default function SearchScreen() {
   const [searchText, setSearchText] = useState("");
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="Buscar" hasBack />
       <TextInput
         style={styles.input}
@@ -22,7 +23,7 @@ export default function SearchScreen() {
           Seu vizinho pode ter o que você está procurando{" "}
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
