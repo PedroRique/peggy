@@ -114,6 +114,8 @@ const styles = StyleSheet.create({
   nearbyProduct: {
     marginRight: 12,
   },
-  categoriesList: {},
+  categoriesList: {
+    paddingVertical: 16,
+  },
   category: {},
 });

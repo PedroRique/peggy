@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   categoryContainer: {
-    width: 343,
     height: 123,
     elevation: 12,
     borderRadius: 8,
