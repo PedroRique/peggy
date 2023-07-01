@@ -15,6 +15,7 @@ import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
 import NearbyProduct from "../components/NerbyProduct";
 import { Category, fetchCategories } from "../services/categories.service";
+import { Product, fetchProducts } from "../services/products.service";
 
 const NearbyTitle = () => {
   return (
@@ -41,14 +42,21 @@ export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
 
   const [categories, setCategories] = useState<Category[]>();
+  const [products, setProducts] = useState<Product[]>();
 
   useEffect(() => {
     getCategories();
+    getProducts();
   }, []);
 
   const getCategories = async () => {
     const result = await fetchCategories();
     setCategories(result);
+  };
+
+  const getProducts = async () => {
+    const result = await fetchProducts();
+    setProducts(result);
   };
 
   return (
@@ -67,13 +75,16 @@ export default function HomeScreen() {
       <View>
         <NearbyTitle />
         <ScrollView style={styles.nearbyProducts} horizontal>
-          <View style={styles.nearbyProduct}>
-            <NearbyProduct
-              onPress={() => {
-                navigation.navigate("Product");
-              }}
-            />
-          </View>
+          {products?.map((product, i) => (
+            <View key={i} style={styles.nearbyProduct}>
+              <NearbyProduct
+                product={product}
+                onPress={() => {
+                  navigation.navigate("Product");
+                }}
+              />
+            </View>
+          ))}
         </ScrollView>
       </View>
 
