@@ -77,13 +77,19 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: "white",
+    flex: 1
   },
   input: {
     backgroundColor: "#fff",
     padding: 16,
     borderRadius: 8,
     fontSize: 18,
-    marginBottom: 16,
+    marginBottom: 32,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 10,
   },
   titleContainer: {
     display: "flex",
