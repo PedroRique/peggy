@@ -1,5 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -8,11 +9,12 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { StackTypes } from "../../App";
 import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
 import NearbyProduct from "../components/NerbyProduct";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Category, fetchCategories } from "../services/categories.service";
 
 const NearbyTitle = () => {
   return (
@@ -37,6 +39,18 @@ const CategoriesTitle = () => {
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
+
+  const [categories, setCategories] = useState<Category[]>();
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    const result = await fetchCategories();
+    setCategories(result);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header>Vamos emprestar!</Header>
@@ -67,7 +81,9 @@ export default function HomeScreen() {
         <CategoriesTitle />
         <ScrollView style={styles.categoriesList}>
           <View style={styles.category}>
-            <CategoryBanner />
+            {categories?.map((category, i) => (
+              <CategoryBanner key={i} category={category} />
+            ))}
           </View>
         </ScrollView>
       </View>
@@ -79,7 +95,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: "white",
-    flex: 1
+    flex: 1,
   },
   input: {
     backgroundColor: "#fff",

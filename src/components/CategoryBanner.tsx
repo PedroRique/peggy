@@ -1,12 +1,20 @@
-import { StyleSheet, View, ImageBackground, Text } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { ImageBackground, StyleSheet, View } from "react-native";
+import { Category } from "../services/categories.service";
+import { BoldText } from "./Text/BoldText";
 const tech = require("../../assets/images/categories/tech.jpg");
 
-export default function CategoryBanner() {
+export default function CategoryBanner({ category }: { category: Category }) {
   return (
     <View style={styles.categoryContainer}>
-      <ImageBackground style={styles.category} source={tech} resizeMode="cover">
+      <ImageBackground
+        style={styles.category}
+        source={{ uri: category.imageUrl }}
+        resizeMode="cover"
+      >
         <View style={styles.distanceContainer}>
-          <Text style={styles.distance}>Tecnologia</Text>
+          <Feather name={category.icon as any} size={16} color={"#00c2ff"} />
+          <BoldText>{category.name}</BoldText>
         </View>
       </ImageBackground>
     </View>
@@ -22,9 +30,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-  },
-  distance: {
-    fontWeight: 'bold',
+    gap: 4,
   },
   category: {
     flex: 1,
