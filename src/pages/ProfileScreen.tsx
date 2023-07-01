@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Header } from "../components/Header";
 import { Avatar } from "../components/Avatar";
+import { Header } from "../components/Header";
 import { Rating } from "../components/Rating";
 
 export default function ProfileScreen() {

@@ -5,21 +5,29 @@ import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
 
 interface HeaderProps {
-  title: string;
+  title?: string;
   hasBack?: boolean;
   onBack?: () => void;
+  children?: any;
+  color?: string;
 }
 
-export const Header = ({ title, hasBack, onBack }: HeaderProps) => {
+export const Header = ({
+  children,
+  title,
+  hasBack,
+  onBack,
+  color,
+}: HeaderProps) => {
   const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.headerContainer}>
       {hasBack && (
         <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
-          <FontAwesome5 name="arrow-left" size={32} color="#000" />
+          <FontAwesome5 name="arrow-left" size={32} color={color} />
         </Pressable>
       )}
-      <BoldText style={styles.title}>{title}</BoldText>
+      <BoldText style={[styles.title, { color }]}>{children || title}</BoldText>
     </View>
   );
 };

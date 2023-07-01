@@ -1,30 +1,20 @@
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-import {
-  Image,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
+import { Header } from "../components/Header";
+import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
-import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
-import { Avatar } from "../components/Avatar";
-import { Rating } from "../components/Rating";
-import { Header } from "../components/Header";
 const goPro = require("../../assets/images/products/go-pro.jpg");
-const userAvatar = require("../../assets/images/users/lucas-maciel.png");
 
 export default function ProductScreen() {
-  const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
         <View style={styles.productInner}>
-          <Header title="4.7" hasBack />
+          <Header hasBack color="#fff">
+            <Rating color="#fff" />
+          </Header>
         </View>
       </ImageBackground>
 

@@ -1,12 +1,9 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import { StackTypes } from "../../App";
 import { Header } from "../components/Header";
 const noSearch = require("../../assets/images/noSearch/noSearch.png");
 
 export default function SearchScreen() {
-  const navigation = useNavigation<StackTypes>();
   const [searchText, setSearchText] = useState("");
 
   return (

@@ -1,4 +1,5 @@
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import {
   Pressable,
   ScrollView,
@@ -7,11 +8,10 @@ import {
   TextInput,
   View,
 } from "react-native";
-import CategoryBanner from "../components/CategoryBanner";
-import NearbyProduct from "../components/NerbyProduct";
-import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
+import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
+import NearbyProduct from "../components/NerbyProduct";
 
 const NearbyTitle = () => {
   return (
@@ -38,8 +38,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
   return (
     <View style={styles.container}>
-      <Header title="Vamos emprestar!"/>
-
+      <Header>Vamos emprestar!</Header>
       <Pressable
         onPress={() => {
           navigation.navigate("Search");
