@@ -6,10 +6,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StackTypes } from "../../App";
 import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
+import { TextInput } from "../components/Input";
 import NearbyProduct from "../components/NerbyProduct";
 import { Category, fetchCategories } from "../services/categories.service";
 import { Product, fetchProducts } from "../services/products.service";
-import { TextInput } from "../components/Input";
+import Geolocation from "@react-native-community/geolocation";
 
 const NearbyTitle = () => {
   return (
@@ -37,10 +38,15 @@ export default function HomeScreen() {
 
   const [categories, setCategories] = useState<Category[]>();
   const [products, setProducts] = useState<Product[]>();
+  const [currentPosition, setCurrentPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  }>();
 
   useEffect(() => {
     getCategories();
     getProducts();
+    getCurrentPosition();
   }, []);
 
   const getCategories = async () => {
@@ -51,6 +57,15 @@ export default function HomeScreen() {
   const getProducts = async () => {
     const result = await fetchProducts();
     setProducts(result);
+  };
+
+  const getCurrentPosition = () => {
+    Geolocation.getCurrentPosition((info) =>
+      setCurrentPosition({
+        latitude: info.coords.latitude,
+        longitude: info.coords.longitude,
+      })
+    );
   };
 
   return (
