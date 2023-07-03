@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 
 export interface Product {
@@ -16,4 +16,14 @@ export const fetchProducts = async () => {
     }
   });
   return result;
+};
+
+export const addProduct = async (name: string) => {
+  const docRef = await addDoc(collection(FIREBASE_DB, "products"), {
+    name,
+    imageUrl:
+      "https://firebasestorage.googleapis.com/v0/b/peggy-app.appspot.com/o/images%2Fproducts%2Fgo-pro.jpg?alt=media&token=ba61ea42-072e-4b09-a512-1dedd9119fa2",
+  });
+
+  return docRef.id;
 };

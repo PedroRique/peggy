@@ -1,14 +1,7 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackTypes } from "../../App";
 import CategoryBanner from "../components/CategoryBanner";
@@ -16,6 +9,7 @@ import { Header } from "../components/Header";
 import NearbyProduct from "../components/NerbyProduct";
 import { Category, fetchCategories } from "../services/categories.service";
 import { Product, fetchProducts } from "../services/products.service";
+import { TextInput } from "../components/Input";
 
 const NearbyTitle = () => {
   return (
@@ -67,10 +61,7 @@ export default function HomeScreen() {
           navigation.navigate("Search");
         }}
       >
-        <TextInput
-          style={styles.input}
-          placeholder="O que você precisa, Pedro?"
-        />
+        <TextInput placeholder="O que você precisa, Pedro?" />
       </Pressable>
       <View>
         <NearbyTitle />
@@ -107,17 +98,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "white",
     flex: 1,
-  },
-  input: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 8,
-    fontSize: 18,
-    marginBottom: 32,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 10,
   },
   titleContainer: {
     display: "flex",

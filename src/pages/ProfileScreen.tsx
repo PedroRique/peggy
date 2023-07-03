@@ -5,8 +5,12 @@ import { Rating } from "../components/Rating";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BoldText } from "../components/Text/BoldText";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from "../../App";
 
 export default function ProfileScreen() {
+  const navigation = useNavigation<StackTypes>();
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Lucas Maciel" hasBack />
@@ -30,7 +34,12 @@ export default function ProfileScreen() {
       <View style={styles.myItemsContainer}>
         <View style={styles.myItemsHeader}>
           <BoldText style={styles.myItemsHeaderTitle}>Seus itens</BoldText>
-          <Pressable style={styles.addItemButton} onPress={() => {}}>
+          <Pressable
+            style={styles.addItemButton}
+            onPress={() => {
+              navigation.navigate("NewProduct");
+            }}
+          >
             <Feather name="plus" color={"#fff"} size={32} />
           </Pressable>
         </View>

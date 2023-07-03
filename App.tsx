@@ -10,6 +10,7 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { Feather } from "@expo/vector-icons";
+import NewProductScreen from "./src/pages/NewProductScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,6 +19,7 @@ type StackNavigation = {
   Main: undefined;
   Product: undefined;
   Search: undefined;
+  NewProduct: undefined;
 };
 
 const TabBarIconMapping: Record<string, string> = {
@@ -62,6 +64,7 @@ export default function App() {
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Product" component={ProductScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="NewProduct" component={NewProductScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
