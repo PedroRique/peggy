@@ -5,6 +5,7 @@ export interface Category {
   icon: string;
   imageUrl: string;
   name: string;
+  id: string;
 }
 
 export const fetchCategories = async () => {
@@ -13,7 +14,7 @@ export const fetchCategories = async () => {
   let result: Category[] = [];
   snap.forEach((doc) => {
     if (doc.exists()) {
-      result.push(doc.data() as Category);
+      result.push({ ...doc.data(), id: doc.id } as Category);
     }
   });
   return result;

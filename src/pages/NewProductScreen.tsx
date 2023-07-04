@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
@@ -9,18 +9,27 @@ import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addProduct, uploadProductImage } from "../services/products.service";
 import { BoldText } from "../components/Text/BoldText";
+import { useSelector } from "react-redux";
+import DropDown from "react-native-paper-dropdown";
+import { Category } from "../services/categories.service";
 
 export default function NewProductScreen() {
   const [productName, setProductName] = useState("");
   const [imageUrl, setImageUrl] = useState<any>(null);
+  const [category, setCategory] = useState<any>(null);
+  const categories = useSelector((state: any) => state.categories);
 
   const createProduct = async () => {
     await addProduct({
       name: productName,
       imageUrl,
-      category: "",
+      category,
     });
   };
+
+  useEffect(() => {
+    console.log(categories);
+  }, [categories])
 
   const getPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -35,6 +44,15 @@ export default function NewProductScreen() {
       setImageUrl(imageUrl);
     }
   };
+
+  const [showDropDown, setShowDropDown] = useState(false);
+
+  const genderList = [
+    {
+      label: "Tech",
+      value: "tech",
+    },
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,10 +75,19 @@ export default function NewProductScreen() {
         ></TextInput>
 
         <BoldText>Categoria do produto</BoldText>
-        <TextInput
-          placeholder="Categoria do produto"
-          onChangeText={(text) => setProductName(text)}
-        ></TextInput>
+        <DropDown
+          label={"Gender"}
+          mode={"outlined"}
+          visible={showDropDown}
+          showDropDown={() => setShowDropDown(true)}
+          onDismiss={() => setShowDropDown(false)}
+          value={category}
+          setValue={setCategory}
+          list={categories.map((categ: Category) => ({
+            label: categ.name,
+            value: categ.id,
+          }))}
+        />
       </View>
       <Button title="Cadastrar" onPress={() => createProduct()} />
     </SafeAreaView>

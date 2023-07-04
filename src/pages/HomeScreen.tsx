@@ -1,16 +1,19 @@
 import { FontAwesome5 } from "@expo/vector-icons";
+import Geolocation from "@react-native-community/geolocation";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import NearbyProduct from "../components/NerbyProduct";
-import { Category, fetchCategories } from "../services/categories.service";
-import { Product, fetchProducts } from "../services/products.service";
-import Geolocation from "@react-native-community/geolocation";
+import { Product } from "../models/Product";
+import { fetchCategories } from "../services/categories.service";
+import { fetchProducts } from "../services/products.service";
+import { categoriesSlice } from "../store/categories";
 
 const NearbyTitle = () => {
   return (
@@ -35,8 +38,9 @@ const CategoriesTitle = () => {
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
+  const categories = useSelector((state: any) => state.categories);
+  const dispatch = useDispatch();
 
-  const [categories, setCategories] = useState<Category[]>();
   const [products, setProducts] = useState<Product[]>();
   const [currentPosition, setCurrentPosition] = useState<{
     latitude: number;
@@ -51,7 +55,7 @@ export default function HomeScreen() {
 
   const getCategories = async () => {
     const result = await fetchCategories();
-    setCategories(result);
+    dispatch(categoriesSlice.actions.setCategories(result));
   };
 
   const getProducts = async () => {
@@ -98,7 +102,7 @@ export default function HomeScreen() {
         <CategoriesTitle />
         <ScrollView style={styles.categoriesList}>
           <View style={styles.category}>
-            {categories?.map((category, i) => (
+            {categories?.map((category: any, i: any) => (
               <CategoryBanner key={i} category={category} />
             ))}
           </View>

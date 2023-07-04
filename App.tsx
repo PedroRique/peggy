@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -5,12 +6,14 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import * as React from "react";
+import { Provider } from "react-redux";
 import HomeScreen from "./src/pages/HomeScreen";
+import NewProductScreen from "./src/pages/NewProductScreen";
 import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import SearchScreen from "./src/pages/SearchScreen";
-import { Feather } from "@expo/vector-icons";
-import NewProductScreen from "./src/pages/NewProductScreen";
+import { store } from "./src/store";
+import { PaperProvider,  } from "react-native-paper";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -59,13 +62,17 @@ function Main() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="Product" component={ProductScreen} />
-        <Stack.Screen name="Search" component={SearchScreen} />
-        <Stack.Screen name="NewProduct" component={NewProductScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Product" component={ProductScreen} />
+            <Stack.Screen name="Search" component={SearchScreen} />
+            <Stack.Screen name="NewProduct" component={NewProductScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </Provider>
   );
 }
