@@ -12,8 +12,10 @@ import { BoldText } from "../components/Text/BoldText";
 import { useSelector } from "react-redux";
 import DropDown from "react-native-paper-dropdown";
 import { Category } from "../models/Category";
+import { pickImage } from "../services/camera.service";
 
 export default function NewProductScreen() {
+  const [showDropDown, setShowDropDown] = useState(false);
   const [productName, setProductName] = useState("");
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
@@ -34,27 +36,9 @@ export default function NewProductScreen() {
   }, [categories]);
 
   const getPhoto = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const imageUrl = await uploadProductImage(result.assets[0].uri);
-      setImageUrl(imageUrl);
-    }
+    const result = await pickImage();
+    setImageUrl(result);
   };
-
-  const [showDropDown, setShowDropDown] = useState(false);
-
-  const genderList = [
-    {
-      label: "Tech",
-      value: "tech",
-    },
-  ];
 
   return (
     <SafeAreaView style={styles.container}>

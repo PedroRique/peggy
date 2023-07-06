@@ -3,19 +3,23 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import { Header } from "../components/Header";
+import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
+import { Product } from "../models/Product";
 import { Profile } from "../models/Profile";
 import { fetchProductsById } from "../services/products.service";
-import { Product } from "../models/Product";
-import { ProductCard } from "../components/ProductCard";
+import { pickImage } from "../services/camera.service";
+import { profileSlice } from "../store/profile";
+import { updateUserPhotoURL } from "../services/user.service";
 
 export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
+  const dispatch = useDispatch();
   const profile: Profile = useSelector((state: any) => state.profile.profile);
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -29,17 +33,28 @@ export default function ProfileScreen() {
     setProducts(result);
   };
 
-  const { displayName } = profile;
+  const getPhotoUrl = async () => {
+    const result = await pickImage();
+    updateUserPhotoURL(result);
+    dispatch(
+      profileSlice.actions.setProfile({
+        ...profile,
+        photoURL: result,
+      })
+    );
+  };
+
+  const { displayName, photoURL } = profile;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={displayName || ""} hasBack />
+      <Header title={displayName} hasBack />
       <View style={styles.avatarContainer}>
-        <Avatar size={100} />
+        <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />
         <View>
           <Rating color="#00C2FF" />
           <Text style={styles.avatarBio}>
-            Carioca, 25 anos. Itens com ótimo estado.
+            Carioca, 27 anos. Itens com ótimo estado.
           </Text>
         </View>
       </View>
@@ -70,7 +85,7 @@ export default function ProfileScreen() {
               key={i}
               product={product}
               onPress={() => {}}
-              style={{ minWidth: "50%" }}
+              style={{ minWidth: "calc(50% - 6px)" }}
             ></ProductCard>
           ))}
         </View>

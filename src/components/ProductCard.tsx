@@ -1,16 +1,16 @@
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import {
   ImageBackground,
   StyleSheet,
   Text,
-  TouchableHighlightProps,
+  TouchableOpacity,
+  TouchableOpacityProps,
   View,
 } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
 import { Product } from "../models/Product";
 
 interface ProductCardProps
-  extends Pick<TouchableHighlightProps, "style" | "onPress"> {
+  extends Pick<TouchableOpacityProps, "style" | "onPress"> {
   product: Product;
   showDistance?: boolean;
 }
@@ -22,7 +22,7 @@ export const ProductCard = ({
   ...rest
 }: ProductCardProps) => {
   return (
-    <TouchableHighlight style={[styles.productContainer, style]} {...rest}>
+    <TouchableOpacity style={[styles.productContainer, style]} {...rest}>
       <ImageBackground
         style={styles.product}
         source={{ uri: product.imageUrl }}
@@ -30,12 +30,12 @@ export const ProductCard = ({
       >
         {showDistance && (
           <View style={styles.distanceContainer}>
-            <FontAwesome5 name="map-marker-alt" size={16} color="#00C2FF" />
+            <Feather name="map-pin" size={16} color="#00C2FF" />
             <Text style={styles.distance}>650m</Text>
           </View>
         )}
       </ImageBackground>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 };
 

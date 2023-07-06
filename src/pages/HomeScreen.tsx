@@ -1,4 +1,4 @@
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import Geolocation from "@react-native-community/geolocation";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
-        <FontAwesome5 name="map-marker-alt" size={24} color="#00C2FF" />
+        <Feather name="map-pin" size={24} color="#00C2FF" />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
@@ -65,12 +65,13 @@ export default function HomeScreen() {
     });
 
     if (result) {
-      const { displayName, uid, email } = result.user;
+      const { displayName, uid, email, photoURL } = result.user;
       dispatch(
         profileSlice.actions.setProfile({
           displayName,
           uid,
           email,
+          photoURL,
         })
       );
     }

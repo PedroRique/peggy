@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
 
 interface HeaderProps {
-  title?: string;
+  title?: string | null;
   hasBack?: boolean;
   onBack?: () => void;
   children?: any;

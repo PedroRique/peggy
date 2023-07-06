@@ -34,6 +34,13 @@ export const createUser = async ({
   }
 };
 
+export const updateUserPhotoURL = async (photoURL: string | null) => {
+  const user = FIREBASE_AUTH.currentUser;
+  if (user) {
+    await updateProfile(user, { photoURL });
+  }
+};
+
 export const signInUser = async ({ email, password }: SignInUserRequest) => {
   try {
     const result = await signInWithEmailAndPassword(
