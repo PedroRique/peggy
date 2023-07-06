@@ -9,13 +9,13 @@ import { StackTypes } from "../../App";
 import CategoryBanner from "../components/CategoryBanner";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
-import NearbyProduct from "../components/NerbyProduct";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/categories.service";
 import { fetchProducts } from "../services/products.service";
 import { signInUser } from "../services/user.service";
 import { categoriesSlice } from "../store/categories";
-import { userSlice } from "../store/user";
+import { profileSlice } from "../store/profile";
+import { ProductCard } from "../components/ProductCard";
 
 const NearbyTitle = () => {
   return (
@@ -65,7 +65,14 @@ export default function HomeScreen() {
     });
 
     if (result) {
-      dispatch(userSlice.actions.setUser({ email, uid: result.user.uid }));
+      const { displayName, uid, email } = result.user;
+      dispatch(
+        profileSlice.actions.setProfile({
+          displayName,
+          uid,
+          email,
+        })
+      );
     }
   };
 
@@ -102,14 +109,17 @@ export default function HomeScreen() {
         <NearbyTitle />
         <ScrollView style={styles.nearbyProducts} horizontal>
           {products?.map((product, i) => (
-            <View key={i} style={styles.nearbyProduct}>
-              <NearbyProduct
-                product={product}
-                onPress={() => {
-                  navigation.navigate("Product");
-                }}
-              />
-            </View>
+            <ProductCard
+              key={i}
+              product={product}
+              onPress={() => {
+                navigation.navigate("Product");
+              }}
+              showDistance
+              style={{
+                marginRight: 12,
+              }}
+            />
           ))}
         </ScrollView>
       </View>
@@ -153,9 +163,6 @@ const styles = StyleSheet.create({
   nearbyProducts: {
     paddingVertical: 16,
     gap: 12,
-  },
-  nearbyProduct: {
-    marginRight: 12,
   },
   categoriesList: {
     paddingVertical: 16,

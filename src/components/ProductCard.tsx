@@ -1,35 +1,43 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   ImageBackground,
-  Pressable,
   StyleSheet,
   Text,
+  TouchableHighlightProps,
   View,
 } from "react-native";
-import { Product } from "../services/products.service";
+import { TouchableHighlight } from "react-native-gesture-handler";
+import { Product } from "../models/Product";
 
-interface NearbyProductProps {
-  onPress: () => void;
+interface ProductCardProps
+  extends Pick<TouchableHighlightProps, "style" | "onPress"> {
   product: Product;
+  showDistance?: boolean;
 }
 
-export default function NearbyProduct(props: NearbyProductProps) {
-  const { onPress, product } = props;
+export const ProductCard = ({
+  style,
+  product,
+  showDistance = false,
+  ...rest
+}: ProductCardProps) => {
   return (
-    <Pressable style={styles.productContainer} onPress={() => onPress()}>
+    <TouchableHighlight style={[styles.productContainer, style]} {...rest}>
       <ImageBackground
         style={styles.product}
         source={{ uri: product.imageUrl }}
         resizeMode="cover"
       >
-        <View style={styles.distanceContainer}>
-          <FontAwesome5 name="map-marker-alt" size={16} color="#00C2FF" />
-          <Text style={styles.distance}>650m</Text>
-        </View>
+        {showDistance && (
+          <View style={styles.distanceContainer}>
+            <FontAwesome5 name="map-marker-alt" size={16} color="#00C2FF" />
+            <Text style={styles.distance}>650m</Text>
+          </View>
+        )}
       </ImageBackground>
-    </Pressable>
+    </TouchableHighlight>
   );
-}
+};
 
 const styles = StyleSheet.create({
   distanceContainer: {

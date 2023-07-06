@@ -18,14 +18,14 @@ export default function NewProductScreen() {
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
   const categories = useSelector((state: any) => state.categories.categories);
-  const user = useSelector((state: any) => state.user.user);
+  const profile = useSelector((state: any) => state.profile.profile);
 
   const createProduct = async () => {
     await addProduct({
       name: productName,
       imageUrl,
       category,
-      userId: user.uid,
+      userId: profile.uid,
     });
   };
 

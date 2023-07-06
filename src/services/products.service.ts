@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uuid from "react-native-uuid";
 import { FIREBASE_DB, FIREBASE_STORAGE } from "../../firebaseConfig";
@@ -14,6 +14,27 @@ export const fetchProducts = async () => {
     }
   });
   return result;
+};
+
+export const fetchProductsById = async (userId: string) => {
+  const q = query(
+    collection(FIREBASE_DB, "products"),
+    where("userId", "==", userId)
+  );
+  const snap = await getDocs(q);
+  let result: Product[] = [];
+  snap.forEach((doc) => {
+    if (doc.exists()) {
+      result.push(doc.data() as Product);
+    }
+  });
+  return result;
+};
+
+export const addProduct = async (product: Product) => {
+  const docRef = await addDoc(collection(FIREBASE_DB, "products"), product);
+
+  return docRef.id;
 };
 
 export const uploadProductImage = async (uri: string) => {
@@ -37,10 +58,4 @@ export const uploadProductImage = async (uri: string) => {
   );
   await uploadBytes(fileRef, blob);
   return await getDownloadURL(fileRef);
-};
-
-export const addProduct = async (product: Product) => {
-  const docRef = await addDoc(collection(FIREBASE_DB, "products"), product);
-
-  return docRef.id;
 };

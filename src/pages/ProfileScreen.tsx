@@ -1,19 +1,39 @@
+import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import { Header } from "../components/Header";
 import { Rating } from "../components/Rating";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { BoldText } from "../components/Text/BoldText";
-import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
+import { Profile } from "../models/Profile";
+import { fetchProductsById } from "../services/products.service";
+import { Product } from "../models/Product";
+import { ProductCard } from "../components/ProductCard";
 
 export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
+  const profile: Profile = useSelector((state: any) => state.profile.profile);
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getUserProducts();
+  }, []);
+
+  const getUserProducts = async () => {
+    const result = await fetchProductsById(profile.uid);
+    setProducts(result);
+  };
+
+  const { displayName } = profile;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Lucas Maciel" hasBack />
+      <Header title={displayName || ""} hasBack />
       <View style={styles.avatarContainer}>
         <Avatar size={100} />
         <View>
@@ -42,6 +62,17 @@ export default function ProfileScreen() {
           >
             <Feather name="plus" color={"#fff"} size={32} />
           </Pressable>
+        </View>
+
+        <View style={styles.products}>
+          {products.map((product, i) => (
+            <ProductCard
+              key={i}
+              product={product}
+              onPress={() => {}}
+              style={{ minWidth: "50%" }}
+            ></ProductCard>
+          ))}
         </View>
       </View>
     </SafeAreaView>
@@ -94,6 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 16,
   },
   myItemsHeaderTitle: {
     fontSize: 24,
@@ -103,5 +135,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 4,
     paddingHorizontal: 5,
+  },
+  products: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
   },
 });
