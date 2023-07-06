@@ -1,4 +1,14 @@
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  Query,
+  addDoc,
+  collection,
+  endAt,
+  getDocs,
+  orderBy,
+  query,
+  startAt,
+  where,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uuid from "react-native-uuid";
 import { FIREBASE_DB, FIREBASE_STORAGE } from "../../firebaseConfig";
@@ -6,14 +16,17 @@ import { Product } from "../models/Product";
 
 export const fetchProducts = async () => {
   const q = query(collection(FIREBASE_DB, "products"));
-  const snap = await getDocs(q);
-  let result: Product[] = [];
-  snap.forEach((doc) => {
-    if (doc.exists()) {
-      result.push(doc.data() as Product);
-    }
-  });
-  return result;
+  return await commonFetchProducts(q);
+};
+
+export const searchProducts = async (searchKey: string) => {
+  const q = query(
+    collection(FIREBASE_DB, "products"),
+    orderBy("name"),
+    startAt(searchKey),
+    endAt(searchKey + "\uf8ff")
+  );
+  return await commonFetchProducts(q);
 };
 
 export const fetchProductsById = async (userId: string) => {
@@ -21,14 +34,7 @@ export const fetchProductsById = async (userId: string) => {
     collection(FIREBASE_DB, "products"),
     where("userId", "==", userId)
   );
-  const snap = await getDocs(q);
-  let result: Product[] = [];
-  snap.forEach((doc) => {
-    if (doc.exists()) {
-      result.push(doc.data() as Product);
-    }
-  });
-  return result;
+  return await commonFetchProducts(q);
 };
 
 export const addProduct = async (product: Product) => {
@@ -58,4 +64,15 @@ export const uploadProductImage = async (uri: string) => {
   );
   await uploadBytes(fileRef, blob);
   return await getDownloadURL(fileRef);
+};
+
+const commonFetchProducts = async (q: Query) => {
+  const snap = await getDocs(q);
+  let result: Product[] = [];
+  snap.forEach((doc) => {
+    if (doc.exists()) {
+      result.push(doc.data() as Product);
+    }
+  });
+  return result;
 };

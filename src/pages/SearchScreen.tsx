@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import { Header } from "../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Header } from "../components/Header";
+import { BoldText } from "../components/Text/BoldText";
+import { useLazyEffect } from "../hooks/useLazyEffect";
+import { Product } from "../models/Product";
+import { searchProducts } from "../services/products.service";
 const noSearch = require("../../assets/images/noSearch/noSearch.png");
 
 export default function SearchScreen() {
   const [searchText, setSearchText] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useLazyEffect(() => {
+    search();
+  }, [searchText]);
+
+  const search = async () => {
+    const result = await searchProducts(searchText);
+    setProducts(result);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,12 +31,21 @@ export default function SearchScreen() {
         onChangeText={(text) => setSearchText(text)}
         autoFocus
       />
-      <View style={styles.imageContainer}>
-        <Image source={noSearch} style={styles.image} resizeMode="contain" />
-        <Text style={styles.imageText}>
-          Seu vizinho pode ter o que você está procurando{" "}
-        </Text>
-      </View>
+
+      {products.length ? (
+        <View style={styles.resultContainer}>
+          {products.map((prod, i) => (
+            <BoldText key={i}>{prod.name}</BoldText>
+          ))}
+        </View>
+      ) : (
+        <View style={styles.imageContainer}>
+          <Image source={noSearch} style={styles.image} resizeMode="contain" />
+          <Text style={styles.imageText}>
+            Seu vizinho pode ter o que você está procurando{" "}
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -57,5 +80,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 160,
     color: "#777777",
+  },
+  resultContainer: {
+    paddingVertical: 16,
   },
 });
