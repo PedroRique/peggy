@@ -1,5 +1,7 @@
 export interface Product {
-    name: string;
-    category: string;
-    imageUrl: string;
-} 
+  uid?: string;
+  name: string;
+  category: string;
+  imageUrl: string;
+  userId: string;
+}

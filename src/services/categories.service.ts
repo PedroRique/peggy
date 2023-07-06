@@ -1,12 +1,6 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
-
-export interface Category {
-  icon: string;
-  imageUrl: string;
-  name: string;
-  id: string;
-}
+import { Category } from "../models/Category";
 
 export const fetchCategories = async () => {
   const q = query(collection(FIREBASE_DB, "categories"));

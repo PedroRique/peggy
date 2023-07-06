@@ -11,25 +11,27 @@ import { addProduct, uploadProductImage } from "../services/products.service";
 import { BoldText } from "../components/Text/BoldText";
 import { useSelector } from "react-redux";
 import DropDown from "react-native-paper-dropdown";
-import { Category } from "../services/categories.service";
+import { Category } from "../models/Category";
 
 export default function NewProductScreen() {
   const [productName, setProductName] = useState("");
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
-  const categories = useSelector((state: any) => state.categories);
+  const categories = useSelector((state: any) => state.categories.categories);
+  const user = useSelector((state: any) => state.user.user);
 
   const createProduct = async () => {
     await addProduct({
       name: productName,
       imageUrl,
       category,
+      userId: user.uid,
     });
   };
 
   useEffect(() => {
     console.log(categories);
-  }, [categories])
+  }, [categories]);
 
   const getPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -76,7 +78,7 @@ export default function NewProductScreen() {
 
         <BoldText>Categoria do produto</BoldText>
         <DropDown
-          label={"Gender"}
+          label={"Categoria do produto"}
           mode={"outlined"}
           visible={showDropDown}
           showDropDown={() => setShowDropDown(true)}

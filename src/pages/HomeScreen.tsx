@@ -13,7 +13,9 @@ import NearbyProduct from "../components/NerbyProduct";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/categories.service";
 import { fetchProducts } from "../services/products.service";
+import { signInUser } from "../services/user.service";
 import { categoriesSlice } from "../store/categories";
+import { userSlice } from "../store/user";
 
 const NearbyTitle = () => {
   return (
@@ -38,7 +40,7 @@ const CategoriesTitle = () => {
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
-  const categories = useSelector((state: any) => state.categories);
+  const categories = useSelector((state: any) => state.categories.categories);
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState<Product[]>();
@@ -51,7 +53,21 @@ export default function HomeScreen() {
     getCategories();
     getProducts();
     getCurrentPosition();
+    loginUser();
   }, []);
+
+  const loginUser = async () => {
+    const email = "pedroh.rique@hotmail.com";
+    const password = "123456";
+    const result = await signInUser({
+      email,
+      password,
+    });
+
+    if (result) {
+      dispatch(userSlice.actions.setUser({ email, uid: result.user.uid }));
+    }
+  };
 
   const getCategories = async () => {
     const result = await fetchCategories();

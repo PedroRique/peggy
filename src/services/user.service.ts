@@ -1,39 +1,48 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
-import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
-import { User } from "../models/User";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
 
-export const createUser = async (user: User) => {
-  const { name, email, password } = user;
+interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+}
 
-  const result = await createUserWithEmailAndPassword(
-    FIREBASE_AUTH,
-    email,
-    password
-  );
+interface SignInUserRequest {
+  email: string;
+  password: string;
+}
 
-  const userData: Omit<User, "password"> = {
-    name,
-    email,
-    uid: result.user.uid,
-  };
-
-  const docRef = await addDoc(collection(FIREBASE_DB, "users"), userData);
-
-  return docRef.id;
+export const createUser = async ({
+  name,
+  email,
+  password,
+}: CreateUserRequest) => {
+  try {
+    const result = await createUserWithEmailAndPassword(
+      FIREBASE_AUTH,
+      email,
+      password
+    );
+    await updateProfile(result.user, { displayName: name });
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-export const signInUser = async (user: User) => {
-  const { email, password } = user;
-
-  const result = await signInWithEmailAndPassword(
-    FIREBASE_AUTH,
-    email,
-    password
-  );
-
-  return result;
+export const signInUser = async ({ email, password }: SignInUserRequest) => {
+  try {
+    const result = await signInWithEmailAndPassword(
+      FIREBASE_AUTH,
+      email,
+      password
+    );
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
 };
