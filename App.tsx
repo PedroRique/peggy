@@ -17,6 +17,7 @@ import { PaperProvider } from "react-native-paper";
 import CategoryScreen from "./src/pages/CategoryScreen";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import NewRentScreen from "./src/pages/NewRentScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,6 +27,7 @@ type StackNavigation = {
   Product: undefined;
   Search: undefined;
   NewProduct: undefined;
+  NewRent: undefined;
   Category: undefined;
 };
 
@@ -81,6 +83,7 @@ export default function App() {
               <Stack.Screen name="Category" component={CategoryScreen} />
               <Stack.Screen name="Search" component={SearchScreen} />
               <Stack.Screen name="NewProduct" component={NewProductScreen} />
+              <Stack.Screen name="NewRent" component={NewRentScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </PaperProvider>

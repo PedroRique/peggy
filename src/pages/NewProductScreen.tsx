@@ -86,7 +86,9 @@ export default function NewProductScreen() {
           />
         </View>
       </ScrollView>
-      <Button title="Cadastrar" onPress={() => createProduct()} />
+      <View style={styles.footer}>
+        <Button title="Cadastrar" onPress={() => createProduct()} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -123,5 +125,8 @@ const styles = StyleSheet.create({
   imageSize: { width: 150, height: 150 },
   label: {
     marginBottom: 4,
+  },
+  footer: {
+    padding: 16,
   },
 });

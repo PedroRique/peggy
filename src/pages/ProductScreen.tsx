@@ -12,8 +12,11 @@ import { fetchUserData } from "../services/user.service";
 import { useEffect, useState } from "react";
 import { UserData } from "../models/UserData";
 import { Text } from "../components/Text/Text";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from "../../App";
 
 export default function ProductScreen() {
+  const navigation = useNavigation<StackTypes>();
   const product = useSelector(
     (state: AppState) => state.product.selectedProduct
   );
@@ -81,7 +84,12 @@ export default function ProductScreen() {
         {/* <BoldText style={styles.price}>
           P$80<BoldText style={styles.recurrence}>/dia</BoldText>
         </BoldText> */}
-        <Button title="Pegar emprestado" onPress={() => {}} />
+        <Button
+          title="Pegar emprestado"
+          onPress={() => {
+            navigation.navigate("NewRent");
+          }}
+        />
       </View>
     </SafeAreaView>
   );
