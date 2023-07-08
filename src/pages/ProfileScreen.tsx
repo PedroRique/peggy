@@ -57,7 +57,7 @@ export default function ProfileScreen() {
         <View style={styles.avatarContainer}>
           <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />
           <View>
-            <Rating color="#00C2FF" />
+            <Rating value={4.7} color="#00C2FF" />
             <Text style={styles.avatarBio}>
               Carioca, 27 anos. Itens com ótimo estado.
             </Text>

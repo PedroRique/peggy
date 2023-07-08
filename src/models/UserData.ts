@@ -3,4 +3,5 @@ export interface UserData  {
   email: string | null;
   photoURL: string | null;
   uid: string;
+  rate: number;
 }

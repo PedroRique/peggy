@@ -2,10 +2,10 @@ import { FontAwesome } from "@expo/vector-icons";
 import { BoldText } from "./Text/BoldText";
 import { StyleSheet } from "react-native";
 
-export const Rating = ({ color }: { color: string }) => {
+export const Rating = ({ color, value }: { color: string; value: number }) => {
   return (
     <BoldText style={[styles.ratingTextSize, { color }]}>
-      4.7 <FontAwesome name="star" size={24} color={color} />
+      {value} <FontAwesome name="star" size={24} color={color} />
     </BoldText>
   );
 };

@@ -49,7 +49,7 @@ export default function ProductScreen() {
       >
         <View style={styles.productInner}>
           <Header hasBack color="#fff">
-            <Rating color="#fff" />
+            <Rating value={4.7} color="#fff" />
           </Header>
         </View>
       </ImageBackground>
@@ -77,10 +77,10 @@ export default function ProductScreen() {
       </View>
 
       <View style={styles.productFooter}>
-        <BoldText style={styles.price}>
+        {/* <BoldText style={styles.price}>
           P$80<BoldText style={styles.recurrence}>/dia</BoldText>
-        </BoldText>
-        <Button title="Emprestar" onPress={() => {}} />
+        </BoldText> */}
+        <Button title="Pegar emprestado" onPress={() => {}} />
       </View>
     </SafeAreaView>
   );
