@@ -2,9 +2,9 @@ import {
   TextInput as ReactTextInput,
   TextInputProps,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { Text } from "./Text/Text";
 
 export const TextInput = ({
   style,

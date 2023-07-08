@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    fontFamily: 'RedHatDisplay',
   },
 });

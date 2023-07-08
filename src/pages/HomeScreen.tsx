@@ -2,7 +2,7 @@ import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import Geolocation from "@react-native-community/geolocation";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
@@ -18,6 +18,7 @@ import { userSlice } from "../store/slices/user.slice";
 import { ProductCard } from "../components/ProductCard";
 import { productSlice } from "../store/slices/product.slice";
 import { AppState } from "../store";
+import { Text } from "../components/Text/Text";
 
 const NearbyTitle = () => {
   return (
@@ -91,6 +92,7 @@ export default function HomeScreen() {
           uid,
           email,
           photoURL,
+          rate: 5,
         })
       );
     }
@@ -189,6 +191,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
+    fontFamily: 'RedHatDisplay',
     marginLeft: 8,
   },
   nearbyProducts: {

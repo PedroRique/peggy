@@ -13,8 +13,10 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { store } from "./src/store";
-import { PaperProvider,  } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import CategoryScreen from "./src/pages/CategoryScreen";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -63,19 +65,26 @@ function Main() {
 }
 
 export default function App() {
-  return (
-    <Provider store={store}>
-      <PaperProvider>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Main" component={Main} />
-            <Stack.Screen name="Product" component={ProductScreen} />
-            <Stack.Screen name="Category" component={CategoryScreen} />
-            <Stack.Screen name="Search" component={SearchScreen} />
-            <Stack.Screen name="NewProduct" component={NewProductScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </Provider>
-  );
+  const [fontsLoaded] = useFonts({
+    RedHatDisplay: require("./assets/fonts/RedHatDisplay.ttf"),
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <Provider store={store}>
+        <PaperProvider>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Main" component={Main} />
+              <Stack.Screen name="Product" component={ProductScreen} />
+              <Stack.Screen name="Category" component={CategoryScreen} />
+              <Stack.Screen name="Search" component={SearchScreen} />
+              <Stack.Screen name="NewProduct" component={NewProductScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
+    );
+  }
 }

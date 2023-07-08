@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
@@ -11,6 +11,7 @@ import { AppState } from "../store";
 import { fetchUserData } from "../services/user.service";
 import { useEffect, useState } from "react";
 import { UserData } from "../models/UserData";
+import { Text } from "../components/Text/Text";
 
 export default function ProductScreen() {
   const product = useSelector(

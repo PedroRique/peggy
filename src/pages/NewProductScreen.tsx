@@ -1,9 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DropDown from "react-native-paper-dropdown";
-import { TextInput as PaperInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import Button from "../components/Button";
@@ -11,10 +10,10 @@ import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
 import { Category } from "../models/Category";
+import { ImageFolder } from "../models/ImageFolder.enum";
 import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { AppState } from "../store";
-import { ImageFolder } from "../models/ImageFolder.enum";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);

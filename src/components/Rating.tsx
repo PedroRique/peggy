@@ -13,5 +13,6 @@ export const Rating = ({ color, value }: { color: string; value: number }) => {
 const styles = StyleSheet.create({
   ratingTextSize: {
     fontSize: 32,
+    fontFamily: 'RedHatDisplay',
   },
 });

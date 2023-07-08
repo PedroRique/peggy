@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
+import { Pressable, StyleSheet, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
@@ -18,6 +18,7 @@ import { userSlice } from "../store/slices/user.slice";
 import { updateUserPhotoURL } from "../services/user.service";
 import { AppState } from "../store";
 import { ImageFolder } from "../models/ImageFolder.enum";
+import { Text } from "../components/Text/Text";
 
 export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();

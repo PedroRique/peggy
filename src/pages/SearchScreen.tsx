@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, StyleSheet, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/Header";
 import { BoldText } from "../components/Text/BoldText";
 import { useLazyEffect } from "../hooks/useLazyEffect";
 import { Product } from "../models/Product";
 import { searchProducts } from "../services/product.service";
+import { Text } from "../components/Text/Text";
 const noSearch = require("../../assets/images/noSearch/noSearch.png");
 
 export default function SearchScreen() {

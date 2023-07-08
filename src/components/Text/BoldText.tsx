@@ -5,7 +5,10 @@ export const BoldText = ({
   style,
   ...rest
 }: React.PropsWithChildren<TextProps>) => (
-  <Text style={[{ fontWeight: "bold" }, style]} {...rest}>
+  <Text
+    style={[{ fontWeight: "900", fontFamily: "RedHatDisplay" }, style]}
+    {...rest}
+  >
     {children}
   </Text>
 );

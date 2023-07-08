@@ -2,12 +2,12 @@ import { Feather } from "@expo/vector-icons";
 import {
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
 } from "react-native";
 import { Product } from "../models/Product";
+import { Text } from "./Text/Text";
 
 interface ProductCardProps
   extends Pick<TouchableOpacityProps, "style" | "onPress"> {
