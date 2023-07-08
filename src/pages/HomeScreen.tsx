@@ -117,15 +117,16 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header>Vamos emprestar!</Header>
-      <Pressable
-        onPress={() => {
-          navigation.navigate("Search");
-        }}
-      >
-        <TextInput placeholder="O que você precisa, Pedro?" />
-      </Pressable>
-      <View>
+      <ScrollView style={styles.scrollContainer}>
+        <Header>Vamos emprestar!</Header>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Search");
+          }}
+        >
+          <TextInput placeholder="O que você precisa, Pedro?" />
+        </Pressable>
+
         <NearbyTitle />
         <ScrollView style={styles.nearbyProducts} horizontal>
           {products?.map((product, i) => (
@@ -143,40 +144,42 @@ export default function HomeScreen() {
             />
           ))}
         </ScrollView>
-      </View>
 
-      <View>
         <CategoriesTitle />
-        <ScrollView style={styles.categoriesList}>
-          <View style={styles.category}>
-            {categories?.map((category: any, i: any) => (
-              <CategoryTile
-                key={i}
-                category={category}
-                onPress={() => {
-                  dispatch(categorySlice.actions.setSelectedCategory(category));
-                  navigation.navigate("Category");
-                }}
-              />
-            ))}
-          </View>
+        <ScrollView
+          style={styles.categoriesList}
+          contentContainerStyle={styles.categoriesList}
+        >
+          {categories?.map((category: any, i: any) => (
+            <CategoryTile
+              key={i}
+              category={category}
+              onPress={() => {
+                dispatch(categorySlice.actions.setSelectedCategory(category));
+                navigation.navigate("Category");
+              }}
+            />
+          ))}
         </ScrollView>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: "white",
     flex: 1,
+  },
+  scrollContainer: {
+    padding: 16,
   },
   titleContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
+    marginBottom: 12,
   },
   titleView: {
     display: "flex",
@@ -189,11 +192,11 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   nearbyProducts: {
-    paddingVertical: 16,
     gap: 12,
+    marginBottom: 16,
   },
   categoriesList: {
-    paddingVertical: 16,
+    display: "flex",
+    gap: 16,
   },
-  category: {},
 });
