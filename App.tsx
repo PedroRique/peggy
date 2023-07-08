@@ -14,6 +14,7 @@ import ProfileScreen from "./src/pages/ProfileScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { store } from "./src/store";
 import { PaperProvider,  } from "react-native-paper";
+import CategoryScreen from "./src/pages/CategoryScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ type StackNavigation = {
   Product: undefined;
   Search: undefined;
   NewProduct: undefined;
+  Category: undefined;
 };
 
 const TabBarIconMapping: Record<string, string> = {
@@ -68,6 +70,7 @@ export default function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Product" component={ProductScreen} />
+            <Stack.Screen name="Category" component={CategoryScreen} />
             <Stack.Screen name="Search" component={SearchScreen} />
             <Stack.Screen name="NewProduct" component={NewProductScreen} />
           </Stack.Navigator>

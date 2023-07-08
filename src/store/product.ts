@@ -1,20 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Product } from "../models/Product";
 
-export interface ProductsState {
+export interface ProductState {
   nearProducts: Product[];
   profileProducts: Product[];
   selectedProduct: Product | null;
 }
 
-const initialState: ProductsState = {
+const initialState: ProductState = {
   nearProducts: [],
   profileProducts: [],
   selectedProduct: null,
 };
 
-export const productsSlice = createSlice({
-  name: "products",
+export const productSlice = createSlice({
+  name: "product",
   initialState,
   reducers: {
     setNearProducts: (state, action) => {

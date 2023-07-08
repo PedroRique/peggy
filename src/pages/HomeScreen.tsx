@@ -6,17 +6,18 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
-import CategoryBanner from "../components/CategoryBanner";
+import CategoryTile from "../components/CategoryTile";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/categories.service";
 import { fetchProducts } from "../services/products.service";
 import { signInUser } from "../services/user.service";
-import { categoriesSlice } from "../store/categories";
+import { categorySlice } from "../store/category";
 import { profileSlice } from "../store/profile";
 import { ProductCard } from "../components/ProductCard";
-import { productsSlice } from "../store/products";
+import { productSlice } from "../store/product";
+import { AppState } from "../store";
 
 const NearbyTitle = () => {
   return (
@@ -41,7 +42,9 @@ const CategoriesTitle = () => {
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackTypes>();
-  const categories = useSelector((state: any) => state.categories.categories);
+  const categories = useSelector(
+    (state: AppState) => state.category.categories
+  );
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState<Product[]>();
@@ -80,7 +83,7 @@ export default function HomeScreen() {
 
   const getCategories = async () => {
     const result = await fetchCategories();
-    dispatch(categoriesSlice.actions.setCategories(result));
+    dispatch(categorySlice.actions.setCategories(result));
   };
 
   const getProducts = async () => {
@@ -115,7 +118,7 @@ export default function HomeScreen() {
               key={i}
               product={product}
               onPress={() => {
-                dispatch(productsSlice.actions.setSelectedProduct(product));
+                dispatch(productSlice.actions.setSelectedProduct(product));
                 navigation.navigate("Product");
               }}
               showDistance
@@ -132,7 +135,14 @@ export default function HomeScreen() {
         <ScrollView style={styles.categoriesList}>
           <View style={styles.category}>
             {categories?.map((category: any, i: any) => (
-              <CategoryBanner key={i} category={category} />
+              <CategoryTile
+                key={i}
+                category={category}
+                onPress={() => {
+                  dispatch(categorySlice.actions.setSelectedCategory(category));
+                  navigation.navigate("Category");
+                }}
+              />
             ))}
           </View>
         </ScrollView>

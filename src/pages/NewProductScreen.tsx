@@ -13,21 +13,24 @@ import { useSelector } from "react-redux";
 import DropDown from "react-native-paper-dropdown";
 import { Category } from "../models/Category";
 import { pickImage } from "../services/camera.service";
+import { AppState } from "../store";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);
   const [productName, setProductName] = useState("");
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
-  const categories = useSelector((state: any) => state.categories.categories);
-  const profile = useSelector((state: any) => state.profile.profile);
+  const categories = useSelector(
+    (state: AppState) => state.category.categories
+  );
+  const profile = useSelector((state: AppState) => state.profile.profile);
 
   const createProduct = async () => {
     await addProduct({
       name: productName,
       imageUrl,
       category,
-      userId: profile.uid,
+      userId: profile?.uid || "",
     });
   };
 

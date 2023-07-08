@@ -16,11 +16,14 @@ import { fetchProductsById } from "../services/products.service";
 import { pickImage } from "../services/camera.service";
 import { profileSlice } from "../store/profile";
 import { updateUserPhotoURL } from "../services/user.service";
+import { AppState } from "../store";
 
 export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
   const dispatch = useDispatch();
-  const profile: Profile = useSelector((state: any) => state.profile.profile);
+  const profile: Profile | null = useSelector(
+    (state: AppState) => state.profile.profile
+  );
 
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -29,7 +32,7 @@ export default function ProfileScreen() {
   }, []);
 
   const getUserProducts = async () => {
-    const result = await fetchProductsById(profile.uid);
+    const result = await fetchProductsById(profile?.uid || "");
     setProducts(result);
   };
 
@@ -38,13 +41,13 @@ export default function ProfileScreen() {
     updateUserPhotoURL(result);
     dispatch(
       profileSlice.actions.setProfile({
-        ...profile,
+        ...profile!,
         photoURL: result,
       })
     );
   };
 
-  const { displayName, photoURL } = profile;
+  const { displayName, photoURL } = profile!;
 
   return (
     <SafeAreaView style={styles.container}>

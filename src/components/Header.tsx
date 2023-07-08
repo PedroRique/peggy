@@ -7,6 +7,7 @@ import { StackTypes } from "../../App";
 interface HeaderProps {
   title?: string | null;
   hasBack?: boolean;
+  hasBorder?: boolean;
   onBack?: () => void;
   children?: any;
   color?: string;
@@ -16,12 +17,19 @@ export const Header = ({
   children,
   title,
   hasBack,
+  hasBorder,
   onBack,
   color,
 }: HeaderProps) => {
   const navigation = useNavigation<StackTypes>();
   return (
-    <View style={[styles.headerContainer, hasBack && styles.hasBackStyles]}>
+    <View
+      style={[
+        styles.headerContainer,
+        hasBack && styles.hasBackStyles,
+        hasBorder && styles.hasBorderStyles,
+      ]}
+    >
       {hasBack && (
         <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
           <FontAwesome5 name="arrow-left" size={32} color={color} />
@@ -41,9 +49,11 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   hasBackStyles: {
+    paddingHorizontal: 16,
+  },
+  hasBorderStyles: {
     borderBottomColor: "#ededed",
     borderBottomWidth: 1,
-    paddingHorizontal: 16,
   },
   title: {
     fontSize: 32,

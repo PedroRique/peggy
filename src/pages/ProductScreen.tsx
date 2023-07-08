@@ -11,10 +11,10 @@ import { AppState } from "../store";
 
 export default function ProductScreen() {
   const product = useSelector(
-    (state: AppState) => state.products.selectedProduct
+    (state: AppState) => state.product.selectedProduct
   );
   const categories = useSelector(
-    (state: AppState) => state.categories.categories
+    (state: AppState) => state.category.categories
   );
 
   const getCategoryLabel = () => {

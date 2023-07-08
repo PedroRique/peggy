@@ -1,12 +1,20 @@
 import { Feather } from "@expo/vector-icons";
-import { ImageBackground, StyleSheet, View } from "react-native";
-import { Category } from "../services/categories.service";
+import {
+  ImageBackground,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native";
 import { BoldText } from "./Text/BoldText";
+import { Category } from "../models/Category";
 const tech = require("../../assets/images/categories/tech.jpg");
 
-export default function CategoryBanner({ category }: { category: Category }) {
+type CategoryTileProps = TouchableOpacityProps & { category: Category };
+
+export default function CategoryTile({ category, ...rest }: CategoryTileProps) {
   return (
-    <View style={styles.categoryContainer}>
+    <TouchableOpacity style={styles.categoryContainer} {...rest}>
       <ImageBackground
         style={styles.category}
         source={{ uri: category.imageUrl }}
@@ -17,7 +25,7 @@ export default function CategoryBanner({ category }: { category: Category }) {
           <BoldText>{category.name}</BoldText>
         </View>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 }
 

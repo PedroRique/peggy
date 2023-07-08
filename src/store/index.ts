@@ -1,18 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { CategoriesState, categoriesSlice } from "./categories";
-import { ProductsState, productsSlice } from "./products";
+import { CategoryState, categorySlice } from "./category";
+import { ProductState, productSlice } from "./product";
 import { ProfileState, profileSlice } from "./profile";
 
 export interface AppState {
-  categories: CategoriesState;
+  category: CategoryState;
   profile: ProfileState;
-  products: ProductsState;
+  product: ProductState;
 }
 
 const reducer = {
-  categories: categoriesSlice.reducer,
+  category: categorySlice.reducer,
   profile: profileSlice.reducer,
-  products: productsSlice.reducer,
+  product: productSlice.reducer,
 };
 
 export const store = configureStore({

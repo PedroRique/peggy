@@ -17,8 +17,10 @@ export default function SearchScreen() {
   }, [searchText]);
 
   const search = async () => {
-    const result = await searchProducts(searchText);
-    setProducts(result);
+    if (searchText) {
+      const result = await searchProducts(searchText);
+      setProducts(result);
+    }
   };
 
   return (
