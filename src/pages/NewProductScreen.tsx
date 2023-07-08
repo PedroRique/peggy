@@ -13,6 +13,7 @@ import { Category } from "../models/Category";
 import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { AppState } from "../store";
+import { ImageFolder } from "../models/ImageFolder.enum";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);
@@ -34,7 +35,7 @@ export default function NewProductScreen() {
   };
 
   const getPhoto = async () => {
-    const result = await pickImage();
+    const result = await pickImage(ImageFolder.PRODUCTS);
     setImageUrl(result);
   };
 

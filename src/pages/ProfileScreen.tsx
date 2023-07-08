@@ -17,6 +17,7 @@ import { pickImage } from "../services/camera.service";
 import { userSlice } from "../store/slices/user.slice";
 import { updateUserPhotoURL } from "../services/user.service";
 import { AppState } from "../store";
+import { ImageFolder } from "../models/ImageFolder.enum";
 
 export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -37,7 +38,7 @@ export default function ProfileScreen() {
   };
 
   const getPhotoUrl = async () => {
-    const result = await pickImage();
+    const result = await pickImage(ImageFolder.USERS);
     updateUserPhotoURL(result);
     dispatch(
       userSlice.actions.setProfile({

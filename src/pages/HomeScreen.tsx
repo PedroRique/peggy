@@ -54,22 +54,26 @@ export default function HomeScreen() {
   }>();
 
   useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    await loginUser();
     getCategories();
     getProducts();
     getCurrentPosition();
-    loginUser();
     // registerUser();
-  }, []);
+  };
 
   const registerUser = async () => {
     const email = "pedroh.rique@hotmail.com";
     const password = "123456";
     const result = await createUser({
-      name: 'Pedro Rique',
+      name: "Pedro Rique",
       email,
       password,
     });
-  }
+  };
 
   const loginUser = async () => {
     const email = "pedroh.rique@hotmail.com";
