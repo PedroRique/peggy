@@ -11,8 +11,8 @@ import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Product } from "../models/Product";
-import { Profile } from "../models/Profile";
-import { fetchProductsById } from "../services/products.service";
+import { UserData } from "../models/UserData";
+import { fetchProductsById } from "../services/product.service";
 import { pickImage } from "../services/camera.service";
 import { userSlice } from "../store/slices/user.slice";
 import { updateUserPhotoURL } from "../services/user.service";
@@ -21,7 +21,7 @@ import { AppState } from "../store";
 export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
   const dispatch = useDispatch();
-  const profile: Profile | null = useSelector(
+  const profile: UserData | null = useSelector(
     (state: AppState) => state.user.profile
   );
 
@@ -47,11 +47,11 @@ export default function ProfileScreen() {
     );
   };
 
-  const { displayName, photoURL } = profile!;
+  const { name, photoURL } = profile || {};
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={displayName} hasBack hasBorder />
+      <Header title={name} hasBack hasBorder />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
           <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />

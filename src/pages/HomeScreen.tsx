@@ -10,9 +10,9 @@ import CategoryTile from "../components/CategoryTile";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { Product } from "../models/Product";
-import { fetchCategories } from "../services/categories.service";
-import { fetchProducts } from "../services/products.service";
-import { signInUser } from "../services/user.service";
+import { fetchCategories } from "../services/category.service";
+import { fetchProducts } from "../services/product.service";
+import { createUser, signInUser } from "../services/user.service";
 import { categorySlice } from "../store/slices/category.slice";
 import { userSlice } from "../store/slices/user.slice";
 import { ProductCard } from "../components/ProductCard";
@@ -58,7 +58,18 @@ export default function HomeScreen() {
     getProducts();
     getCurrentPosition();
     loginUser();
+    // registerUser();
   }, []);
+
+  const registerUser = async () => {
+    const email = "pedroh.rique@hotmail.com";
+    const password = "123456";
+    const result = await createUser({
+      name: 'Pedro Rique',
+      email,
+      password,
+    });
+  }
 
   const loginUser = async () => {
     const email = "pedroh.rique@hotmail.com";
@@ -72,7 +83,7 @@ export default function HomeScreen() {
       const { displayName, uid, email, photoURL } = result.user;
       dispatch(
         userSlice.actions.setProfile({
-          displayName,
+          name: displayName,
           uid,
           email,
           photoURL,

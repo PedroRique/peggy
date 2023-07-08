@@ -8,7 +8,7 @@ import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Product } from "../models/Product";
-import { fetchProductsByCategory } from "../services/products.service";
+import { fetchProductsByCategory } from "../services/product.service";
 import { AppState } from "../store";
 
 export default function CategoryScreen() {

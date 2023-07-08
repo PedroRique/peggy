@@ -4,7 +4,15 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { UserData } from "../models/UserData";
 
 interface CreateUserRequest {
   name: string;
@@ -29,9 +37,10 @@ export const createUser = async ({
       password
     );
     await updateProfile(result.user, { displayName: name });
-    await addDoc(collection(FIREBASE_DB, "users"), {
+    await setDoc(doc(FIREBASE_DB, "users", result.user.uid), {
       name,
       email,
+      photoURL: null,
     });
   } catch (error) {
     console.error(error);
@@ -39,9 +48,27 @@ export const createUser = async ({
 };
 
 export const updateUserPhotoURL = async (photoURL: string | null) => {
-  const user = FIREBASE_AUTH.currentUser;
-  if (user) {
-    await updateProfile(user, { photoURL });
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      await updateProfile(user, { photoURL });
+      await updateDoc(doc(FIREBASE_DB, "users", user.uid), { photoURL });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchUserData = async (
+  uid?: string
+): Promise<UserData | undefined> => {
+  try {
+    if (uid) {
+      const result = await getDoc(doc(FIREBASE_DB, "users", uid));
+      return result.data() as UserData;
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 

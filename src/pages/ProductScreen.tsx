@@ -8,6 +8,9 @@ import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
+import { fetchUserData } from "../services/user.service";
+import { useEffect, useState } from "react";
+import { UserData } from "../models/UserData";
 
 export default function ProductScreen() {
   const product = useSelector(
@@ -17,10 +20,24 @@ export default function ProductScreen() {
     (state: AppState) => state.category.categories
   );
 
+  const [categoryLabel, setCategoryLabel] = useState("");
+  const [userData, setUserData] = useState<UserData>();
+
+  useEffect(() => {
+    getUserData();
+    getCategoryLabel();
+  }, []);
+
   const getCategoryLabel = () => {
-    return categories
+    const categoryLabel = categories
       .find((c) => c.id === product?.category)
       ?.name.toLowerCase();
+    setCategoryLabel(categoryLabel || "");
+  };
+
+  const getUserData = async () => {
+    const result = await fetchUserData(product?.userId);
+    setUserData(result);
   };
 
   return (
@@ -42,7 +59,7 @@ export default function ProductScreen() {
 
         {!!product?.category && (
           <View style={styles.chipsContainer}>
-            <Chip>{getCategoryLabel()}</Chip>
+            <Chip>{categoryLabel}</Chip>
           </View>
         )}
 
@@ -53,11 +70,11 @@ export default function ProductScreen() {
         </Text>
 
         <View style={styles.userContainer}>
-          <Avatar />
+          <Avatar imageUrl={userData?.photoURL} />
           <View>
             <BoldText style={{ color: "#333333" }}>Emprestado por</BoldText>
             <BoldText style={{ fontSize: 24, color: "#333333" }}>
-              Lucas Maciel
+              {userData?.name}
             </BoldText>
           </View>
         </View>
@@ -111,6 +128,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    gap: 12,
   },
   productFooter: {
     display: "flex",

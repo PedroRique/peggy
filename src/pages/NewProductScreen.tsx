@@ -1,18 +1,17 @@
 import { Feather } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View, ScrollView } from "react-native";
+import { useState } from "react";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
-import { addProduct, uploadProductImage } from "../services/products.service";
 import { BoldText } from "../components/Text/BoldText";
-import { useSelector } from "react-redux";
-import DropDown from "react-native-paper-dropdown";
 import { Category } from "../models/Category";
 import { pickImage } from "../services/camera.service";
+import { addProduct } from "../services/product.service";
 import { AppState } from "../store";
 
 export default function NewProductScreen() {
@@ -34,10 +33,6 @@ export default function NewProductScreen() {
     });
   };
 
-  useEffect(() => {
-    console.log(categories);
-  }, [categories]);
-
   const getPhoto = async () => {
     const result = await pickImage();
     setImageUrl(result);
@@ -49,7 +44,7 @@ export default function NewProductScreen() {
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.newProductForm}>
-          <BoldText>Foto do produto</BoldText>
+          <BoldText style={styles.label}>Foto do produto</BoldText>
           <TouchableOpacity style={styles.addImageBtn} onPress={getPhoto}>
             {imageUrl ? (
               <Image source={{ uri: imageUrl }} style={styles.imageSize} />
@@ -58,7 +53,7 @@ export default function NewProductScreen() {
             )}
           </TouchableOpacity>
 
-          <BoldText>Nome do produto</BoldText>
+          <BoldText style={styles.label}>Nome do produto</BoldText>
           <TextInput
             placeholder="Nome do produto"
             onChangeText={(text) => setProductName(text)}
@@ -110,4 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   imageSize: { width: 150, height: 150 },
+  label: {
+    marginBottom: 4,
+  },
 });

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { UserData } from "../../models/UserData";
+import { UserData } from "../models/UserData";
 
 export interface UserState {
   profile: UserData | null;

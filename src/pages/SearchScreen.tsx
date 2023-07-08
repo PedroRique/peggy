@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 import { BoldText } from "../components/Text/BoldText";
 import { useLazyEffect } from "../hooks/useLazyEffect";
 import { Product } from "../models/Product";
-import { searchProducts } from "../services/products.service";
+import { searchProducts } from "../services/product.service";
 const noSearch = require("../../assets/images/noSearch/noSearch.png");
 
 export default function SearchScreen() {

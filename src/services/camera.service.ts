@@ -1,5 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
-import { uploadProductImage } from "./products.service";
+import { uploadProductImage } from "./product.service";
 
 export const pickImage = async (): Promise<string | null> => {
   let result = await ImagePicker.launchImageLibraryAsync({
