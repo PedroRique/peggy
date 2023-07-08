@@ -87,7 +87,7 @@ export default function ProductScreen() {
         <Button
           title="Pegar emprestado"
           onPress={() => {
-            navigation.navigate("NewRent");
+            navigation.navigate("NewLoan");
           }}
         />
       </View>

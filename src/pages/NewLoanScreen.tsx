@@ -12,7 +12,7 @@ import { UserData } from "../models/UserData";
 import { fetchUserData } from "../services/user.service";
 import { TextInput } from "../components/Input";
 
-export default function NewRentScreen() {
+export default function NewLoanScreen() {
   const selectedProduct = useSelector(
     (state: AppState) => state.product.selectedProduct
   );
@@ -47,7 +47,7 @@ export default function NewRentScreen() {
 
         <Text style={styles.commonText}>de {userData?.name}</Text>
 
-        <View style={styles.rentForm}>
+        <View style={styles.loanForm}>
           <View style={styles.row}>
             <TextInput
               label="De:"
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   row: { display: "flex", gap: 12, flexDirection: "row" },
-  rentForm: {
+  loanForm: {
     marginTop: 32,
   },
   footer: {
