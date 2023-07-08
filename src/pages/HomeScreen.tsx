@@ -13,10 +13,10 @@ import { Product } from "../models/Product";
 import { fetchCategories } from "../services/categories.service";
 import { fetchProducts } from "../services/products.service";
 import { signInUser } from "../services/user.service";
-import { categorySlice } from "../store/category";
-import { profileSlice } from "../store/profile";
+import { categorySlice } from "../store/slices/category.slice";
+import { userSlice } from "../store/slices/user.slice";
 import { ProductCard } from "../components/ProductCard";
-import { productSlice } from "../store/product";
+import { productSlice } from "../store/slices/product.slice";
 import { AppState } from "../store";
 
 const NearbyTitle = () => {
@@ -71,7 +71,7 @@ export default function HomeScreen() {
     if (result) {
       const { displayName, uid, email, photoURL } = result.user;
       dispatch(
-        profileSlice.actions.setProfile({
+        userSlice.actions.setProfile({
           displayName,
           uid,
           email,

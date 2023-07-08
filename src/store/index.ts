@@ -1,17 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { CategoryState, categorySlice } from "./category";
-import { ProductState, productSlice } from "./product";
-import { ProfileState, profileSlice } from "./profile";
+import { CategoryState, categorySlice } from "./slices/category.slice";
+import { ProductState, productSlice } from "./slices/product.slice";
+import { UserState, userSlice } from "./slices/user.slice";
 
 export interface AppState {
   category: CategoryState;
-  profile: ProfileState;
+  user: UserState;
   product: ProductState;
 }
 
 const reducer = {
   category: categorySlice.reducer,
-  profile: profileSlice.reducer,
+  user: userSlice.reducer,
   product: productSlice.reducer,
 };
 

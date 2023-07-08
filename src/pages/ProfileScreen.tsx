@@ -14,7 +14,7 @@ import { Product } from "../models/Product";
 import { Profile } from "../models/Profile";
 import { fetchProductsById } from "../services/products.service";
 import { pickImage } from "../services/camera.service";
-import { profileSlice } from "../store/profile";
+import { userSlice } from "../store/slices/user.slice";
 import { updateUserPhotoURL } from "../services/user.service";
 import { AppState } from "../store";
 
@@ -22,7 +22,7 @@ export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
   const dispatch = useDispatch();
   const profile: Profile | null = useSelector(
-    (state: AppState) => state.profile.profile
+    (state: AppState) => state.user.profile
   );
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -40,7 +40,7 @@ export default function ProfileScreen() {
     const result = await pickImage();
     updateUserPhotoURL(result);
     dispatch(
-      profileSlice.actions.setProfile({
+      userSlice.actions.setProfile({
         ...profile!,
         photoURL: result,
       })

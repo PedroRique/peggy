@@ -3,7 +3,8 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
+import { addDoc, collection } from "firebase/firestore";
 
 interface CreateUserRequest {
   name: string;
@@ -28,7 +29,10 @@ export const createUser = async ({
       password
     );
     await updateProfile(result.user, { displayName: name });
-    return result;
+    await addDoc(collection(FIREBASE_DB, "users"), {
+      name,
+      email,
+    });
   } catch (error) {
     console.error(error);
   }

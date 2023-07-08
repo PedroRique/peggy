@@ -1,16 +1,16 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Profile } from "../models/Profile";
+import { Profile } from "../../models/Profile";
 
-export interface ProfileState {
+export interface UserState {
   profile: Profile | null;
 }
 
-const initialState: ProfileState = {
+const initialState: UserState = {
   profile: null,
 };
 
-export const profileSlice = createSlice({
-  name: "profile",
+export const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
     setProfile: (state, action: PayloadAction<Profile>) => {

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Product } from "../models/Product";
+import { Product } from "../../models/Product";
 
 export interface ProductState {
   nearProducts: Product[];

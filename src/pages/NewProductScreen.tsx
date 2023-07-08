@@ -23,7 +23,7 @@ export default function NewProductScreen() {
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
-  const profile = useSelector((state: AppState) => state.profile.profile);
+  const profile = useSelector((state: AppState) => state.user.profile);
 
   const createProduct = async () => {
     await addProduct({
