@@ -5,14 +5,17 @@ import {
   View,
 } from "react-native";
 import { Text } from "./Text/Text";
+import { BoldText } from "./Text/BoldText";
 
 export const TextInput = ({
   style,
   value,
   multiline,
+  label,
   ...rest
-}: React.PropsWithChildren<TextInputProps>) => (
-  <View>
+}: React.PropsWithChildren<TextInputProps & { label?: string }>) => (
+  <View style={{ flex: 1 }}>
+    <BoldText style={styles.label}>{label}</BoldText>
     <ReactTextInput
       value={value}
       multiline={multiline}
@@ -40,5 +43,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     right: 0,
+  },
+  label: {
+    marginBottom: 4,
   },
 });

@@ -47,7 +47,7 @@ export default function NewProductScreen() {
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.newProductForm}>
-          <BoldText style={styles.label}>Foto do produto</BoldText>
+          <BoldText style={{ marginBottom: 4 }}>Foto do produto</BoldText>
           <TouchableOpacity style={styles.addImageBtn} onPress={getPhoto}>
             {imageUrl ? (
               <Image source={{ uri: imageUrl }} style={styles.imageSize} />
@@ -56,14 +56,14 @@ export default function NewProductScreen() {
             )}
           </TouchableOpacity>
 
-          <BoldText style={styles.label}>Nome do produto</BoldText>
           <TextInput
+            label="Nome do produto"
             placeholder="Nome do produto"
             onChangeText={setName}
           ></TextInput>
 
-          <BoldText style={styles.label}>Descrição do produto</BoldText>
           <TextInput
+            label="Descrição do produto"
             multiline={true}
             numberOfLines={4}
             value={description}
@@ -123,9 +123,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   imageSize: { width: 150, height: 150 },
-  label: {
-    marginBottom: 4,
-  },
   footer: {
     padding: 16,
   },

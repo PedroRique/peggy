@@ -77,7 +77,7 @@ export default function HomeScreen() {
   };
 
   const loginUser = async () => {
-    const email = "gabriele.rique@hotmail.com";
+    const email = "pedroh.rique@hotmail.com";
     const password = "123456";
     const result = await signInUser({
       email,
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   nearbyProducts: {
     gap: 12,
-    marginBottom: 16,
+    padding: 16,
   },
   categoriesList: {
     display: "flex",
