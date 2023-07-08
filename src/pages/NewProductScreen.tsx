@@ -1,8 +1,9 @@
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DropDown from "react-native-paper-dropdown";
+import { TextInput as PaperInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import Button from "../components/Button";
@@ -17,7 +18,8 @@ import { ImageFolder } from "../models/ImageFolder.enum";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);
-  const [productName, setProductName] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
   const categories = useSelector(
@@ -27,7 +29,8 @@ export default function NewProductScreen() {
 
   const createProduct = async () => {
     await addProduct({
-      name: productName,
+      name,
+      description,
       imageUrl,
       category,
       userId: profile?.uid || "",
@@ -41,7 +44,7 @@ export default function NewProductScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Novo produto" hasBack />
+      <Header title="Novo produto" hasBack hasBorder />
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.newProductForm}>
@@ -57,7 +60,15 @@ export default function NewProductScreen() {
           <BoldText style={styles.label}>Nome do produto</BoldText>
           <TextInput
             placeholder="Nome do produto"
-            onChangeText={(text) => setProductName(text)}
+            onChangeText={setName}
+          ></TextInput>
+
+          <BoldText style={styles.label}>Descrição do produto</BoldText>
+          <TextInput
+            multiline={true}
+            numberOfLines={4}
+            value={description}
+            onChangeText={setDescription}
           ></TextInput>
 
           <BoldText>Categoria do produto</BoldText>
@@ -104,6 +115,11 @@ const styles = StyleSheet.create({
     borderColor: "#00C2FF",
     overflow: "hidden",
     marginBottom: 24,
+    backgroundColor: "white",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 10,
   },
   imageSize: { width: 150, height: 150 },
   label: {

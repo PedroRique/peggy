@@ -2,13 +2,25 @@ import {
   TextInput as ReactTextInput,
   TextInputProps,
   StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export const TextInput = ({
   style,
+  value,
+  multiline,
   ...rest
 }: React.PropsWithChildren<TextInputProps>) => (
-  <ReactTextInput style={[styles.input, style]} {...rest}></ReactTextInput>
+  <View>
+    <ReactTextInput
+      value={value}
+      multiline={multiline}
+      style={[styles.input, style]}
+      {...rest}
+    ></ReactTextInput>
+    {multiline && <Text style={styles.textLength}>{value?.length}/100</Text>}
+  </View>
 );
 
 const styles = StyleSheet.create({
@@ -22,5 +34,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
+  },
+  textLength: {
+    fontSize: 12,
+    position: "absolute",
+    bottom: 0,
+    right: 0,
   },
 });

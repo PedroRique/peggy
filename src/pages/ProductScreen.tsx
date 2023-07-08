@@ -63,11 +63,7 @@ export default function ProductScreen() {
           </View>
         )}
 
-        <Text style={styles.productDescription}>
-          A GoPro inspira você a atingir seus objetivos enquanto você desfruta
-          do caminho. Suas câmeras são projetadas para lhe ajudar a capturar
-          todas as experiências da maneira em que você quer.
-        </Text>
+        <Text style={styles.productDescription}>{product?.description}</Text>
 
         <View style={styles.userContainer}>
           <Avatar imageUrl={userData?.photoURL} />

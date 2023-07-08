@@ -76,7 +76,7 @@ export default function HomeScreen() {
   };
 
   const loginUser = async () => {
-    const email = "pedroh.rique@hotmail.com";
+    const email = "gabriele.rique@hotmail.com";
     const password = "123456";
     const result = await signInUser({
       email,
