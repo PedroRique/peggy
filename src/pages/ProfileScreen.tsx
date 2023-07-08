@@ -51,7 +51,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={displayName} hasBack />
+      <Header title={displayName} hasBack hasBorder />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
           <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />

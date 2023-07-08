@@ -37,6 +37,14 @@ export const fetchProductsById = async (userId: string) => {
   return await commonFetchProducts(q);
 };
 
+export const fetchProductsByCategory = async (categoryId: string) => {
+  const q = query(
+    collection(FIREBASE_DB, "products"),
+    where("category", "==", categoryId)
+  );
+  return await commonFetchProducts(q);
+};
+
 export const addProduct = async (product: Product) => {
   const docRef = await addDoc(collection(FIREBASE_DB, "products"), product);
 

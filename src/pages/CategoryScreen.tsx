@@ -1,19 +1,31 @@
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { ImageBackground, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Avatar } from "../components/Avatar";
-import Button from "../components/Button";
+import { useSelector } from "react-redux";
 import { Header } from "../components/Header";
+import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
-import { Chip } from "../components/Text/Chip";
-import { useSelector } from "react-redux";
+import { Product } from "../models/Product";
+import { fetchProductsByCategory } from "../services/products.service";
 import { AppState } from "../store";
-import { Feather } from "@expo/vector-icons";
 
 export default function CategoryScreen() {
   const selectedCategory = useSelector(
     (state: AppState) => state.category.selectedCategory
   );
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getUserProducts();
+  }, []);
+
+  const getUserProducts = async () => {
+    const result = await fetchProductsByCategory(selectedCategory?.id || "");
+    setProducts(result);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,6 +50,16 @@ export default function CategoryScreen() {
           ></Feather>
           {selectedCategory?.name}
         </BoldText>
+
+        <View style={styles.products}>
+          {products.map((product, i) => (
+            <ProductCard
+              key={i}
+              product={product}
+              style={{ minWidth: "calc(50% - 6px)" }}
+            ></ProductCard>
+          ))}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -66,8 +88,14 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 32,
     marginBottom: 16,
-    display: 'flex',
+    display: "flex",
     gap: 12,
-    alignItems: 'center'
+    alignItems: "center",
+  },
+  products: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
   },
 });
