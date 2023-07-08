@@ -16,6 +16,7 @@ import { signInUser } from "../services/user.service";
 import { categoriesSlice } from "../store/categories";
 import { profileSlice } from "../store/profile";
 import { ProductCard } from "../components/ProductCard";
+import { productsSlice } from "../store/products";
 
 const NearbyTitle = () => {
   return (
@@ -114,6 +115,7 @@ export default function HomeScreen() {
               key={i}
               product={product}
               onPress={() => {
+                dispatch(productsSlice.actions.setSelectedProduct(product));
                 navigation.navigate("Product");
               }}
               showDistance

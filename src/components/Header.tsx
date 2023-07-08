@@ -21,7 +21,7 @@ export const Header = ({
 }: HeaderProps) => {
   const navigation = useNavigation<StackTypes>();
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, hasBack && styles.hasBackStyles]}>
       {hasBack && (
         <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
           <FontAwesome5 name="arrow-left" size={32} color={color} />
@@ -39,6 +39,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 16,
+  },
+  hasBackStyles: {
+    borderBottomColor: "#ededed",
+    borderBottomWidth: 1,
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 32,

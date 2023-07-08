@@ -6,12 +6,30 @@ import { Header } from "../components/Header";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
-const goPro = require("../../assets/images/products/go-pro.jpg");
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
 
 export default function ProductScreen() {
+  const product = useSelector(
+    (state: AppState) => state.products.selectedProduct
+  );
+  const categories = useSelector(
+    (state: AppState) => state.categories.categories
+  );
+
+  const getCategoryLabel = () => {
+    return categories
+      .find((c) => c.id === product?.category)
+      ?.name.toLowerCase();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground style={styles.product} source={goPro} resizeMode="cover">
+      <ImageBackground
+        style={styles.product}
+        source={{ uri: product?.imageUrl }}
+        resizeMode="cover"
+      >
         <View style={styles.productInner}>
           <Header hasBack color="#fff">
             <Rating color="#fff" />
@@ -20,12 +38,13 @@ export default function ProductScreen() {
       </ImageBackground>
 
       <View style={styles.productBody}>
-        <Text style={styles.productTitle}>GoPro Hero 8 Black</Text>
+        <Text style={styles.productTitle}>{product?.name}</Text>
 
-        <View style={styles.chipsContainer}>
-          <Chip>tecnologia</Chip>
-          <Chip>filmadoras</Chip>
-        </View>
+        {!!product?.category && (
+          <View style={styles.chipsContainer}>
+            <Chip>{getCategoryLabel()}</Chip>
+          </View>
+        )}
 
         <Text style={styles.productDescription}>
           A GoPro inspira você a atingir seus objetivos enquanto você desfruta

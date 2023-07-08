@@ -32,7 +32,7 @@ export default function SearchScreen() {
         autoFocus
       />
 
-      {products.length ? (
+      {products.length && searchText ? (
         <View style={styles.resultContainer}>
           {products.map((prod, i) => (
             <BoldText key={i}>{prod.name}</BoldText>

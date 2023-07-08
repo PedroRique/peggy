@@ -18,11 +18,17 @@ interface ProductCardProps
 export const ProductCard = ({
   style,
   product,
+  onPress,
   showDistance = false,
   ...rest
 }: ProductCardProps) => {
   return (
-    <TouchableOpacity style={[styles.productContainer, style]} {...rest}>
+    <TouchableOpacity
+      disabled={!onPress}
+      onPress={onPress}
+      style={[styles.productContainer, style]}
+      {...rest}
+    >
       <ImageBackground
         style={styles.product}
         source={{ uri: product.imageUrl }}

@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
@@ -49,47 +49,48 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Header title={displayName} hasBack />
-      <View style={styles.avatarContainer}>
-        <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />
-        <View>
-          <Rating color="#00C2FF" />
-          <Text style={styles.avatarBio}>
-            Carioca, 27 anos. Itens com ótimo estado.
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.peggiesContainer}>
-        <BoldText style={styles.peggiesText}>Você possui:</BoldText>
-        <BoldText style={styles.peggiesText}>
-          <Text style={styles.peggiesTextBig}>120</Text> Peggies
-        </BoldText>
-      </View>
-
-      <View style={styles.myItemsContainer}>
-        <View style={styles.myItemsHeader}>
-          <BoldText style={styles.myItemsHeaderTitle}>Seus itens</BoldText>
-          <Pressable
-            style={styles.addItemButton}
-            onPress={() => {
-              navigation.navigate("NewProduct");
-            }}
-          >
-            <Feather name="plus" color={"#fff"} size={32} />
-          </Pressable>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.avatarContainer}>
+          <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />
+          <View>
+            <Rating color="#00C2FF" />
+            <Text style={styles.avatarBio}>
+              Carioca, 27 anos. Itens com ótimo estado.
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.products}>
-          {products.map((product, i) => (
-            <ProductCard
-              key={i}
-              product={product}
-              onPress={() => {}}
-              style={{ minWidth: "calc(50% - 6px)" }}
-            ></ProductCard>
-          ))}
+        <View style={styles.peggiesContainer}>
+          <BoldText style={styles.peggiesText}>Você possui:</BoldText>
+          <BoldText style={styles.peggiesText}>
+            <Text style={styles.peggiesTextBig}>120</Text> Peggies
+          </BoldText>
         </View>
-      </View>
+
+        <View style={styles.myItemsContainer}>
+          <View style={styles.myItemsHeader}>
+            <BoldText style={styles.myItemsHeaderTitle}>Seus itens</BoldText>
+            <Pressable
+              style={styles.addItemButton}
+              onPress={() => {
+                navigation.navigate("NewProduct");
+              }}
+            >
+              <Feather name="plus" color={"#fff"} size={32} />
+            </Pressable>
+          </View>
+
+          <View style={styles.products}>
+            {products.map((product, i) => (
+              <ProductCard
+                key={i}
+                product={product}
+                style={{ minWidth: "calc(50% - 6px)" }}
+              ></ProductCard>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -99,6 +100,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
+  },
+  scrollContainer: {
     padding: 16,
   },
   avatarContainer: {

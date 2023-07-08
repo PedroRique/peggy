@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../components/Button";
@@ -44,37 +44,39 @@ export default function NewProductScreen() {
     <SafeAreaView style={styles.container}>
       <Header title="Novo produto" hasBack />
 
-      <View style={styles.newProductForm}>
-        <BoldText>Foto do produto</BoldText>
-        <TouchableOpacity style={styles.addImageBtn} onPress={getPhoto}>
-          {imageUrl ? (
-            <Image source={{ uri: imageUrl }} style={styles.imageSize} />
-          ) : (
-            <Feather name="plus-square" color={"#00c2ff"} size={32} />
-          )}
-        </TouchableOpacity>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.newProductForm}>
+          <BoldText>Foto do produto</BoldText>
+          <TouchableOpacity style={styles.addImageBtn} onPress={getPhoto}>
+            {imageUrl ? (
+              <Image source={{ uri: imageUrl }} style={styles.imageSize} />
+            ) : (
+              <Feather name="plus-square" color={"#00c2ff"} size={32} />
+            )}
+          </TouchableOpacity>
 
-        <BoldText>Nome do produto</BoldText>
-        <TextInput
-          placeholder="Nome do produto"
-          onChangeText={(text) => setProductName(text)}
-        ></TextInput>
+          <BoldText>Nome do produto</BoldText>
+          <TextInput
+            placeholder="Nome do produto"
+            onChangeText={(text) => setProductName(text)}
+          ></TextInput>
 
-        <BoldText>Categoria do produto</BoldText>
-        <DropDown
-          label={"Categoria do produto"}
-          mode={"outlined"}
-          visible={showDropDown}
-          showDropDown={() => setShowDropDown(true)}
-          onDismiss={() => setShowDropDown(false)}
-          value={category}
-          setValue={setCategory}
-          list={categories.map((categ: Category) => ({
-            label: categ.name,
-            value: categ.id,
-          }))}
-        />
-      </View>
+          <BoldText>Categoria do produto</BoldText>
+          <DropDown
+            label={"Categoria do produto"}
+            mode={"outlined"}
+            visible={showDropDown}
+            showDropDown={() => setShowDropDown(true)}
+            onDismiss={() => setShowDropDown(false)}
+            value={category}
+            setValue={setCategory}
+            list={categories.map((categ: Category) => ({
+              label: categ.name,
+              value: categ.id,
+            }))}
+          />
+        </View>
+      </ScrollView>
       <Button title="Cadastrar" onPress={() => createProduct()} />
     </SafeAreaView>
   );
@@ -85,6 +87,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
+  },
+  scrollContainer: {
     padding: 16,
   },
   newProductForm: {

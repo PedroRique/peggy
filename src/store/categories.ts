@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Category } from "../models/Category";
 
-const initialState = {
+export interface CategoriesState {
+  categories: Category[];
+}
+
+const initialState: CategoriesState = {
   categories: [],
 };
 
