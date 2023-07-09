@@ -7,6 +7,7 @@ import {
 } from "@react-navigation/native-stack";
 import * as React from "react";
 import { Provider } from "react-redux";
+import LoginScreen from "./src/pages/LoginScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import NewProductScreen from "./src/pages/NewProductScreen";
 import ProductScreen from "./src/pages/ProductScreen";
@@ -78,6 +79,7 @@ export default function App() {
         <PaperProvider>
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Main" component={Main} />
               <Stack.Screen name="Product" component={ProductScreen} />
               <Stack.Screen name="Category" component={CategoryScreen} />
