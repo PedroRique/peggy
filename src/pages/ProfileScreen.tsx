@@ -15,23 +15,48 @@ import { UserData } from "../models/UserData";
 import { fetchProductsById } from "../services/product.service";
 import { pickImage } from "../services/camera.service";
 import { userSlice } from "../store/slices/user.slice";
-import { updateUserPhotoURL } from "../services/user.service";
+import { fetchUserData, updateUserPhotoURL } from "../services/user.service";
 import { AppState } from "../store";
 import { ImageFolder } from "../models/ImageFolder.enum";
 import { Text } from "../components/Text/Text";
+import AddressTile from "../components/AddressTile";
+import { Address } from "../models/Address";
+
+const SectionHeader = ({ title, route }: { title: string; route: any }) => {
+  const navigation = useNavigation<StackTypes>();
+  return (
+    <View style={styles.myHeader}>
+      <BoldText style={styles.myHeaderTitle}>{title}</BoldText>
+      <Pressable
+        style={styles.addButton}
+        onPress={() => {
+          navigation.navigate(route);
+        }}
+      >
+        <Feather name="plus" color={"#fff"} size={32} />
+      </Pressable>
+    </View>
+  );
+};
 
 export default function ProfileScreen() {
-  const navigation = useNavigation<StackTypes>();
   const dispatch = useDispatch();
   const profile: UserData | null = useSelector(
     (state: AppState) => state.user.profile
   );
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
     getUserProducts();
+    getUserData();
   }, []);
+
+  const getUserData = async () => {
+    const result = await fetchUserData(profile?.uid);
+    setUserData(result);
+  };
 
   const getUserProducts = async () => {
     const result = await fetchProductsById(profile?.uid || "");
@@ -49,7 +74,7 @@ export default function ProfileScreen() {
     );
   };
 
-  const { name, photoURL } = profile || {};
+  const { name, photoURL, addresses } = profile || {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,19 +97,8 @@ export default function ProfileScreen() {
           </BoldText>
         </View>
 
-        <View style={styles.myItemsContainer}>
-          <View style={styles.myItemsHeader}>
-            <BoldText style={styles.myItemsHeaderTitle}>Seus itens</BoldText>
-            <Pressable
-              style={styles.addItemButton}
-              onPress={() => {
-                navigation.navigate("NewProduct");
-              }}
-            >
-              <Feather name="plus" color={"#fff"} size={32} />
-            </Pressable>
-          </View>
-
+        <View style={styles.myContainer}>
+          <SectionHeader title="Seus produtos" route="NewProduct" />
           <View style={styles.products}>
             {products.map((product, i) => (
               <ProductCard
@@ -93,6 +107,16 @@ export default function ProfileScreen() {
                 style={{ minWidth: "calc(50% - 6px)" }}
               ></ProductCard>
             ))}
+          </View>
+        </View>
+
+        <View style={styles.myContainer}>
+          <SectionHeader title="Seus endereços" route="NewAddress" />
+          <View style={styles.addresses}>
+            {!!userData?.addresses?.length &&
+              userData.addresses.map((address, i) => (
+                <AddressTile key={i} address={address}></AddressTile>
+              ))}
           </View>
         </View>
       </ScrollView>
@@ -142,18 +166,20 @@ const styles = StyleSheet.create({
     fontSize: 32,
     lineHeight: 24,
   },
-  myItemsContainer: {},
-  myItemsHeader: {
+  myContainer: {
+    marginBottom: 16,
+  },
+  myHeader: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
   },
-  myItemsHeaderTitle: {
+  myHeaderTitle: {
     fontSize: 24,
   },
-  addItemButton: {
+  addButton: {
     backgroundColor: "#00C2FF",
     borderRadius: 5,
     padding: 4,
@@ -163,6 +189,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: 12,
+  },
+  addresses: {
+    display: "flex",
     gap: 12,
   },
 });

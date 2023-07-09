@@ -92,6 +92,7 @@ export default function HomeScreen() {
           uid,
           email,
           photoURL,
+          addresses: [],
           rate: 5,
         })
       );

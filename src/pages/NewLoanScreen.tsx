@@ -28,6 +28,7 @@ export default function NewLoanScreen() {
     const result = await fetchUserData(selectedProduct?.userId);
     setUserData(result);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Detalhes" hasBack hasBorder />

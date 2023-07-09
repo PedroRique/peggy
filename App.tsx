@@ -5,19 +5,20 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
+import AppLoading from "expo-app-loading";
+import { useFonts } from "expo-font";
 import * as React from "react";
+import { PaperProvider } from "react-native-paper";
 import { Provider } from "react-redux";
+import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
+import NewAddressScreen from "./src/pages/NewAddressScreen";
+import NewLoanScreen from "./src/pages/NewLoanScreen";
 import NewProductScreen from "./src/pages/NewProductScreen";
 import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { store } from "./src/store";
-import { PaperProvider } from "react-native-paper";
-import CategoryScreen from "./src/pages/CategoryScreen";
-import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
-import NewLoanScreen from "./src/pages/NewLoanScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,6 +28,7 @@ type StackNavigation = {
   Product: undefined;
   Search: undefined;
   NewProduct: undefined;
+  NewAddress: undefined;
   NewLoan: undefined;
   Category: undefined;
 };
@@ -83,6 +85,7 @@ export default function App() {
               <Stack.Screen name="Category" component={CategoryScreen} />
               <Stack.Screen name="Search" component={SearchScreen} />
               <Stack.Screen name="NewProduct" component={NewProductScreen} />
+              <Stack.Screen name="NewAddress" component={NewAddressScreen} />
               <Stack.Screen name="NewLoan" component={NewLoanScreen} />
             </Stack.Navigator>
           </NavigationContainer>
