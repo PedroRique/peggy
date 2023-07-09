@@ -10,6 +10,7 @@ import { useFonts } from "expo-font";
 import * as React from "react";
 import { PaperProvider } from "react-native-paper";
 import { Provider } from "react-redux";
+import LoginScreen from "./src/pages/LoginScreen";
 import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import NewAddressScreen from "./src/pages/NewAddressScreen";
@@ -80,6 +81,7 @@ export default function App() {
         <PaperProvider>
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Main" component={Main} />
               <Stack.Screen name="Product" component={ProductScreen} />
               <Stack.Screen name="Category" component={CategoryScreen} />
