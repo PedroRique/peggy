@@ -6,6 +6,8 @@ import {
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -13,6 +15,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { UserData } from "../models/UserData";
+import { Address } from "../models/Address";
 
 interface CreateUserRequest {
   name: string;
@@ -53,6 +56,50 @@ export const updateUserPhotoURL = async (photoURL: string | null) => {
     if (user) {
       await updateProfile(user, { photoURL });
       await updateDoc(doc(FIREBASE_DB, "users", user.uid), { photoURL });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addAddress = async (address: Address) => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      const ref = doc(FIREBASE_DB, "users", user.uid);
+      updateDoc(ref, { addresses: arrayUnion(address) });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const removeAddress = async (address: Address) => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      const ref = doc(FIREBASE_DB, "users", user.uid);
+      updateDoc(ref, { addresses: arrayRemove(address) });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateAddress = async (address: Address) => {
+  try {
+
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      const ref = doc(FIREBASE_DB, "users", user.uid);
+      const docSnapshot = await getDoc(ref);
+      const addresses = docSnapshot.data()?.addresses || [];
+      const addressIndex = addresses.findIndex((a: Address) => a.street === address.street);
+
+      if (addressIndex !== -1) {
+        addresses[addressIndex] = address;
+        await updateDoc(ref, { addresses });
+      }
     }
   } catch (error) {
     console.error(error);

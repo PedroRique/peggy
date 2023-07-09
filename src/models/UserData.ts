@@ -1,7 +1,10 @@
-export interface UserData  {
+import { Address } from "./Address";
+
+export interface UserData {
+  uid: string;
   name: string | null;
   email: string | null;
   photoURL: string | null;
-  uid: string;
+  addresses: Address[];
   rate: number;
 }
