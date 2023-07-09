@@ -14,7 +14,7 @@ import LoginScreen from "./src/pages/LoginScreen";
 import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import NewAddressScreen from "./src/pages/NewAddressScreen";
-import NewLoanScreen from "./src/pages/NewLoanScreen";
+import NewLoanRequestScreen from "./src/pages/NewLoanRequestScreen";
 import NewProductScreen from "./src/pages/NewProductScreen";
 import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
@@ -33,7 +33,7 @@ type StackNavigation = {
   Search: undefined;
   NewProduct: undefined;
   NewAddress: undefined;
-  NewLoan: undefined;
+  NewLoanRequest: undefined;
   Category: undefined;
 };
 
@@ -92,7 +92,10 @@ export default function App() {
               <Stack.Screen name="Search" component={SearchScreen} />
               <Stack.Screen name="NewProduct" component={NewProductScreen} />
               <Stack.Screen name="NewAddress" component={NewAddressScreen} />
-              <Stack.Screen name="NewLoan" component={NewLoanScreen} />
+              <Stack.Screen
+                name="NewLoanRequest"
+                component={NewLoanRequestScreen}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </PaperProvider>

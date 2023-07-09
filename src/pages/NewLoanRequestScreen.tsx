@@ -11,12 +11,17 @@ import { useState, useEffect } from "react";
 import { UserData } from "../models/UserData";
 import { fetchUserData } from "../services/user.service";
 import { TextInput } from "../components/Input";
+import { BoldText } from "../components/Text/BoldText";
+import DropDown from "react-native-paper-dropdown";
+import { Address } from "../models/Address";
 
-export default function NewLoanScreen() {
+export default function NewLoanRequestScreen() {
   const selectedProduct = useSelector(
     (state: AppState) => state.product.selectedProduct
   );
+  const [showDropDown, setShowDropDown] = useState(false);
   const [userData, setUserData] = useState<UserData>();
+  const [address, setAddress] = useState<UserData>();
 
   const [startDate, setStartDate] = useState("");
 
@@ -61,11 +66,28 @@ export default function NewLoanScreen() {
               onChangeText={setStartDate}
             ></TextInput>
           </View>
-          <TextInput
-            label="Buscar e devolver em:"
-            placeholder="Selecione um endereço"
-            onChangeText={setStartDate}
-          ></TextInput>
+
+          <View style={{ marginBottom: 32 }}>
+            <BoldText>Buscar e devolver em:</BoldText>
+            <DropDown
+              label={"Selecione um endereço"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={address}
+              setValue={setAddress}
+              list={
+                userData && userData.addresses
+                  ? userData.addresses.map((address: Address) => ({
+                      label: `${address.street} ${address.number}, ${address.complement} - ${address.city}`,
+                      value: address.street,
+                    }))
+                  : []
+              }
+            />
+          </View>
+
           <View style={styles.row}>
             <TextInput
               label="Buscar as:"

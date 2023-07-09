@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   myContainer: {
-    marginBottom: 16,
+    marginBottom: 32,
   },
   myHeader: {
     display: "flex",
