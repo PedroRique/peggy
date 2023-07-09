@@ -14,16 +14,23 @@ import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
 import DropDown from "react-native-paper-dropdown";
 import { Address } from "../models/Address";
+import { createLoan } from "../services/loan.service";
 
 export default function NewLoanRequestScreen() {
   const selectedProduct = useSelector(
     (state: AppState) => state.product.selectedProduct
   );
+  const profile: UserData | null = useSelector(
+    (state: AppState) => state.user.profile
+  );
   const [showDropDown, setShowDropDown] = useState(false);
   const [userData, setUserData] = useState<UserData>();
-  const [address, setAddress] = useState<UserData>();
+  const [address, setAddress] = useState('');
 
   const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [pickUpTime, setPickUpTime] = useState("");
+  const [giveBackTime, setGiveBackTime] = useState("");
 
   useEffect(() => {
     getUserData();
@@ -33,6 +40,18 @@ export default function NewLoanRequestScreen() {
     const result = await fetchUserData(selectedProduct?.userId);
     setUserData(result);
   };
+
+  const onSubmit = async () => {
+    await createLoan({
+      address: address || '',
+      endDate,
+      giveBackTime,
+      pickUpTime,
+      receiverId: profile?.uid || '',
+      senderId: selectedProduct?.userId || '',
+      startDate,
+    })
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,7 +82,7 @@ export default function NewLoanRequestScreen() {
             <TextInput
               label="Até:"
               placeholder="DD/MM/YYYY"
-              onChangeText={setStartDate}
+              onChangeText={setEndDate}
             ></TextInput>
           </View>
 
@@ -92,18 +111,18 @@ export default function NewLoanRequestScreen() {
             <TextInput
               label="Buscar as:"
               placeholder="00:00"
-              onChangeText={setStartDate}
+              onChangeText={setPickUpTime}
             ></TextInput>
             <TextInput
               label="Devolver as:"
               placeholder="00:00"
-              onChangeText={setStartDate}
+              onChangeText={setGiveBackTime}
             ></TextInput>
           </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Button title="Cadastrar" onPress={() => ({})} />
+        <Button title="Solicitar" onPress={onSubmit} />
       </View>
     </SafeAreaView>
   );

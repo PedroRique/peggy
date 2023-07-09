@@ -77,7 +77,7 @@ export default function HomeScreen() {
   };
 
   const loginUser = async () => {
-    const email = "pedroh.rique@hotmail.com";
+    const email = "gabriele.rique@hotmail.com";
     const password = "123456";
     const result = await signInUser({
       email,
@@ -120,7 +120,10 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <Header>Vamos emprestar!</Header>
         <Pressable
           onPress={() => {
@@ -192,7 +195,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    fontFamily: 'RedHatDisplay',
+    fontFamily: "RedHatDisplay",
     marginLeft: 8,
   },
   nearbyProducts: {
