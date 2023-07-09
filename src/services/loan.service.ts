@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import { Loan, LoanRequest, LoanStatus } from "../models/Loan";
 

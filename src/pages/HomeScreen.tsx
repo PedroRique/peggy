@@ -59,44 +59,9 @@ export default function HomeScreen() {
   }, []);
 
   const init = async () => {
-    await loginUser();
     getCategories();
     getProducts();
     getCurrentPosition();
-    // registerUser();
-  };
-
-  const registerUser = async () => {
-    const email = "pedroh.rique@hotmail.com";
-    const password = "123456";
-    const result = await createUser({
-      name: "Pedro Rique",
-      email,
-      password,
-    });
-  };
-
-  const loginUser = async () => {
-    const email = "gabriele.rique@hotmail.com";
-    const password = "123456";
-    const result = await signInUser({
-      email,
-      password,
-    });
-
-    if (result) {
-      const { displayName, uid, email, photoURL } = result.user;
-      dispatch(
-        userSlice.actions.setProfile({
-          name: displayName,
-          uid,
-          email,
-          photoURL,
-          addresses: [],
-          rate: 5,
-        })
-      );
-    }
   };
 
   const getCategories = async () => {
