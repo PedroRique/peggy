@@ -21,6 +21,7 @@ import { ImageFolder } from "../models/ImageFolder.enum";
 import { Text } from "../components/Text/Text";
 import AddressTile from "../components/AddressTile";
 import { Address } from "../models/Address";
+import { Colors } from "../shared/Colors";
 
 const SectionHeader = ({ title, route }: { title: string; route: any }) => {
   const navigation = useNavigation<StackTypes>();
@@ -83,7 +84,7 @@ export default function ProfileScreen() {
         <View style={styles.avatarContainer}>
           <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />
           <View>
-            <Rating value={4.7} color="#00C2FF" />
+            <Rating value={4.7} color={Colors.Blue} />
             <Text style={styles.avatarBio}>
               Carioca, 27 anos. Itens com ótimo estado.
             </Text>
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   addButton: {
-    backgroundColor: "#00C2FF",
+    backgroundColor: Colors.Blue,
     borderRadius: 5,
     padding: 4,
     paddingHorizontal: 5,

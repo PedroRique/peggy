@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#00C2FF",
+    borderColor: Colors.Blue,
     overflow: "hidden",
     marginBottom: 24,
     backgroundColor: "white",

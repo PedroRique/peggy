@@ -10,17 +10,18 @@ import { useFonts } from "expo-font";
 import * as React from "react";
 import { PaperProvider } from "react-native-paper";
 import { Provider } from "react-redux";
-import LoginScreen from "./src/pages/LoginScreen";
 import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
+import LoginScreen from "./src/pages/LoginScreen";
 import NewAddressScreen from "./src/pages/NewAddressScreen";
 import NewLoanRequestScreen from "./src/pages/NewLoanRequestScreen";
 import NewProductScreen from "./src/pages/NewProductScreen";
 import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
-import SearchScreen from "./src/pages/SearchScreen";
-import { store } from "./src/store";
 import RegisterScreen from "./src/pages/RegisterScreen";
+import SearchScreen from "./src/pages/SearchScreen";
+import { Colors } from "./src/shared/Colors";
+import { store } from "./src/store";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -61,7 +62,7 @@ function Main() {
           return "";
         },
         tabBarStyle: { backgroundColor: "#f3f3f3", height: 70 },
-        tabBarActiveTintColor: "#ff9900",
+        tabBarActiveTintColor: Colors.Orange,
         tabBarInactiveTintColor: "#444",
         headerShown: false,
       })}

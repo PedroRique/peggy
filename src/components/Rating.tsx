@@ -3,7 +3,7 @@ import { BoldText } from "./Text/BoldText";
 import { StyleSheet } from "react-native";
 
 export const Rating = ({
-  color = "#00C2FF",
+  color = Colors.Blue,
   value,
 }: {
   color?: string;

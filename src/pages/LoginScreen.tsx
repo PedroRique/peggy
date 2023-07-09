@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   forgotText: {
-    color: "#00C2FF",
+    color: Colors.Blue,
     marginTop: 20,
   },
   underlineText: {

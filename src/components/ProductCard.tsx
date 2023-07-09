@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Product } from "../models/Product";
 import { Text } from "./Text/Text";
+import { Colors } from "../shared/Colors";
 
 interface ProductCardProps
   extends Pick<TouchableOpacityProps, "style" | "onPress"> {
@@ -38,7 +39,7 @@ export const ProductCard = ({
       >
         {showDistance && (
           <View style={styles.distanceContainer}>
-            <Feather name="map-pin" size={16} color="#00C2FF" />
+            <Feather name="map-pin" size={16} color={Colors.Blue} />
             <Text style={styles.distance}>650m</Text>
           </View>
         )}

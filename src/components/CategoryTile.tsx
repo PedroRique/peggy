@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { BoldText } from "./Text/BoldText";
 import { Category } from "../models/Category";
+import { Colors } from "../shared/Colors";
 const tech = require("../../assets/images/categories/tech.jpg");
 
 type CategoryTileProps = TouchableOpacityProps & { category: Category };
@@ -21,7 +22,7 @@ export default function CategoryTile({ category, ...rest }: CategoryTileProps) {
         resizeMode="cover"
       >
         <View style={styles.distanceContainer}>
-          <Feather name={category.icon as any} size={16} color={"#00c2ff"} />
+          <Feather name={category.icon as any} size={16} color={Colors.Blue} />
           <BoldText>{category.name}</BoldText>
         </View>
       </ImageBackground>

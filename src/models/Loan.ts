@@ -18,5 +18,5 @@ export enum LoanStatus {
   DENIED,
   PROGRESS,
   CANCELED,
-  DONE,
+  RETURNED,
 }

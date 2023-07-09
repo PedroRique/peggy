@@ -19,16 +19,17 @@ import { ProductCard } from "../components/ProductCard";
 import { productSlice } from "../store/slices/product.slice";
 import { AppState } from "../store";
 import { Text } from "../components/Text/Text";
+import { Colors } from "../shared/Colors";
 
 const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
-        <Feather name="map-pin" size={24} color="#00C2FF" />
+        <Feather name="map-pin" size={24} color={Colors.Blue} />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
-      <FontAwesome5 name="arrow-right" size={32} color="#FF9900" />
+      <FontAwesome5 name="arrow-right" size={32} color={Colors.Orange} />
     </View>
   );
 };
