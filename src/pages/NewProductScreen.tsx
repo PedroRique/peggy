@@ -14,6 +14,7 @@ import { ImageFolder } from "../models/ImageFolder.enum";
 import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { AppState } from "../store";
+import { Colors } from "../shared/Colors";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);

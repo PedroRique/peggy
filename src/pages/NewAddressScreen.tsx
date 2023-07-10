@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
+import { Colors } from "../shared/Colors";
 
 export default function NewAddressScreen() {
   const [number, setNumber] = useState("");

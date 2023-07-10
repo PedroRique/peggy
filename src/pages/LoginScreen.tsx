@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
 import { signInUser } from "../services/user.service";
+import { Colors } from "../shared/Colors";
 import { userSlice } from "../store/slices/user.slice";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
