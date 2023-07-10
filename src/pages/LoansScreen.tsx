@@ -4,6 +4,9 @@ import { Header } from "../components/Header";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Text } from "../components/Text/Text";
+import { useEffect, useState } from "react";
+import { fetchLoans } from "../services/loan.service";
+import { Loan } from "../models/Loan";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -25,6 +28,16 @@ function LoanTabs() {
 }
 
 export default function LoansScreen() {
+  const [loans, setLoans] = useState<Loan[]>([]);
+  useEffect(() => {
+    getLoans();
+  }, []);
+
+  const getLoans = async () => {
+    const result = await fetchLoans();
+    setLoans(result);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title={"Empréstimos"} />
