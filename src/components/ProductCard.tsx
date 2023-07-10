@@ -8,11 +8,13 @@ import {
 } from "react-native";
 import { Product } from "../models/Product";
 import { Text } from "./Text/Text";
+import { Colors } from "../shared/Colors";
 
 interface ProductCardProps
   extends Pick<TouchableOpacityProps, "style" | "onPress"> {
   product: Product;
   showDistance?: boolean;
+  hasShadow?: boolean;
   size?: number;
 }
 
@@ -22,13 +24,14 @@ export const ProductCard = ({
   onPress,
   size = 150,
   showDistance = false,
+  hasShadow = true,
   ...rest
 }: ProductCardProps) => {
   return (
     <TouchableOpacity
       disabled={!onPress}
       onPress={onPress}
-      style={[styles.productContainer, style, { width: size, height: size }]}
+      style={[styles.productContainer, style, { width: size, height: size }, hasShadow && styles.shadowStyle]}
       {...rest}
     >
       <ImageBackground
@@ -38,7 +41,7 @@ export const ProductCard = ({
       >
         {showDistance && (
           <View style={styles.distanceContainer}>
-            <Feather name="map-pin" size={16} color="#00C2FF" />
+            <Feather name="map-pin" size={16} color={Colors.Blue} />
             <Text style={styles.distance}>650m</Text>
           </View>
         )}
@@ -68,11 +71,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   productContainer: {
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  shadowStyle: {
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
+  }
 });

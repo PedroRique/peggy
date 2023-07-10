@@ -14,6 +14,7 @@ import { ImageFolder } from "../models/ImageFolder.enum";
 import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { AppState } from "../store";
+import { Colors } from "../shared/Colors";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);
@@ -52,7 +53,7 @@ export default function NewProductScreen() {
             {imageUrl ? (
               <Image source={{ uri: imageUrl }} style={styles.imageSize} />
             ) : (
-              <Feather name="plus-square" color={"#00c2ff"} size={32} />
+              <Feather name="plus-square" color={Colors.Blue} size={32} />
             )}
           </TouchableOpacity>
 
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#00C2FF",
+    borderColor: Colors.Blue,
     overflow: "hidden",
     marginBottom: 24,
     backgroundColor: "white",

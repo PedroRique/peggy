@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text } from "./Text/Text";
+import { Colors } from "../shared/Colors";
 
 export interface ButtonProps {
   onPress: () => void;
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     width: '100%',
-    backgroundColor: "#00C2FF",
+    backgroundColor: Colors.Blue,
   },
   text: {
     fontSize: 22,

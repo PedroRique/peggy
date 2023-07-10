@@ -87,7 +87,7 @@ export default function ProductScreen() {
         <Button
           title="Pegar emprestado"
           onPress={() => {
-            navigation.navigate("NewLoan");
+            navigation.navigate("NewLoanRequest");
           }}
         />
       </View>
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     height: 200,
     width: "100%",
     paddingHorizontal: 16,
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   productBody: {
     padding: 16,

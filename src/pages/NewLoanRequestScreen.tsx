@@ -11,14 +11,27 @@ import { useState, useEffect } from "react";
 import { UserData } from "../models/UserData";
 import { fetchUserData } from "../services/user.service";
 import { TextInput } from "../components/Input";
+import { BoldText } from "../components/Text/BoldText";
+import DropDown from "react-native-paper-dropdown";
+import { Address } from "../models/Address";
+import { createLoan } from "../services/loan.service";
+import { formatAddressLabel } from "../services/utils.service";
 
-export default function NewLoanScreen() {
+export default function NewLoanRequestScreen() {
   const selectedProduct = useSelector(
     (state: AppState) => state.product.selectedProduct
   );
+  const profile: UserData | null = useSelector(
+    (state: AppState) => state.user.profile
+  );
+  const [showDropDown, setShowDropDown] = useState(false);
   const [userData, setUserData] = useState<UserData>();
+  const [address, setAddress] = useState<string>("");
 
   const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [pickUpTime, setPickUpTime] = useState("");
+  const [giveBackTime, setGiveBackTime] = useState("");
 
   useEffect(() => {
     getUserData();
@@ -27,6 +40,19 @@ export default function NewLoanScreen() {
   const getUserData = async () => {
     const result = await fetchUserData(selectedProduct?.userId);
     setUserData(result);
+  };
+
+  const onSubmit = async () => {
+    await createLoan({
+      address,
+      endDate,
+      giveBackTime,
+      pickUpTime,
+      borrowerUserId: profile?.uid || "",
+      lenderUserId: selectedProduct?.userId || "",
+      productId: selectedProduct?.uid || "",
+      startDate,
+    });
   };
 
   return (
@@ -58,30 +84,49 @@ export default function NewLoanScreen() {
             <TextInput
               label="Até:"
               placeholder="DD/MM/YYYY"
-              onChangeText={setStartDate}
+              onChangeText={setEndDate}
             ></TextInput>
           </View>
-          <TextInput
-            label="Buscar e devolver em:"
-            placeholder="Selecione um endereço"
-            onChangeText={setStartDate}
-          ></TextInput>
+
+          <View style={{ marginBottom: 32 }}>
+            <BoldText>Buscar e devolver em:</BoldText>
+            <DropDown
+              label={"Selecione um endereço"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={address}
+              setValue={(addressLabel) => {
+                setAddress(addressLabel);
+              }}
+              list={
+                userData && userData.addresses
+                  ? userData.addresses.map((address: Address) => ({
+                      label: formatAddressLabel(address),
+                      value: formatAddressLabel(address),
+                    }))
+                  : []
+              }
+            />
+          </View>
+
           <View style={styles.row}>
             <TextInput
               label="Buscar as:"
               placeholder="00:00"
-              onChangeText={setStartDate}
+              onChangeText={setPickUpTime}
             ></TextInput>
             <TextInput
               label="Devolver as:"
               placeholder="00:00"
-              onChangeText={setStartDate}
+              onChangeText={setGiveBackTime}
             ></TextInput>
           </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Button title="Cadastrar" onPress={() => ({})} />
+        <Button title="Solicitar" onPress={onSubmit} />
       </View>
     </SafeAreaView>
   );

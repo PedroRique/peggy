@@ -45,7 +45,7 @@ export default function CategoryScreen() {
         <BoldText style={styles.categoryTitle}>
           <Feather
             name={selectedCategory?.icon as any}
-            color={"#00C2FF"}
+            color={Colors.Blue}
             size={32}
           ></Feather>
           {selectedCategory?.name}

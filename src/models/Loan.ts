@@ -1,16 +1,25 @@
+import { Product } from "./Product";
+import { UserData } from "./UserData";
+
 export interface LoanRequest {
   startDate: string;
   endDate: string;
   pickUpTime: string;
   giveBackTime: string;
   address: string;
-  senderId: string;
-  receiverId: string;
+  borrowerUserId: string;
+  lenderUserId: string;
+  productId: string;
 }
 
 export interface Loan extends LoanRequest {
-  uid?: string;
   status: LoanStatus;
+}
+
+export interface LoanWithInfo extends Loan {
+  status: LoanStatus;
+  product?: Product;
+  borrower?: UserData;
 }
 
 export enum LoanStatus {
@@ -19,5 +28,5 @@ export enum LoanStatus {
   DENIED,
   PROGRESS,
   CANCELED,
-  DONE,
+  RETURNED,
 }

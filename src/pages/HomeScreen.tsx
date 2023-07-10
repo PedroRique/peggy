@@ -9,26 +9,25 @@ import { StackTypes } from "../../App";
 import CategoryTile from "../components/CategoryTile";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
+import { ProductCard } from "../components/ProductCard";
+import { Text } from "../components/Text/Text";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/category.service";
 import { fetchProducts } from "../services/product.service";
-import { createUser, signInUser } from "../services/user.service";
-import { categorySlice } from "../store/slices/category.slice";
-import { userSlice } from "../store/slices/user.slice";
-import { ProductCard } from "../components/ProductCard";
-import { productSlice } from "../store/slices/product.slice";
+import { Colors } from "../shared/Colors";
 import { AppState } from "../store";
-import { Text } from "../components/Text/Text";
+import { categorySlice } from "../store/slices/category.slice";
+import { productSlice } from "../store/slices/product.slice";
 
 const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
-        <Feather name="map-pin" size={24} color="#00C2FF" />
+        <Feather name="map-pin" size={24} color={Colors.Blue} />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
-      <FontAwesome5 name="arrow-right" size={32} color="#FF9900" />
+      <FontAwesome5 name="arrow-right" size={32} color={Colors.Orange} />
     </View>
   );
 };
@@ -59,44 +58,9 @@ export default function HomeScreen() {
   }, []);
 
   const init = async () => {
-    await loginUser();
     getCategories();
     getProducts();
     getCurrentPosition();
-    // registerUser();
-  };
-
-  const registerUser = async () => {
-    const email = "pedroh.rique@hotmail.com";
-    const password = "123456";
-    const result = await createUser({
-      name: "Pedro Rique",
-      email,
-      password,
-    });
-  };
-
-  const loginUser = async () => {
-    const email = "pedroh.rique@hotmail.com";
-    const password = "123456";
-    const result = await signInUser({
-      email,
-      password,
-    });
-
-    if (result) {
-      const { displayName, uid, email, photoURL } = result.user;
-      dispatch(
-        userSlice.actions.setProfile({
-          name: displayName,
-          uid,
-          email,
-          photoURL,
-          addresses: [],
-          rate: 5,
-        })
-      );
-    }
   };
 
   const getCategories = async () => {
@@ -120,7 +84,10 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <Header>Vamos emprestar!</Header>
         <Pressable
           onPress={() => {
@@ -192,7 +159,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    fontFamily: 'RedHatDisplay',
+    fontFamily: "RedHatDisplay",
     marginLeft: 8,
   },
   nearbyProducts: {
