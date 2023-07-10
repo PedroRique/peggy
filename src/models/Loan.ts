@@ -4,8 +4,9 @@ export interface LoanRequest {
   pickUpTime: string;
   giveBackTime: string;
   address: string;
-  senderId: string;
-  receiverId: string;
+  borrowerUserId: string;
+  lenderUserId: string;
+  productId: string;
 }
 
 export interface Loan extends LoanRequest {

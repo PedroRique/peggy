@@ -15,6 +15,7 @@ import { BoldText } from "../components/Text/BoldText";
 import DropDown from "react-native-paper-dropdown";
 import { Address } from "../models/Address";
 import { createLoan } from "../services/loan.service";
+import { formatAddressLabel } from "../services/utils.service";
 
 export default function NewLoanRequestScreen() {
   const selectedProduct = useSelector(
@@ -25,7 +26,7 @@ export default function NewLoanRequestScreen() {
   );
   const [showDropDown, setShowDropDown] = useState(false);
   const [userData, setUserData] = useState<UserData>();
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState<string>("");
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -43,15 +44,16 @@ export default function NewLoanRequestScreen() {
 
   const onSubmit = async () => {
     await createLoan({
-      address: address || '',
+      address,
       endDate,
       giveBackTime,
       pickUpTime,
-      receiverId: profile?.uid || '',
-      senderId: selectedProduct?.userId || '',
+      borrowerUserId: profile?.uid || "",
+      lenderUserId: selectedProduct?.userId || "",
+      productId: selectedProduct?.uid || "",
       startDate,
-    })
-  }
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -95,12 +97,14 @@ export default function NewLoanRequestScreen() {
               showDropDown={() => setShowDropDown(true)}
               onDismiss={() => setShowDropDown(false)}
               value={address}
-              setValue={setAddress}
+              setValue={(addressLabel) => {
+                setAddress(addressLabel);
+              }}
               list={
                 userData && userData.addresses
                   ? userData.addresses.map((address: Address) => ({
-                      label: `${address.street} ${address.number}, ${address.complement} - ${address.city}`,
-                      value: address.street,
+                      label: formatAddressLabel(address),
+                      value: formatAddressLabel(address),
                     }))
                   : []
               }
