@@ -1,21 +1,63 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/Header";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Text } from "../components/Text/Text";
 import { useEffect, useState } from "react";
-import { fetchLoans } from "../services/loan.service";
-import { Loan } from "../models/Loan";
+import LoanTile from "../components/LoanTile";
+import { BoldText } from "../components/Text/BoldText";
+import { LoanWithInfo } from "../models/Loan";
+import { fetchLoansWithProductInfo } from "../services/loan.service";
+import { Colors } from "../shared/Colors";
 
 const Tab = createMaterialTopTabNavigator();
 
 const LendingTab = () => {
-  return <Text>Emprestando</Text>;
+  const [loans, setLoans] = useState<LoanWithInfo[]>([]);
+  useEffect(() => {
+    getLoans();
+  }, []);
+
+  const getLoans = async () => {
+    const result = await fetchLoansWithProductInfo("lender");
+    setLoans(result);
+  };
+
+  return (
+    <View style={styles.tabInner}>
+      <BoldText style={styles.sectionTitle}>Ativos</BoldText>
+
+      <View style={styles.loansContainer}>
+        {loans.map((loan, i) => (
+          <LoanTile key={i} loan={loan} />
+        ))}
+      </View>
+    </View>
+  );
 };
 
 const BorrowingTab = () => {
-  return <Text>Pedindo emprestado</Text>;
+  const [loans, setLoans] = useState<LoanWithInfo[]>([]);
+  useEffect(() => {
+    getLoans();
+  }, []);
+
+  const getLoans = async () => {
+    const result = await fetchLoansWithProductInfo("borrower");
+    setLoans(result);
+  };
+
+  return (
+    <View style={styles.tabInner}>
+      <BoldText style={styles.sectionTitle}>Ativos</BoldText>
+
+      <View style={styles.loansContainer}>
+        {loans.map((loan, i) => (
+          <LoanTile key={i} loan={loan} />
+        ))}
+      </View>
+    </View>
+  );
 };
 
 function LoanTabs() {
@@ -28,16 +70,6 @@ function LoanTabs() {
 }
 
 export default function LoansScreen() {
-  const [loans, setLoans] = useState<Loan[]>([]);
-  useEffect(() => {
-    getLoans();
-  }, []);
-
-  const getLoans = async () => {
-    const result = await fetchLoans();
-    setLoans(result);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Header title={"Empréstimos"} />
@@ -51,9 +83,23 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     padding: 16,
-    backgroundColor: "white",
+    backgroundColor: Colors.White,
   },
   scrollContainer: {
     padding: 16,
+  },
+  tabInner: {
+    backgroundColor: Colors.White,
+    padding: 16,
+    flex: 1,
+  },
+  sectionTitle: {
+    fontWeight: "700",
+    fontSize: 20,
+    marginBottom: 16,
+  },
+  loansContainer: {
+    display: "flex",
+    gap: 12,
   },
 });

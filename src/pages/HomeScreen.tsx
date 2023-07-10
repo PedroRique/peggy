@@ -9,17 +9,15 @@ import { StackTypes } from "../../App";
 import CategoryTile from "../components/CategoryTile";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
+import { ProductCard } from "../components/ProductCard";
+import { Text } from "../components/Text/Text";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/category.service";
 import { fetchProducts } from "../services/product.service";
-import { createUser, signInUser } from "../services/user.service";
-import { categorySlice } from "../store/slices/category.slice";
-import { userSlice } from "../store/slices/user.slice";
-import { ProductCard } from "../components/ProductCard";
-import { productSlice } from "../store/slices/product.slice";
-import { AppState } from "../store";
-import { Text } from "../components/Text/Text";
 import { Colors } from "../shared/Colors";
+import { AppState } from "../store";
+import { categorySlice } from "../store/slices/category.slice";
+import { productSlice } from "../store/slices/product.slice";
 
 const NearbyTitle = () => {
   return (

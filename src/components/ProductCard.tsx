@@ -14,6 +14,7 @@ interface ProductCardProps
   extends Pick<TouchableOpacityProps, "style" | "onPress"> {
   product: Product;
   showDistance?: boolean;
+  hasShadow?: boolean;
   size?: number;
 }
 
@@ -23,13 +24,14 @@ export const ProductCard = ({
   onPress,
   size = 150,
   showDistance = false,
+  hasShadow = true,
   ...rest
 }: ProductCardProps) => {
   return (
     <TouchableOpacity
       disabled={!onPress}
       onPress={onPress}
-      style={[styles.productContainer, style, { width: size, height: size }]}
+      style={[styles.productContainer, style, { width: size, height: size }, hasShadow && styles.shadowStyle]}
       {...rest}
     >
       <ImageBackground
@@ -69,11 +71,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   productContainer: {
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  shadowStyle: {
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
+  }
 });

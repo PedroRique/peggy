@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { BoldText } from "./Text/BoldText";
 import { StyleSheet } from "react-native";
+import { Colors } from "../shared/Colors";
 
 export const Rating = ({
   color = Colors.Blue,

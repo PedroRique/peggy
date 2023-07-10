@@ -1,3 +1,6 @@
+import { Product } from "./Product";
+import { UserData } from "./UserData";
+
 export interface LoanRequest {
   startDate: string;
   endDate: string;
@@ -11,6 +14,12 @@ export interface LoanRequest {
 
 export interface Loan extends LoanRequest {
   status: LoanStatus;
+}
+
+export interface LoanWithInfo extends Loan {
+  status: LoanStatus;
+  product?: Product;
+  borrower?: UserData;
 }
 
 export enum LoanStatus {
