@@ -45,6 +45,8 @@ export const createUser = async ({
       email,
       photoURL: null,
     });
+
+    return result;
   } catch (error) {
     console.error(error);
   }

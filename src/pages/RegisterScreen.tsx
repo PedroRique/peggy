@@ -4,61 +4,55 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BoldText } from "../components/Text/BoldText";
 import { userSlice } from "../store/slices/user.slice";
 import Button from "../components/Button";
-import { signInUser } from "../services/user.service";
+import { createUser} from "../services/user.service";
 import { Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { TextInput } from "../components/Input";
+
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
-import { TouchableHighlight } from "react-native";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
-export default function LoginScreen() {
-  const dispatch = useDispatch()
+export default function RegisterScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>()
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
   };
 
-  const loginUser = async () => {
-    if (email === "" || password === "") {
-      console.log("Preencha o email e a senha");
+  const registerUser = async () => {
+    if (name === "" || email === "" || password === "") {
+      console.log("Preencha nome, email e senha");
       return;
     }
-
-    const result = await signInUser({
+  
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      console.log("Por favor, insira um e-mail válido");
+      return;
+    }
+  
+    const result = await createUser({
+      name,
       email,
       password,
     });
-
-    if (result) {
-      const { displayName, uid, email, photoURL } = result.user;
-      dispatch(
-        userSlice.actions.setProfile({
-          name: displayName,
-          uid,
-          email,
-          photoURL,
-          addresses: [],
-          rate: 5,
-        })
-      );
-      console.log("Login bem-sucedido");
+  
+    if (result !== null && result !== undefined) {
+      console.log("Cadastro bem-sucedido");
       navigation.navigate("Main")
     } else {
       console.log("Credenciais inválidas");
     }
   };
-
-  const handleForgotPassword = () => {
-    
-  };
   
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.center}>
@@ -67,17 +61,26 @@ export default function LoginScreen() {
       <View style={styles.loginContainer}>
         <View>
           <View>
-            <BoldText style={styles.title}>E-mail</BoldText>
+            <BoldText style={styles.title}>Nome</BoldText>
             <TextInput
               style={styles.input}
-              placeholder="Insira seu e-mail"
-              value={email}
-              onChangeText={setEmail}
+              placeholder="Insira seu nome"
+              value={name}
+              onChangeText={setName}
             />
           </View>
           <View>
-            <BoldText style={styles.title}>Senha</BoldText>
+            <BoldText style={styles.title}>E-mail</BoldText>
             <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Insira seu e-mail"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+            <View>
+              <BoldText style={styles.title}>Senha</BoldText>
               <TextInput
                 style={styles.input}
                 placeholder="Insira sua senha"
@@ -85,34 +88,23 @@ export default function LoginScreen() {
                 value={password}
                 onChangeText={setPassword}
               />
-              <Feather
-                name={secureTextEntry ? 'eye-off' : 'eye'}
-                size={24}
-                color="gray"
-                style={styles.icon}
-                onPress={toggleSecureEntry}
-              />
             </View>
-            <BoldText style={[styles.forgotPassword, styles.forgotText]} onPress={handleForgotPassword}>
-              Esqueceu a senha?
-            </BoldText>
           </View>
         </View>
       </View>
       <View>
         <View>
-          <Button title="Login" onPress={() => loginUser()} />
+          <Button title="Cadastrar" onPress={() => registerUser()} />
         </View>
         <BoldText style={[styles.forgotText, styles.center]}>
-          Não possui uma conta?
+          Já possui uma conta?
         </BoldText>
-        <TouchableOpacity onPress={() => {navigation.navigate("Register")}}>
-          <BoldText style={[styles.underlineText, styles.center, styles.forgotText]} >
-            Cadastre-se 
-          </BoldText>
+        <TouchableOpacity onPress={() => {navigation.navigate("Login")}}>
+        <BoldText style={[styles.underlineText, styles.center, styles.forgotText]}>
+          Fazer login
+        </BoldText>
         </TouchableOpacity>
       </View>
-
     </SafeAreaView>
   );
 }
@@ -125,7 +117,7 @@ const styles = StyleSheet.create({
   },
   center: {
     alignItems: "center",
-    textAlign:"center",
+    textAlign: "center",
   },
   logo: {
     width: 140,
@@ -133,7 +125,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginVertical: 10,
+    marginVertical: 4,
   },
   loginContainer: {
     flex: 1,
@@ -148,6 +140,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
+    marginBottom:16,
   },
   passwordContainer: {
     position: "relative",
@@ -163,7 +156,7 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     color: "#00C2FF",
-    marginTop:20,
+    marginTop: 20,
   },
   underlineText: {
     textDecorationLine: "underline",

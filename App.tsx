@@ -20,6 +20,7 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { store } from "./src/store";
+import RegisterScreen from "./src/pages/RegisterScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,6 +28,8 @@ const Stack = createNativeStackNavigator();
 type StackNavigation = {
   Main: undefined;
   Product: undefined;
+  Login: undefined;
+  Register: undefined;
   Search: undefined;
   NewProduct: undefined;
   NewAddress: undefined;
@@ -82,6 +85,7 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
               <Stack.Screen name="Main" component={Main} />
               <Stack.Screen name="Product" component={ProductScreen} />
               <Stack.Screen name="Category" component={CategoryScreen} />
