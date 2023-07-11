@@ -1,22 +1,22 @@
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
-import { Text } from "../components/Text/Text";
-import { useSelector } from "react-redux";
-import { AppState } from "../store";
-import { Rating } from "../components/Rating";
-import { ProductCard } from "../components/ProductCard";
-import { useState, useEffect } from "react";
-import { UserData } from "../models/UserData";
-import { fetchUserData } from "../services/user.service";
 import { TextInput } from "../components/Input";
+import { ProductCard } from "../components/ProductCard";
+import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
-import DropDown from "react-native-paper-dropdown";
+import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
+import { UserData } from "../models/UserData";
 import { createLoan } from "../services/loan.service";
+import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel } from "../services/utils.service";
-import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { AppState } from "../store";
 
 export default function NewLoanRequestScreen() {
   const selectedProduct = useSelector(

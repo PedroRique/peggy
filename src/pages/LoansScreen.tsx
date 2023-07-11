@@ -9,6 +9,8 @@ import { BoldText } from "../components/Text/BoldText";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { fetchLoansWithProductInfo } from "../services/loan.service";
 import { Colors } from "../shared/Colors";
+import { useDispatch } from "react-redux";
+import { loanSlice } from "../store/slices/loan.slice";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,13 +21,17 @@ const LoansSection = ({
   title: string;
   loans: LoanWithInfo[];
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.loansSectionContainer}>
       <BoldText style={styles.sectionTitle}>{title}</BoldText>
 
       <View style={styles.loansContainer}>
         {loans.map((loan, i) => (
-          <LoanTile key={i} loan={loan} />
+          <LoanTile key={i} loan={loan} onPress={() => {
+            dispatch(loanSlice.actions.setSelectedLoan(loan));
+          }}/>
         ))}
       </View>
     </View>
