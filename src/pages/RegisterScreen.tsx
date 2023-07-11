@@ -5,10 +5,8 @@ import { BoldText } from "../components/Text/BoldText";
 import { userSlice } from "../store/slices/user.slice";
 import Button from "../components/Button";
 import { createUser} from "../services/user.service";
-import { Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { TextInput } from "../components/Input";
-
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -17,38 +15,42 @@ const Login = require("../../assets/images/Logo/peggy-logo.png");
 export default function RegisterScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>()
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  const toggleSecureEntry = () => {
-    setSecureTextEntry(!secureTextEntry);
-  };
 
   const registerUser = async () => {
-    if (name === "" || email === "" || password === "") {
-      console.log("Preencha nome, email e senha");
+    if (name === '' || email === '' || password === '') {
+      console.log('Preencha nome, email e senha');
       return;
     }
-  
+
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!emailRegex.test(email)) {
-      console.log("Por favor, insira um e-mail válido");
+      console.log('Por favor, insira um e-mail válido');
       return;
     }
-  
+
     const result = await createUser({
       name,
       email,
       password,
     });
-  
+
     if (result !== null && result !== undefined) {
-      console.log("Cadastro bem-sucedido");
-      navigation.navigate("Main")
+      console.log('Cadastro bem-sucedido');
+      dispatch(userSlice.actions.setProfile({
+        name: displayName,
+        email,
+        uid: "",
+        photoURL: null,
+        addresses: [],
+        rate: 0
+      }));
+      navigation.navigate('Main');
     } else {
-      console.log("Credenciais inválidas");
+      console.log('Credenciais inválidas');
     }
   };
   
@@ -61,8 +63,8 @@ export default function RegisterScreen() {
       <View style={styles.loginContainer}>
         <View>
           <View>
-            <BoldText style={styles.title}>Nome</BoldText>
             <TextInput
+              label="Nome"
               style={styles.input}
               placeholder="Insira seu nome"
               value={name}
@@ -70,9 +72,9 @@ export default function RegisterScreen() {
             />
           </View>
           <View>
-            <BoldText style={styles.title}>E-mail</BoldText>
             <View style={styles.passwordContainer}>
               <TextInput
+                label="E-mail"
                 style={styles.input}
                 placeholder="Insira seu e-mail"
                 value={email}
@@ -80,11 +82,11 @@ export default function RegisterScreen() {
               />
             </View>
             <View>
-              <BoldText style={styles.title}>Senha</BoldText>
               <TextInput
+                label="Senha"
                 style={styles.input}
                 placeholder="Insira sua senha"
-                secureTextEntry={secureTextEntry}
+                showEyeIcon={true}
                 value={password}
                 onChangeText={setPassword}
               />
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    marginBottom:16,
+    
   },
   passwordContainer: {
     position: "relative",
