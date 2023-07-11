@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import { CategoryState, categorySlice } from "./slices/category.slice";
 import { ProductState, productSlice } from "./slices/product.slice";
 import { UserState, userSlice } from "./slices/user.slice";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 
 export interface AppState {
   category: CategoryState;
@@ -26,6 +26,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 
 export const persistor = persistStore(store);

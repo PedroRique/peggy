@@ -75,7 +75,7 @@ export default function LoginScreen() {
           <View>
             <View style={styles.passwordContainer}>
               <TextInput
-                label="E-mail"
+                label="Senha"
                 style={styles.input}
                 placeholder="Insira sua senha"
                 secureTextEntry={secureTextEntry}

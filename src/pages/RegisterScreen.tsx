@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BoldText } from "../components/Text/BoldText";
 import { userSlice } from "../store/slices/user.slice";
 import Button from "../components/Button";
-import { createUser} from "../services/user.service";
+import { createUser } from "../services/user.service";
 import { Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { TextInput } from "../components/Input";
@@ -16,7 +16,7 @@ const Login = require("../../assets/images/Logo/peggy-logo.png");
 
 export default function RegisterScreen() {
   const dispatch = useDispatch();
-  const navigation = useNavigation<StackTypes>()
+  const navigation = useNavigation<StackTypes>();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,27 +31,26 @@ export default function RegisterScreen() {
       console.log("Preencha nome, email e senha");
       return;
     }
-  
+
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!emailRegex.test(email)) {
       console.log("Por favor, insira um e-mail válido");
       return;
     }
-  
+
     const result = await createUser({
       name,
       email,
       password,
     });
-  
+
     if (result !== null && result !== undefined) {
       console.log("Cadastro bem-sucedido");
-      navigation.navigate("Main")
+      navigation.navigate("Main");
     } else {
       console.log("Credenciais inválidas");
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,36 +59,30 @@ export default function RegisterScreen() {
       </View>
       <View style={styles.loginContainer}>
         <View>
-          <View>
-            <BoldText style={styles.title}>Nome</BoldText>
+          <TextInput
+            label="Nome"
+            style={styles.input}
+            placeholder="Insira seu nome"
+            value={name}
+            onChangeText={setName}
+          />
+          <View style={styles.passwordContainer}>
             <TextInput
+              label="E-mail"
               style={styles.input}
-              placeholder="Insira seu nome"
-              value={name}
-              onChangeText={setName}
+              placeholder="Insira seu e-mail"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
-          <View>
-            <BoldText style={styles.title}>E-mail</BoldText>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Insira seu e-mail"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
-            <View>
-              <BoldText style={styles.title}>Senha</BoldText>
-              <TextInput
-                style={styles.input}
-                placeholder="Insira sua senha"
-                secureTextEntry={secureTextEntry}
-                value={password}
-                onChangeText={setPassword}
-              />
-            </View>
-          </View>
+          <TextInput
+            label="Senha"
+            style={styles.input}
+            placeholder="Insira sua senha"
+            secureTextEntry={secureTextEntry}
+            value={password}
+            onChangeText={setPassword}
+          />
         </View>
       </View>
       <View>
@@ -99,10 +92,16 @@ export default function RegisterScreen() {
         <BoldText style={[styles.forgotText, styles.center]}>
           Já possui uma conta?
         </BoldText>
-        <TouchableOpacity onPress={() => {navigation.navigate("Login")}}>
-        <BoldText style={[styles.underlineText, styles.center, styles.forgotText]}>
-          Fazer login
-        </BoldText>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Login");
+          }}
+        >
+          <BoldText
+            style={[styles.underlineText, styles.center, styles.forgotText]}
+          >
+            Fazer login
+          </BoldText>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -140,7 +139,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    marginBottom:16,
   },
   passwordContainer: {
     position: "relative",

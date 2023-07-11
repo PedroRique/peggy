@@ -5,12 +5,16 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { User } from "firebase/auth";
 import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { View } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { FIREBASE_AUTH } from "./firebaseConfig";
 import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import LoansScreen from "./src/pages/LoansScreen";
@@ -23,7 +27,7 @@ import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { Colors } from "./src/shared/Colors";
-import { AppState, persistor, store } from "./src/store";
+import { persistor, store } from "./src/store";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -79,43 +83,72 @@ function Main() {
 }
 
 const Navigation = () => {
-  const user = useSelector((state: AppState) => state.user.profile);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState<User | null>();
+
+  useEffect(() => {
+    const subscriber = FIREBASE_AUTH.onAuthStateChanged((user) => {
+      setUser(user);
+      if (initializing) setInitializing(false);
+    });
+    return subscriber;
+  }, []);
+
+  if (initializing) return null;
+
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={user?.uid ? "Main" : "Login"}
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="Product" component={ProductScreen} />
-        <Stack.Screen name="Category" component={CategoryScreen} />
-        <Stack.Screen name="Search" component={SearchScreen} />
-        <Stack.Screen name="NewProduct" component={NewProductScreen} />
-        <Stack.Screen name="NewAddress" component={NewAddressScreen} />
-        <Stack.Screen name="NewLoanRequest" component={NewLoanRequestScreen} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {user ? (
+          <>
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Product" component={ProductScreen} />
+            <Stack.Screen name="Category" component={CategoryScreen} />
+            <Stack.Screen name="Search" component={SearchScreen} />
+            <Stack.Screen name="NewProduct" component={NewProductScreen} />
+            <Stack.Screen name="NewAddress" component={NewAddressScreen} />
+            <Stack.Screen
+              name="NewLoanRequest"
+              component={NewLoanRequestScreen}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     RedHatDisplay: require("./assets/fonts/RedHatDisplay.ttf"),
   });
 
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   } else {
     return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <PaperProvider>
-            <Navigation></Navigation>
-          </PaperProvider>
-        </PersistGate>
-      </Provider>
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <PaperProvider>
+              <Navigation></Navigation>
+            </PaperProvider>
+          </PersistGate>
+        </Provider>
+      </View>
     );
   }
 }

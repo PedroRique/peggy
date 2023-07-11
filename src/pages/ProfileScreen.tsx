@@ -1,27 +1,26 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, View, ScrollView } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
+import AddressTile from "../components/AddressTile";
 import { Avatar } from "../components/Avatar";
 import { Header } from "../components/Header";
 import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
+import { Text } from "../components/Text/Text";
+import { ImageFolder } from "../models/ImageFolder.enum";
 import { Product } from "../models/Product";
 import { UserData } from "../models/UserData";
-import { fetchProductsById } from "../services/product.service";
 import { pickImage } from "../services/camera.service";
-import { userSlice } from "../store/slices/user.slice";
+import { fetchProductsById } from "../services/product.service";
 import { fetchUserData, updateUserPhotoURL } from "../services/user.service";
-import { AppState } from "../store";
-import { ImageFolder } from "../models/ImageFolder.enum";
-import { Text } from "../components/Text/Text";
-import AddressTile from "../components/AddressTile";
-import { Address } from "../models/Address";
 import { Colors } from "../shared/Colors";
+import { AppState } from "../store";
+import { userSlice } from "../store/slices/user.slice";
 
 const SectionHeader = ({ title, route }: { title: string; route: any }) => {
   const navigation = useNavigation<StackTypes>();
@@ -75,7 +74,7 @@ export default function ProfileScreen() {
     );
   };
 
-  const { name, photoURL, addresses } = profile || {};
+  const { name, photoURL } = profile || {};
 
   return (
     <SafeAreaView style={styles.container}>

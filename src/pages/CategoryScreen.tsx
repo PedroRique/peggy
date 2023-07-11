@@ -10,6 +10,7 @@ import { BoldText } from "../components/Text/BoldText";
 import { Product } from "../models/Product";
 import { fetchProductsByCategory } from "../services/product.service";
 import { AppState } from "../store";
+import { Colors } from "../shared/Colors";
 
 export default function CategoryScreen() {
   const selectedCategory = useSelector(
@@ -36,7 +37,7 @@ export default function CategoryScreen() {
       >
         <View style={styles.bannerInner}>
           <Header hasBack color="#fff">
-            <Rating color="#fff" />
+            <Rating color="#fff" value={4.7} />
           </Header>
         </View>
       </ImageBackground>
