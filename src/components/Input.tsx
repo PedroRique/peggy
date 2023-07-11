@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   inputWithIcon: {
-    paddingRight: 36,
+    paddingRight: 48,
   },
   textLength: {
     fontSize: 12,

@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BoldText } from "../components/Text/BoldText";
 import { userSlice } from "../store/slices/user.slice";
 import Button from "../components/Button";
-import { createUser} from "../services/user.service";
+import { createUser } from "../services/user.service";
 import { useDispatch } from "react-redux";
 import { TextInput } from "../components/Input";
 import { useNavigation } from "@react-navigation/native";
@@ -41,7 +41,7 @@ export default function RegisterScreen() {
     if (result !== null && result !== undefined) {
       console.log('Cadastro bem-sucedido');
       dispatch(userSlice.actions.setProfile({
-        name: displayName,
+        name,
         email,
         uid: "",
         photoURL: null,
@@ -96,7 +96,7 @@ export default function RegisterScreen() {
       </View>
       <View>
         <View>
-          <Button title="Cadastrar" onPress={() => registerUser()} />
+          <Button title="Cadastrar" onPress={registerUser} />
         </View>
         <BoldText style={[styles.forgotText, styles.center]}>
           Já possui uma conta?
