@@ -13,8 +13,8 @@ import { Category } from "../models/Category";
 import { ImageFolder } from "../models/ImageFolder.enum";
 import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
-import { AppState } from "../store";
 import { Colors } from "../shared/Colors";
+import { AppState } from "../store";
 
 export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);
@@ -25,7 +25,6 @@ export default function NewProductScreen() {
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
-  const profile = useSelector((state: AppState) => state.user.profile);
 
   const createProduct = async () => {
     await addProduct({
@@ -33,7 +32,6 @@ export default function NewProductScreen() {
       description,
       imageUrl,
       category,
-      userId: profile?.uid || "",
     });
   };
 

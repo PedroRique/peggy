@@ -38,7 +38,7 @@ export default function LoginScreen() {
     if (result) {
       const { displayName, uid, email, photoURL } = result.user;
       dispatch(
-        userSlice.actions.setProfile({
+        userSlice.actions.setUserData({
           name: displayName,
           uid,
           email,

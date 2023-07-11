@@ -42,7 +42,7 @@ const SectionHeader = ({ title, route }: { title: string; route: any }) => {
 export default function ProfileScreen() {
   const dispatch = useDispatch();
   const profile: UserData | null = useSelector(
-    (state: AppState) => state.user.profile
+    (state: AppState) => state.user.userData
   );
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -67,7 +67,7 @@ export default function ProfileScreen() {
     const result = await pickImage(ImageFolder.USERS);
     updateUserPhotoURL(result);
     dispatch(
-      userSlice.actions.setProfile({
+      userSlice.actions.setUserData({
         ...profile!,
         photoURL: result,
       })

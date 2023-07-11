@@ -51,8 +51,15 @@ export const fetchProductsByCategory = async (categoryId: string) => {
   return await commonFetch<Product>(q);
 };
 
-export const addProduct = async (product: Product) => {
-  const docRef = await addDoc(collection(FIREBASE_DB, "products"), product);
+export const addProduct = async (product: Omit<Product, "userId">) => {
+  const finalProduct: Product = {
+    ...product,
+    userId: FIREBASE_AUTH.currentUser?.uid || "",
+  };
+  const docRef = await addDoc(
+    collection(FIREBASE_DB, "products"),
+    finalProduct
+  );
 
   return docRef.id;
 };

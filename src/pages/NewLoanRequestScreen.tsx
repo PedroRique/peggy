@@ -16,16 +16,14 @@ import DropDown from "react-native-paper-dropdown";
 import { Address } from "../models/Address";
 import { createLoan } from "../services/loan.service";
 import { formatAddressLabel } from "../services/utils.service";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
 
 export default function NewLoanRequestScreen() {
   const selectedProduct = useSelector(
     (state: AppState) => state.product.selectedProduct
   );
-  const profile: UserData | null = useSelector(
-    (state: AppState) => state.user.profile
-  );
   const [showDropDown, setShowDropDown] = useState(false);
-  const [userData, setUserData] = useState<UserData>();
+  const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
 
   const [startDate, setStartDate] = useState("");
@@ -39,7 +37,7 @@ export default function NewLoanRequestScreen() {
 
   const getUserData = async () => {
     const result = await fetchUserData(selectedProduct?.userId);
-    setUserData(result);
+    setLenderUserData(result);
   };
 
   const onSubmit = async () => {
@@ -48,7 +46,7 @@ export default function NewLoanRequestScreen() {
       endDate,
       giveBackTime,
       pickUpTime,
-      borrowerUserId: profile?.uid || "",
+      borrowerUserId: FIREBASE_AUTH.currentUser?.uid || "",
       lenderUserId: selectedProduct?.userId || "",
       productId: selectedProduct?.uid || "",
       startDate,
@@ -72,7 +70,7 @@ export default function NewLoanRequestScreen() {
           </View>
         )}
 
-        <Text style={styles.commonText}>de {userData?.name}</Text>
+        <Text style={styles.commonText}>de {lenderUserData?.name}</Text>
 
         <View style={styles.loanForm}>
           <View style={styles.row}>
@@ -101,8 +99,8 @@ export default function NewLoanRequestScreen() {
                 setAddress(addressLabel);
               }}
               list={
-                userData && userData.addresses
-                  ? userData.addresses.map((address: Address) => ({
+                lenderUserData && lenderUserData.addresses
+                  ? lenderUserData.addresses.map((address: Address) => ({
                       label: formatAddressLabel(address),
                       value: formatAddressLabel(address),
                     }))

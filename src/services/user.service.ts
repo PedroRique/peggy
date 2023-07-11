@@ -3,19 +3,17 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import {
-  addDoc,
   arrayRemove,
   arrayUnion,
-  collection,
   doc,
   getDoc,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { UserData } from "../models/UserData";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import { Address } from "../models/Address";
+import { UserData } from "../models/UserData";
 
 interface CreateUserRequest {
   name: string;
@@ -90,13 +88,14 @@ export const removeAddress = async (address: Address) => {
 
 export const updateAddress = async (address: Address) => {
   try {
-
     const user = FIREBASE_AUTH.currentUser;
     if (user) {
       const ref = doc(FIREBASE_DB, "users", user.uid);
       const docSnapshot = await getDoc(ref);
       const addresses = docSnapshot.data()?.addresses || [];
-      const addressIndex = addresses.findIndex((a: Address) => a.street === address.street);
+      const addressIndex = addresses.findIndex(
+        (a: Address) => a.street === address.street
+      );
 
       if (addressIndex !== -1) {
         addresses[addressIndex] = address;
