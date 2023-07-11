@@ -6,7 +6,7 @@ import {
   where,
 } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
-import { Loan, LoanRequest, LoanStatus } from "../models/Loan";
+import { Loan, LoanRequest, LoanStatus, LoanWithInfo } from "../models/Loan";
 import { Product } from "../models/Product";
 import { UserData } from "../models/UserData";
 import { commonFetch } from "./utils.service";
@@ -14,7 +14,7 @@ import { commonFetch } from "./utils.service";
 export const createLoan = async (loanRequest: LoanRequest) => {
   const loan: Loan = {
     ...loanRequest,
-    status: LoanStatus.REQUESTING,
+    status: LoanStatus.PENDING,
   };
   const docRef = await addDoc(collection(FIREBASE_DB, "loans"), loan);
 
@@ -28,7 +28,7 @@ export const fetchLoans = async () => {
 
 export const fetchLoansWithProductInfo = async (
   type: "lender" | "borrower"
-) => {
+): Promise<LoanWithInfo[]> => {
   const currentUserId = FIREBASE_AUTH.currentUser?.uid || "";
   const loanData = await commonFetch<Loan>(
     query(
@@ -41,7 +41,6 @@ export const fetchLoansWithProductInfo = async (
     )
   );
 
-  console.log(loanData);
   if (!loanData.length) {
     return [];
   }
@@ -69,12 +68,12 @@ export const fetchLoansWithProductInfo = async (
     return { ...loan, product };
   });
 
-  const mergedData = dataWithProduct.map((loan) => {
+  const dataWithProductAndBorrower = dataWithProduct.map((loan) => {
     const borrower = borrowerUserData.find(
       (borrower) => borrower.uid === loan.borrowerUserId
     );
     return { ...loan, borrower };
   });
 
-  return mergedData;
+  return dataWithProductAndBorrower;
 };

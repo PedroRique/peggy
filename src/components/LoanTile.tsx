@@ -6,29 +6,62 @@ import {
   TouchableOpacityProps,
   View,
 } from "react-native";
-import { LoanWithInfo } from "../models/Loan";
+import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { Colors } from "../shared/Colors";
 import { ProductCard } from "./ProductCard";
 import { Text } from "./Text/Text";
 import { BoldText } from "./Text/BoldText";
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
 
 type LoanTileProps = TouchableOpacityProps & { loan: LoanWithInfo };
 
 export default function LoanTile({ loan, ...rest }: LoanTileProps) {
+  const userData = useSelector((state: AppState) => state.user.userData);
+
+  const getSentence = () => {
+    const { startDate, endDate, borrower } = loan;
+
+    const borrowerName =
+      borrower?.uid === userData?.uid ? "Você" : borrower?.name;
+
+    let firstSentence = (
+      <>
+        {loan.product?.name} está com <BoldText>{borrowerName}</BoldText>
+      </>
+    );
+    let secondSentence = <>até {endDate}</>;
+
+    if (loan.status === LoanStatus.PENDING) {
+      firstSentence = (
+        <>
+          <BoldText>{borrowerName}</BoldText> quer pegar emprestado{" "}
+          {loan.product?.name}
+        </>
+      );
+      secondSentence = (
+        <>
+          de {startDate} até {endDate}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Text>{firstSentence}</Text>
+        <Text size={14} style={styles.endDateText}>
+          {secondSentence}
+        </Text>
+      </>
+    );
+  };
+
   return (
     <TouchableOpacity style={styles.tileContainer} {...rest}>
       {loan.product && (
         <ProductCard size={60} product={loan.product} hasShadow={false} />
       )}
-      <View style={styles.loanText}>
-        <Text weight="700">
-          {loan.product?.name} está com{" "}
-          <BoldText>{loan.borrower?.name}</BoldText>
-        </Text>
-        <Text size={14} style={styles.endDateText}>
-          até {loan.endDate}
-        </Text>
-      </View>
+      <View style={styles.loanText}>{getSentence()}</View>
 
       <Pressable onPress={() => {}}>
         <Feather name="arrow-right" color={Colors.Orange} size={24}></Feather>

@@ -23,7 +23,7 @@ export interface LoanWithInfo extends Loan {
 }
 
 export enum LoanStatus {
-  REQUESTING = 1,
+  PENDING = 1,
   ACCEPTED,
   DENIED,
   PROGRESS,

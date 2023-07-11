@@ -6,26 +6,22 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { useEffect, useState } from "react";
 import LoanTile from "../components/LoanTile";
 import { BoldText } from "../components/Text/BoldText";
-import { LoanWithInfo } from "../models/Loan";
+import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { fetchLoansWithProductInfo } from "../services/loan.service";
 import { Colors } from "../shared/Colors";
 
 const Tab = createMaterialTopTabNavigator();
 
-const LendingTab = () => {
-  const [loans, setLoans] = useState<LoanWithInfo[]>([]);
-  useEffect(() => {
-    getLoans();
-  }, []);
-
-  const getLoans = async () => {
-    const result = await fetchLoansWithProductInfo("lender");
-    setLoans(result);
-  };
-
+const LoansSection = ({
+  title,
+  loans,
+}: {
+  title: string;
+  loans: LoanWithInfo[];
+}) => {
   return (
-    <View style={styles.tabInner}>
-      <BoldText style={styles.sectionTitle}>Ativos</BoldText>
+    <View style={styles.loansSectionContainer}>
+      <BoldText style={styles.sectionTitle}>{title}</BoldText>
 
       <View style={styles.loansContainer}>
         {loans.map((loan, i) => (
@@ -36,35 +32,40 @@ const LendingTab = () => {
   );
 };
 
-const BorrowingTab = () => {
+const LoansTab = ({ type }: { type: "lender" | "borrower" }) => {
   const [loans, setLoans] = useState<LoanWithInfo[]>([]);
+  const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
   useEffect(() => {
     getLoans();
   }, []);
 
   const getLoans = async () => {
-    const result = await fetchLoansWithProductInfo("borrower");
-    setLoans(result);
+    const result = await fetchLoansWithProductInfo(type);
+    setPendingLoans(result.filter((l) => l.status === LoanStatus.PENDING));
+    setLoans(result.filter((l) => l.status !== LoanStatus.PENDING));
   };
 
   return (
     <View style={styles.tabInner}>
-      <BoldText style={styles.sectionTitle}>Ativos</BoldText>
-
-      <View style={styles.loansContainer}>
-        {loans.map((loan, i) => (
-          <LoanTile key={i} loan={loan} />
-        ))}
-      </View>
+      <LoansSection title="Pendente" loans={pendingLoans} />
+      <LoansSection title="Ativos" loans={loans} />
     </View>
   );
+};
+
+const LendingTab = () => {
+  return <LoansTab type="lender" />;
+};
+
+const BorrowingTab = () => {
+  return <LoansTab type="borrower" />;
 };
 
 function LoanTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Emprestando" component={LendingTab} />
-      <Tab.Screen name="Pegando" component={BorrowingTab} />
+      <Tab.Screen name="Pegando Emprestado" component={BorrowingTab} />
     </Tab.Navigator>
   );
 }
@@ -97,6 +98,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 20,
     marginBottom: 16,
+  },
+  loansSectionContainer: {
+    marginBottom: 24,
   },
   loansContainer: {
     display: "flex",
