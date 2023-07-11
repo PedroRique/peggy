@@ -6,13 +6,13 @@ import {
   TouchableOpacityProps,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { Colors } from "../shared/Colors";
+import { STATUS_MESSAGES } from "../shared/Constants";
+import { AppState } from "../store";
 import { ProductCard } from "./ProductCard";
 import { Text } from "./Text/Text";
-import { BoldText } from "./Text/BoldText";
-import { useSelector } from "react-redux";
-import { AppState } from "../store";
 
 type LoanTileProps = TouchableOpacityProps & { loan: LoanWithInfo };
 
@@ -21,37 +21,28 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
 
   const getSentence = () => {
     const { startDate, endDate, borrower } = loan;
-
     const borrowerName =
-      borrower?.uid === userData?.uid ? "Você" : borrower?.name;
+      borrower?.uid === userData?.uid ? "Você" : borrower?.name || "";
+    const productName = loan.product?.name || "";
 
-    let firstSentence = (
-      <>
-        {loan.product?.name} está com <BoldText>{borrowerName}</BoldText>
-      </>
-    );
-    let secondSentence = <>até {endDate}</>;
-
-    if (loan.status === LoanStatus.PENDING) {
-      firstSentence = (
-        <>
-          <BoldText>{borrowerName}</BoldText> quer pegar emprestado{" "}
-          <BoldText>{loan.product?.name}</BoldText>
-        </>
-      );
-      secondSentence = (
-        <>
-          de {startDate} até {endDate}
-        </>
-      );
-    }
+    const getMessage = STATUS_MESSAGES[loan.status];
+    const firstSentence = getMessage
+      ? getMessage({ borrowerName, productName, startDate, endDate })
+      : null;
+    const secondSentence =
+      loan.status !== LoanStatus.PENDING &&
+      loan.status !== LoanStatus.RETURNED ? (
+        <>em {"Z"}</>
+      ) : null;
 
     return (
       <>
-        <Text>{firstSentence}</Text>
-        <Text size={14} style={styles.endDateText}>
-          {secondSentence}
-        </Text>
+        {firstSentence && <Text>{firstSentence}</Text>}
+        {secondSentence && (
+          <Text size={14} style={styles.endDateText}>
+            {secondSentence}
+          </Text>
+        )}
       </>
     );
   };
