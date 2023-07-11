@@ -13,6 +13,7 @@ export interface LoanRequest {
 }
 
 export interface Loan extends LoanRequest {
+  uid?: string;
   status: LoanStatus;
 }
 

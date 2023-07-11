@@ -18,6 +18,7 @@ import { Colors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
 import { productSlice } from "../store/slices/product.slice";
+import { loanSlice } from "../store/slices/loan.slice";
 
 const NearbyTitle = () => {
   return (
@@ -104,6 +105,7 @@ export default function HomeScreen() {
               key={i}
               product={product}
               onPress={() => {
+                dispatch(loanSlice.actions.setSelectedLoan(null));
                 dispatch(productSlice.actions.setSelectedProduct(product));
                 navigation.navigate("Product");
               }}

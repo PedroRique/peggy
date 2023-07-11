@@ -36,7 +36,7 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
       firstSentence = (
         <>
           <BoldText>{borrowerName}</BoldText> quer pegar emprestado{" "}
-          {loan.product?.name}
+          <BoldText>{loan.product?.name}</BoldText>
         </>
       );
       secondSentence = (

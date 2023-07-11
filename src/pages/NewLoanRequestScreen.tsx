@@ -13,44 +13,69 @@ import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
 import { UserData } from "../models/UserData";
-import { createLoan } from "../services/loan.service";
+import { createLoan, updateLoanStatus } from "../services/loan.service";
 import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel } from "../services/utils.service";
 import { AppState } from "../store";
+import { LoanStatus } from "../models/Loan";
 
 export default function NewLoanRequestScreen() {
-  const selectedProduct = useSelector(
-    (state: AppState) => state.product.selectedProduct
+  const loan = useSelector((state: AppState) => state.loan.selectedLoan);
+  const product = useSelector(
+    (state: AppState) =>
+      state.product.selectedProduct || state.loan.selectedLoan?.product
   );
+  const borrowerUserData = useSelector(
+    (state: AppState) => state.loan.selectedLoan?.borrower
+  );
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
+
   const [showDropDown, setShowDropDown] = useState(false);
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
-
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [pickUpTime, setPickUpTime] = useState("");
   const [giveBackTime, setGiveBackTime] = useState("");
 
   useEffect(() => {
-    getUserData();
+    getLenderUserData();
   }, []);
 
-  const getUserData = async () => {
-    const result = await fetchUserData(selectedProduct?.userId);
+  useEffect(() => {
+    if (loan) {
+      setStartDate(loan.startDate);
+      setEndDate(loan.endDate);
+      setPickUpTime(loan.pickUpTime);
+      setGiveBackTime(loan.giveBackTime);
+      setAddress(loan.address);
+    }
+  }, [loan]);
+
+  const getLenderUserData = async () => {
+    const result = await fetchUserData(product?.userId);
     setLenderUserData(result);
   };
 
-  const onSubmit = async () => {
+  const onUpdateStatus = async (status: LoanStatus) => {
+    return await updateLoanStatus(loan?.uid || "", status);
+  };
+
+  const onCreate = async () => {
     await createLoan({
       address,
       endDate,
       giveBackTime,
       pickUpTime,
       borrowerUserId: FIREBASE_AUTH.currentUser?.uid || "",
-      lenderUserId: selectedProduct?.userId || "",
-      productId: selectedProduct?.uid || "",
+      lenderUserId: product?.userId || "",
+      productId: product?.uid || "",
       startDate,
     });
+  };
+
+  const isLoanRequest = () => {
+    return borrowerUserData && borrowerUserData.uid !== currentUserData?.uid;
   };
 
   return (
@@ -58,30 +83,40 @@ export default function NewLoanRequestScreen() {
       <Header title="Detalhes" hasBack hasBorder />
 
       <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.commonText}>Pegue emprestado</Text>
+        <Text size={24}>
+          {isLoanRequest() ? "Empreste" : "Pegue emprestado"}{" "}
+          {isLoanRequest() ? "para" : "de"}{" "}
+          <BoldText size={24}>
+            {isLoanRequest() ? borrowerUserData?.name : lenderUserData?.name}
+          </BoldText>
+        </Text>
 
-        {selectedProduct && (
+        {product && (
           <View style={styles.productSummary}>
-            <ProductCard product={selectedProduct} size={60} />
-            <Text style={styles.commonText} numberOfLines={2}>
-              {selectedProduct?.name}
-            </Text>
+            <ProductCard product={product} size={60} />
+            <BoldText size={24} numberOfLines={2}>
+              {product?.name}
+            </BoldText>
             <Rating value={4.7} />
           </View>
         )}
-
-        <Text style={styles.commonText}>de {lenderUserData?.name}</Text>
 
         <View style={styles.loanForm}>
           <View style={styles.row}>
             <TextInput
               label="De:"
               placeholder="DD/MM/YYYY"
+              value={startDate}
+              editable={!loan}
+              selectTextOnFocus={!loan}
               onChangeText={setStartDate}
             ></TextInput>
             <TextInput
               label="Até:"
               placeholder="DD/MM/YYYY"
+              value={endDate}
+              editable={!loan}
+              selectTextOnFocus={!loan}
               onChangeText={setEndDate}
             ></TextInput>
           </View>
@@ -91,7 +126,7 @@ export default function NewLoanRequestScreen() {
             <DropDown
               label={"Selecione um endereço"}
               mode={"outlined"}
-              visible={showDropDown}
+              visible={!loan && showDropDown}
               showDropDown={() => setShowDropDown(true)}
               onDismiss={() => setShowDropDown(false)}
               value={address}
@@ -113,18 +148,53 @@ export default function NewLoanRequestScreen() {
             <TextInput
               label="Buscar as:"
               placeholder="00:00"
+              value={pickUpTime}
+              editable={!loan}
+              selectTextOnFocus={!loan}
               onChangeText={setPickUpTime}
             ></TextInput>
             <TextInput
               label="Devolver as:"
               placeholder="00:00"
+              value={giveBackTime}
+              editable={!loan}
+              selectTextOnFocus={!loan}
               onChangeText={setGiveBackTime}
             ></TextInput>
           </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Button title="Solicitar" onPress={onSubmit} />
+        {loan && loan.uid ? (
+          <>
+            {loan.status === LoanStatus.PENDING && (
+              <>
+                {isLoanRequest() ? (
+                  <>
+                    <Button
+                      title="Negar"
+                      onPress={() => onUpdateStatus(LoanStatus.DENIED)}
+                      outlined
+                    />
+                    <Button
+                      title="Aceitar"
+                      onPress={() => onUpdateStatus(LoanStatus.ACCEPTED)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      title="Cancelar"
+                      onPress={() => onUpdateStatus(LoanStatus.CANCELED)}
+                    />
+                  </>
+                )}
+              </>
+            )}
+          </>
+        ) : (
+          <Button title="Solicitar" onPress={onCreate} />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -139,10 +209,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 16,
   },
-  commonText: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
   productSummary: {
     display: "flex",
     flexDirection: "row",
@@ -155,6 +221,9 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   footer: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 12,
     borderTopColor: "#E5E5E5",
     borderTopWidth: 1,
     padding: 16,

@@ -13,7 +13,7 @@ export const loanSlice = createSlice({
   name: "loan",
   initialState,
   reducers: {
-    setSelectedLoan: (state, action: PayloadAction<LoanWithInfo>) => {
+    setSelectedLoan: (state, action: PayloadAction<LoanWithInfo | null>) => {
       state.selectedLoan = action.payload;
     },
   },

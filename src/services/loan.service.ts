@@ -1,8 +1,10 @@
 import {
   addDoc,
   collection,
+  doc,
   documentId,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
@@ -19,6 +21,14 @@ export const createLoan = async (loanRequest: LoanRequest) => {
   const docRef = await addDoc(collection(FIREBASE_DB, "loans"), loan);
 
   return docRef.id;
+};
+
+export const updateLoanStatus = async (loanId: string, status: LoanStatus) => {
+  try {
+    await updateDoc(doc(FIREBASE_DB, "loans", loanId), { status });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const fetchLoans = async () => {

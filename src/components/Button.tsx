@@ -5,13 +5,19 @@ import { Colors } from "../shared/Colors";
 export interface ButtonProps {
   onPress: () => void;
   title: string;
+  outlined?: boolean;
 }
 
 export default function Button(props: ButtonProps) {
-  const { onPress, title = "Save" } = props;
+  const { onPress, title = "Save", outlined } = props;
   return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+    <Pressable
+      style={[styles.button, outlined && styles.outlinedButton]}
+      onPress={onPress}
+    >
+      <Text style={[styles.text, outlined && styles.outlinedText]}>
+        {title}
+      </Text>
     </Pressable>
   );
 }
@@ -24,14 +30,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    width: '100%',
+    width: "100%",
+    flex: 1,
     backgroundColor: Colors.Blue,
+  },
+  outlinedButton: {
+    backgroundColor: Colors.White,
+    borderColor: Colors.Blue,
+    borderWidth: 1,
   },
   text: {
     fontSize: 22,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: Colors.White,
+  },
+  outlinedText: {
+    color: Colors.Blue,
   },
 });

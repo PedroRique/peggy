@@ -11,6 +11,9 @@ import { fetchLoansWithProductInfo } from "../services/loan.service";
 import { Colors } from "../shared/Colors";
 import { useDispatch } from "react-redux";
 import { loanSlice } from "../store/slices/loan.slice";
+import { productSlice } from "../store/slices/product.slice";
+import { useNavigation } from "@react-navigation/native";
+import { StackTypes } from "../../App";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -22,6 +25,7 @@ const LoansSection = ({
   loans: LoanWithInfo[];
 }) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation<StackTypes>();
 
   return (
     <View style={styles.loansSectionContainer}>
@@ -29,9 +33,15 @@ const LoansSection = ({
 
       <View style={styles.loansContainer}>
         {loans.map((loan, i) => (
-          <LoanTile key={i} loan={loan} onPress={() => {
-            dispatch(loanSlice.actions.setSelectedLoan(loan));
-          }}/>
+          <LoanTile
+            key={i}
+            loan={loan}
+            onPress={() => {
+              dispatch(productSlice.actions.setSelectedProduct(null));
+              dispatch(loanSlice.actions.setSelectedLoan(loan));
+              navigation.navigate("NewLoanRequest");
+            }}
+          />
         ))}
       </View>
     </View>
