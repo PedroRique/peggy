@@ -12,7 +12,7 @@ import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { FIREBASE_AUTH } from "./firebaseConfig";
 import CategoryScreen from "./src/pages/CategoryScreen";
@@ -28,6 +28,8 @@ import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
 import { Colors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
+import { userSlice } from "./src/store/slices/user.slice";
+import { convertUserToUserData } from "./src/services/utils.service";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -83,12 +85,21 @@ function Main() {
 }
 
 const Navigation = () => {
+  const dispatch = useDispatch();
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
     const subscriber = FIREBASE_AUTH.onAuthStateChanged((user) => {
       setUser(user);
+      const userData = convertUserToUserData(user);
+      
+      if (userData) {
+        dispatch(
+          userSlice.actions.setUserData(userData)
+        );
+      }
+
       if (initializing) setInitializing(false);
     });
     return subscriber;

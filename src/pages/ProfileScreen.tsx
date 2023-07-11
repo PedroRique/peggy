@@ -17,7 +17,11 @@ import { Product } from "../models/Product";
 import { UserData } from "../models/UserData";
 import { pickImage } from "../services/camera.service";
 import { fetchProductsById } from "../services/product.service";
-import { fetchUserData, updateUserPhotoURL } from "../services/user.service";
+import {
+  fetchCurrentUserData,
+  fetchUserData,
+  updateUserPhotoURL,
+} from "../services/user.service";
 import { Colors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
@@ -41,12 +45,8 @@ const SectionHeader = ({ title, route }: { title: string; route: any }) => {
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
-  const profile: UserData | null = useSelector(
-    (state: AppState) => state.user.userData
-  );
-
+  const userData = useSelector((state: AppState) => state.user.userData);
   const [products, setProducts] = useState<Product[]>([]);
-  const [userData, setUserData] = useState<UserData>();
 
   useEffect(() => {
     getUserProducts();
@@ -54,12 +54,12 @@ export default function ProfileScreen() {
   }, []);
 
   const getUserData = async () => {
-    const result = await fetchUserData(profile?.uid);
-    setUserData(result);
+    const result = await fetchCurrentUserData();
+    dispatch(userSlice.actions.setUserData(result || null));
   };
 
   const getUserProducts = async () => {
-    const result = await fetchProductsById(profile?.uid || "");
+    const result = await fetchProductsById();
     setProducts(result);
   };
 
@@ -68,20 +68,22 @@ export default function ProfileScreen() {
     updateUserPhotoURL(result);
     dispatch(
       userSlice.actions.setUserData({
-        ...profile!,
+        ...userData,
         photoURL: result,
       })
     );
   };
 
-  const { name, photoURL } = profile || {};
-
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={name} hasBack hasBorder />
+      <Header title={userData?.name} hasBack hasBorder />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
-          <Avatar size={100} imageUrl={photoURL} onPress={getPhotoUrl} />
+          <Avatar
+            size={100}
+            imageUrl={userData?.photoURL}
+            onPress={getPhotoUrl}
+          />
           <View>
             <Rating value={4.7} color={Colors.Blue} />
             <Text style={styles.avatarBio}>

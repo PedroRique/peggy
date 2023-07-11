@@ -32,10 +32,11 @@ export const searchProducts = async (searchKey: string) => {
   return await commonFetch<Product>(q);
 };
 
-export const fetchProductsById = async (userId: string) => {
+export const fetchProductsById = async (userId?: string) => {
+  const finalUserId = userId || FIREBASE_AUTH.currentUser?.uid;
   const q = query(
     collection(FIREBASE_DB, "products"),
-    where("userId", "==", userId)
+    where("userId", "==", finalUserId)
   );
   return await commonFetch<Product>(q);
 };

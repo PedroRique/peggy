@@ -107,13 +107,21 @@ export const updateAddress = async (address: Address) => {
   }
 };
 
+export const fetchCurrentUserData = async () => {
+  return await fetchUserData(FIREBASE_AUTH.currentUser?.uid);
+};
+
 export const fetchUserData = async (
   uid?: string
 ): Promise<UserData | undefined> => {
   try {
     if (uid) {
       const result = await getDoc(doc(FIREBASE_DB, "users", uid));
-      return result.data() as UserData;
+      const userData = result.data() as UserData;
+      return {
+        ...userData,
+        uid,
+      };
     }
   } catch (error) {
     console.error(error);
