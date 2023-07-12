@@ -54,11 +54,7 @@ export default function CategoryScreen() {
 
         <View style={styles.products}>
           {products.map((product, i) => (
-            <ProductCard
-              key={i}
-              product={product}
-              style={{ minWidth: "calc(50% - 6px)" }}
-            ></ProductCard>
+            <ProductCard key={i} product={product}></ProductCard>
           ))}
         </View>
       </View>

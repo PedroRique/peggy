@@ -93,11 +93,9 @@ const Navigation = () => {
     const subscriber = FIREBASE_AUTH.onAuthStateChanged((user) => {
       setUser(user);
       const userData = convertUserToUserData(user);
-      
+
       if (userData) {
-        dispatch(
-          userSlice.actions.setUserData(userData)
-        );
+        dispatch(userSlice.actions.setUserData(userData));
       }
 
       if (initializing) setInitializing(false);
@@ -109,7 +107,13 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          animation: "slide_from_right",
+          presentation: 'card',
+        }}
+      >
         {user ? (
           <>
             <Stack.Screen name="Main" component={Main} />
