@@ -14,6 +14,7 @@ import { UserData } from "../models/UserData";
 import { Text } from "../components/Text/Text";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
+import { PColors } from "../shared/Colors";
 
 export default function ProductScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -53,8 +54,8 @@ export default function ProductScreen() {
         resizeMode="cover"
       >
         <View style={styles.productInner}>
-          <Header hasBack color="#fff">
-            <Rating value={4.7} color="#fff" />
+          <Header hasBack color={PColors.White}>
+            <Rating value={4.7} color={PColors.White} />
           </Header>
         </View>
       </ImageBackground>

@@ -2,13 +2,13 @@ import { Feather } from "@expo/vector-icons";
 import {
   ImageBackground,
   StyleSheet,
-  View,
   TouchableOpacity,
   TouchableOpacityProps,
+  View,
 } from "react-native";
-import { BoldText } from "./Text/BoldText";
 import { Category } from "../models/Category";
 import { PColors } from "../shared/Colors";
+import { BoldText } from "./Text/BoldText";
 const tech = require("../../assets/images/categories/tech.jpg");
 
 type CategoryTileProps = TouchableOpacityProps & { category: Category };
@@ -32,7 +32,7 @@ export default function CategoryTile({ category, ...rest }: CategoryTileProps) {
 
 const styles = StyleSheet.create({
   distanceContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: PColors.White,
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderTopLeftRadius: 8,

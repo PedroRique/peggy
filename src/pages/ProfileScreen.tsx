@@ -38,7 +38,7 @@ const SectionHeader = ({ title, route }: { title: string; route: any }) => {
           navigation.navigate(route);
         }}
       >
-        <Feather name="plus" color={"#fff"} size={32} />
+        <Feather name="plus" color={PColors.White} size={32} />
       </Pressable>
     </View>
   );

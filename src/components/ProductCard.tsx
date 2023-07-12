@@ -64,7 +64,7 @@ export const ProductCard = ({
 
 const styles = StyleSheet.create({
   distanceContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: PColors.White,
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderTopLeftRadius: 8,

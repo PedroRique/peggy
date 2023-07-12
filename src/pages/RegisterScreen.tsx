@@ -12,6 +12,7 @@ import { TextInput } from "../components/Input";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { PColors } from "../shared/Colors";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
 export default function RegisterScreen() {
@@ -111,7 +112,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: PColors.White,
     height: "100%",
   },
   center: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: PColors.White,
     padding: 16,
     borderRadius: 8,
     fontSize: 18,

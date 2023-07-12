@@ -7,6 +7,7 @@ import { useLazyEffect } from "../hooks/useLazyEffect";
 import { Product } from "../models/Product";
 import { searchProducts } from "../services/product.service";
 import { Text } from "../components/Text/Text";
+import { PColors } from "../shared/Colors";
 const noSearch = require("../../assets/images/noSearch/noSearch.png");
 
 export default function SearchScreen() {
@@ -61,7 +62,7 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: PColors.White,
     height: "100%",
   },
   bodyContainer: {
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: PColors.White,
     padding: 16,
     borderRadius: 8,
     fontSize: 18,

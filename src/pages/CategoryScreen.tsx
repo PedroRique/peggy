@@ -42,8 +42,8 @@ export default function CategoryScreen() {
         resizeMode="cover"
       >
         <View style={styles.bannerInner}>
-          <Header hasBack color="#fff">
-            <Rating color="#fff" value={4.7} />
+          <Header hasBack color={PColors.White}>
+            <Rating color={PColors.White} value={4.7} />
           </Header>
         </View>
       </ImageBackground>
