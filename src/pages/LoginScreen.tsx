@@ -1,4 +1,3 @@
-import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -19,8 +18,6 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-
 
   const loginUser = async () => {
     if (email === "" || password === "") {
@@ -61,35 +58,28 @@ export default function LoginScreen() {
       </View>
       <View style={styles.loginContainer}>
         <View>
-          <View>
-            <TextInput
-              label="E-mail"
-              style={styles.input}
-              placeholder="Insira seu e-mail"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-          <View>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                label="Senha"
-                showEyeIcon={true}
-                style={styles.input}
-                placeholder="Insira sua senha"
-                value={password}
-                onChangeText={setPassword}
-              />
-              {/* TODO: pass to inside of the text input component */}
-              
-            </View>
-            <BoldText
-              style={[styles.forgotPassword, styles.forgotText]}
-              onPress={handleForgotPassword}
-            >
-              Esqueceu a senha?
-            </BoldText>
-          </View>
+          <TextInput
+            label="E-mail"
+            style={styles.input}
+            placeholder="Insira seu e-mail"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            label="Senha"
+            showEyeIcon={true}
+            style={styles.input}
+            placeholder="Insira sua senha"
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <BoldText
+            style={[styles.forgotPassword, styles.forgotText]}
+            onPress={handleForgotPassword}
+          >
+            Esqueceu a senha?
+          </BoldText>
         </View>
       </View>
       <View>
