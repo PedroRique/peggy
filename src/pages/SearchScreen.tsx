@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     padding: 16,
+    paddingTop: 0,
   },
   input: {
     backgroundColor: PColors.White,
