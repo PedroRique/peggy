@@ -16,13 +16,11 @@ const Login = require("../../assets/images/Logo/peggy-logo.png");
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const toggleSecureEntry = () => {
-    setSecureTextEntry(!secureTextEntry);
-  };
+
 
   const loginUser = async () => {
     if (email === "" || password === "") {
@@ -76,20 +74,14 @@ export default function LoginScreen() {
             <View style={styles.passwordContainer}>
               <TextInput
                 label="Senha"
+                showEyeIcon={true}
                 style={styles.input}
                 placeholder="Insira sua senha"
-                secureTextEntry={secureTextEntry}
                 value={password}
                 onChangeText={setPassword}
               />
               {/* TODO: pass to inside of the text input component */}
-              <Feather
-                name={secureTextEntry ? "eye-off" : "eye"}
-                size={24}
-                color="gray"
-                style={styles.icon}
-                onPress={toggleSecureEntry}
-              />
+              
             </View>
             <BoldText
               style={[styles.forgotPassword, styles.forgotText]}

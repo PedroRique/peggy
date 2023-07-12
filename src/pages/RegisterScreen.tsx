@@ -1,29 +1,24 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
+import { StackTypes } from "../../App";
 import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
 import { createUser } from "../services/user.service";
-
-import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { StackTypes } from "../../App";
 import { PColors } from "../shared/Colors";
+import { userSlice } from "../store/slices/user.slice";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
 export default function RegisterScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
-  const toggleSecureEntry = () => {
-    setSecureTextEntry(!secureTextEntry);
-  };
 
   const registerUser = async () => {
     if (name === "" || email === "" || password === "") {
@@ -45,6 +40,16 @@ export default function RegisterScreen() {
 
     if (result !== null && result !== undefined) {
       console.log("Cadastro bem-sucedido");
+      dispatch(
+        userSlice.actions.setUserData({
+          name,
+          email,
+          uid: "",
+          photoURL: null,
+          addresses: [],
+          rate: 0,
+        })
+      );
       navigation.navigate("Main");
     } else {
       console.log("Credenciais inválidas");
@@ -65,20 +70,18 @@ export default function RegisterScreen() {
             value={name}
             onChangeText={setName}
           />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              label="E-mail"
-              style={styles.input}
-              placeholder="Insira seu e-mail"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
+          <TextInput
+            label="E-mail"
+            style={styles.input}
+            placeholder="Insira seu e-mail"
+            value={email}
+            onChangeText={setEmail}
+          />
           <TextInput
             label="Senha"
             style={styles.input}
             placeholder="Insira sua senha"
-            secureTextEntry={secureTextEntry}
+            showEyeIcon={true}
             value={password}
             onChangeText={setPassword}
           />
@@ -86,7 +89,7 @@ export default function RegisterScreen() {
       </View>
       <View>
         <View>
-          <Button title="Cadastrar" onPress={() => registerUser()} />
+          <Button title="Cadastrar" onPress={registerUser} />
         </View>
         <BoldText style={[styles.forgotText, styles.center]}>
           Já possui uma conta?
@@ -138,9 +141,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-  },
-  passwordContainer: {
-    position: "relative",
   },
   icon: {
     position: "absolute",
