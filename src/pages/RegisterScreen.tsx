@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BoldText } from "../components/Text/BoldText";
-import { userSlice } from "../store/slices/user.slice";
-import Button from "../components/Button";
-import { createUser } from "../services/user.service";
-import { Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
+import Button from "../components/Button";
 import { TextInput } from "../components/Input";
+import { BoldText } from "../components/Text/BoldText";
+import { createUser } from "../services/user.service";
 
 import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { StackTypes } from "../../App";
 import { PColors } from "../shared/Colors";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   forgotText: {
-    color: "#00C2FF",
+    color: PColors.Blue,
     marginTop: 20,
   },
   underlineText: {

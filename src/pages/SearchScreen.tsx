@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     width: 160,
-    color: "#777777",
+    color: PColors.Grey,
   },
   resultContainer: {
     paddingVertical: 16,

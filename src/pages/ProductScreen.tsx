@@ -1,20 +1,20 @@
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
-import { useSelector } from "react-redux";
-import { AppState } from "../store";
-import { fetchUserData } from "../services/user.service";
-import { useEffect, useState } from "react";
-import { UserData } from "../models/UserData";
 import { Text } from "../components/Text/Text";
-import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
+import { UserData } from "../models/UserData";
+import { fetchUserData } from "../services/user.service";
 import { PColors } from "../shared/Colors";
+import { AppState } from "../store";
 
 export default function ProductScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -74,10 +74,8 @@ export default function ProductScreen() {
         <View style={styles.userContainer}>
           <Avatar imageUrl={lenderUserData?.photoURL} />
           <View>
-            <BoldText style={{ color: "#333333" }}>Emprestado por</BoldText>
-            <BoldText style={{ fontSize: 24, color: "#333333" }}>
-              {lenderUserData?.name}
-            </BoldText>
+            <BoldText>Emprestado por</BoldText>
+            <BoldText size={24}>{lenderUserData?.name}</BoldText>
           </View>
         </View>
       </View>
@@ -128,7 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   productDescription: {
-    color: "#777777",
+    color: PColors.Grey,
     marginBottom: 24,
   },
   userContainer: {

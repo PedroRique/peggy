@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   avatarBio: {
-    color: "#777777",
+    color: PColors.Grey,
     fontSize: 16,
     width: "70%",
   },
