@@ -26,7 +26,7 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
-import { Colors } from "./src/shared/Colors";
+import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
 import { convertUserToUserData } from "./src/services/utils.service";
@@ -72,7 +72,7 @@ function Main() {
           return "";
         },
         tabBarStyle: { backgroundColor: "#f3f3f3", height: 70 },
-        tabBarActiveTintColor: Colors.Orange,
+        tabBarActiveTintColor: PColors.Orange,
         tabBarInactiveTintColor: "#444",
         headerShown: false,
       })}

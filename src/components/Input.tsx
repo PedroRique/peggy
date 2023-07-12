@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { Text } from "./Text/Text";
 import { BoldText } from "./Text/BoldText";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 
 export const TextInput = ({
   style,
@@ -29,7 +29,7 @@ export const TextInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
     padding: 16,
     borderRadius: 8,
     fontSize: 18,

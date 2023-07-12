@@ -13,7 +13,7 @@ import { Text } from "../components/Text/Text";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/category.service";
 import { fetchProducts } from "../services/product.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
 
@@ -21,11 +21,11 @@ const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
-        <Feather name="map-pin" size={24} color={Colors.Blue} />
+        <Feather name="map-pin" size={24} color={PColors.Blue} />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
-      <FontAwesome5 name="arrow-right" size={32} color={Colors.Orange} />
+      <FontAwesome5 name="arrow-right" size={32} color={PColors.Orange} />
     </View>
   );
 };

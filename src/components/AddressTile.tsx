@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Address } from "../models/Address";
 import { removeAddress } from "../services/user.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
 
@@ -26,7 +26,7 @@ export default function AddressTile({ address, ...rest }: AddressTileProps) {
     <>
       {!isRemoved && (
         <TouchableOpacity style={styles.addressContainer} {...rest}>
-          <Feather name="map-pin" color={Colors.Blue} size={32}></Feather>
+          <Feather name="map-pin" color={PColors.Blue} size={32}></Feather>
           <View style={styles.addressText}>
             <BoldText size={18}>
               {address.street} {address.number}
@@ -38,7 +38,7 @@ export default function AddressTile({ address, ...rest }: AddressTileProps) {
           </View>
 
           <Pressable onPress={remove}>
-            <Feather name="trash-2" color={Colors.Orange} size={24}></Feather>
+            <Feather name="trash-2" color={PColors.Orange} size={24}></Feather>
           </Pressable>
         </TouchableOpacity>
       )}
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     elevation: 10,
     borderRadius: 8,
     overflow: "hidden",
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
     gap: 12,
     padding: 16,
   },

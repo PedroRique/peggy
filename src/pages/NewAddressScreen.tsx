@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 
 export default function NewAddressScreen() {
   const [number, setNumber] = useState("");
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: Colors.Blue,
+    borderColor: PColors.Blue,
     overflow: "hidden",
     marginBottom: 24,
     backgroundColor: "white",

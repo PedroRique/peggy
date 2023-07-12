@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Product } from "../models/Product";
 import { Text } from "./Text/Text";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
 
 interface ProductCardProps
@@ -48,7 +48,7 @@ export const ProductCard = ({
       >
         {showDistance && (
           <View style={styles.distanceContainer}>
-            <Feather name="map-pin" size={16} color={Colors.Blue} />
+            <Feather name="map-pin" size={16} color={PColors.Blue} />
             <Text style={styles.distance}>650m</Text>
           </View>
         )}
@@ -81,11 +81,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "flex-end",
     borderRadius: 8,
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
     overflow: "hidden",
   },
   productContainer: {
-    backgroundColor: Colors.White
+    backgroundColor: PColors.White
   },
   shadowStyle: {
     shadowOffset: { width: 0, height: 5 },

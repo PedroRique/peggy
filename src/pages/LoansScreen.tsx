@@ -1,59 +1,15 @@
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/Header";
-
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useEffect, useState } from "react";
-import LoanTile from "../components/LoanTile";
-import { BoldText } from "../components/Text/BoldText";
-import { LoanStatus, LoanType, LoanWithInfo } from "../models/Loan";
+import { LoansSection } from "../components/LoansList";
+import { LoanType, LoanWithInfo } from "../models/Loan";
 import { fetchLoansWithProductInfo } from "../services/loan.service";
-import { Colors } from "../shared/Colors";
-import { useDispatch } from "react-redux";
-import { loanSlice } from "../store/slices/loan.slice";
-import { productSlice } from "../store/slices/product.slice";
-import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
-import { Text } from "../components/Text/Text";
+import { groupLoansBySection } from "../services/utils.service";
+import { PColors } from "../shared/Colors";
 
 const Tab = createMaterialTopTabNavigator();
-
-const LoansSection = ({
-  title,
-  emptyText,
-  loans,
-}: {
-  title: string;
-  emptyText: string;
-  loans: LoanWithInfo[];
-}) => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation<StackTypes>();
-
-  return (
-    <View style={styles.loansSectionContainer}>
-      <BoldText style={styles.sectionTitle}>{title}</BoldText>
-
-      <View style={styles.loansContainer}>
-        {loans && loans.length ? (
-          loans.map((loan, i) => (
-            <LoanTile
-              key={i}
-              loan={loan}
-              onPress={() => {
-                dispatch(productSlice.actions.setSelectedProduct(null));
-                dispatch(loanSlice.actions.setSelectedLoan(loan));
-                navigation.navigate("NewLoanRequest");
-              }}
-            />
-          ))
-        ) : (
-          <Text color={Colors.Grey}>{emptyText}</Text>
-        )}
-      </View>
-    </View>
-  );
-};
 
 const LoansTab = ({ type }: { type: LoanType }) => {
   const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
@@ -66,24 +22,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   const getLoans = async () => {
     try {
       const result = await fetchLoansWithProductInfo(type);
-      let groups: Record<string, LoanWithInfo[]> = {
-        pending: [],
-        progress: [],
-        other: [],
-      };
-      const groupedLoans = result.reduce((accumulator, loan) => {
-        if (loan.status === LoanStatus.PENDING) {
-          accumulator.pending.push(loan);
-        } else if (
-          loan.status === LoanStatus.PROGRESS ||
-          loan.status === LoanStatus.ACCEPTED
-        ) {
-          accumulator.progress.push(loan);
-        } else {
-          accumulator.other.push(loan);
-        }
-        return accumulator;
-      }, groups);
+      const groupedLoans = groupLoansBySection(result);
 
       setPendingLoans(groupedLoans.pending);
       setProgressLoans(groupedLoans.progress);
@@ -127,7 +66,7 @@ function LoanTabs() {
     <Tab.Navigator
       screenOptions={{
         tabBarIndicatorStyle: {
-          backgroundColor: Colors.Orange,
+          backgroundColor: PColors.Orange,
         },
       }}
     >
@@ -150,26 +89,14 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
   },
   scrollContainer: {
     padding: 16,
   },
   tabInner: {
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
     padding: 16,
     flex: 1,
-  },
-  sectionTitle: {
-    fontWeight: "700",
-    fontSize: 20,
-    marginBottom: 16,
-  },
-  loansSectionContainer: {
-    marginBottom: 24,
-  },
-  loansContainer: {
-    display: "flex",
-    gap: 12,
   },
 });

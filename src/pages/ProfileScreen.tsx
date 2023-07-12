@@ -22,7 +22,7 @@ import {
   fetchUserData,
   updateUserPhotoURL,
 } from "../services/user.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
 import { ProductHorizontalList } from "../components/ProductsHorizontalList";
@@ -86,7 +86,7 @@ export default function ProfileScreen() {
             onPress={getPhotoUrl}
           />
           <View>
-            <Rating value={4.7} color={Colors.Blue} />
+            <Rating value={4.7} color={PColors.Blue} />
             <Text style={styles.avatarBio}>
               Carioca, 27 anos. Itens com ótimo estado.
             </Text>
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   addButton: {
-    backgroundColor: Colors.Blue,
+    backgroundColor: PColors.Blue,
     borderRadius: 5,
     padding: 4,
     paddingHorizontal: 5,

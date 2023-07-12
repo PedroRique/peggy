@@ -9,7 +9,7 @@ import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
 import { signInUser } from "../services/user.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { userSlice } from "../store/slices/user.slice";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   forgotText: {
-    color: Colors.Blue,
+    color: PColors.Blue,
     marginTop: 20,
   },
   underlineText: {

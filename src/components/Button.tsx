@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text } from "./Text/Text";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 
 export interface ButtonProps {
   onPress: () => void;
@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: Colors.Blue,
+    backgroundColor: PColors.Blue,
   },
   outlinedButton: {
-    backgroundColor: Colors.White,
-    borderColor: Colors.Blue,
+    backgroundColor: PColors.White,
+    borderColor: PColors.Blue,
     borderWidth: 1,
   },
   text: {
@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: Colors.White,
+    color: PColors.White,
   },
   outlinedText: {
-    color: Colors.Blue,
+    color: PColors.Blue,
   },
 });

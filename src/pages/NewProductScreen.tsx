@@ -13,7 +13,7 @@ import { Category } from "../models/Category";
 import { ImageFolder } from "../models/ImageFolder.enum";
 import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 
 export default function NewProductScreen() {
@@ -51,7 +51,7 @@ export default function NewProductScreen() {
             {imageUrl ? (
               <Image source={{ uri: imageUrl }} style={styles.imageSize} />
             ) : (
-              <Feather name="plus-square" color={Colors.Blue} size={32} />
+              <Feather name="plus-square" color={PColors.Blue} size={32} />
             )}
           </TouchableOpacity>
 
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: Colors.Blue,
+    borderColor: PColors.Blue,
     overflow: "hidden",
     marginBottom: 24,
     backgroundColor: "white",

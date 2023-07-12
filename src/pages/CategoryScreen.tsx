@@ -11,7 +11,7 @@ import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Product } from "../models/Product";
 import { fetchProductsByCategory } from "../services/product.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
@@ -52,7 +52,7 @@ export default function CategoryScreen() {
         <View style={styles.categoryTitle}>
           <Feather
             name={selectedCategory?.icon as any}
-            color={Colors.Blue}
+            color={PColors.Blue}
             size={32}
           ></Feather>
           <BoldText size={32}>{selectedCategory?.name}</BoldText>

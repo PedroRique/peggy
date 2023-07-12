@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { LOAN_TILE_STATUS_MESSAGES } from "../shared/Constants";
 import { AppState } from "../store";
 import { ProductCard } from "./ProductCard";
@@ -80,7 +80,7 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
       </View>
 
       <Pressable onPress={() => {}}>
-        <Feather name="arrow-right" color={Colors.Orange} size={24}></Feather>
+        <Feather name="arrow-right" color={PColors.Orange} size={24}></Feather>
       </Pressable>
     </TouchableOpacity>
   );
@@ -99,12 +99,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     gap: 12,
     padding: 16,
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
   },
   loanText: {
     flex: 1,
   },
   endDateText: {
-    color: Colors.Grey,
+    color: PColors.Grey,
   },
 });
