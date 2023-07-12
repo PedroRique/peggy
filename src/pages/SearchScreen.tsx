@@ -27,37 +27,46 @@ export default function SearchScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Buscar" hasBack />
-      <TextInput
-        style={styles.input}
-        placeholder="O que você precisa, Pedro?"
-        value={searchText}
-        onChangeText={(text) => setSearchText(text)}
-        autoFocus
-      />
+      <View style={styles.bodyContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="O que você precisa, Pedro?"
+          value={searchText}
+          onChangeText={(text) => setSearchText(text)}
+          autoFocus
+        />
 
-      {products.length && searchText ? (
-        <View style={styles.resultContainer}>
-          {products.map((prod, i) => (
-            <BoldText key={i}>{prod.name}</BoldText>
-          ))}
-        </View>
-      ) : (
-        <View style={styles.imageContainer}>
-          <Image source={noSearch} style={styles.image} resizeMode="contain" />
-          <Text style={styles.imageText}>
-            Seu vizinho pode ter o que você está procurando{" "}
-          </Text>
-        </View>
-      )}
+        {products.length && searchText ? (
+          <View style={styles.resultContainer}>
+            {products.map((prod, i) => (
+              <BoldText key={i}>{prod.name}</BoldText>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.imageContainer}>
+            <Image
+              source={noSearch}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <Text style={styles.imageText}>
+              Seu vizinho pode ter o que você está procurando{" "}
+            </Text>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: "#FFFFFF",
     height: "100%",
+  },
+  bodyContainer: {
+    flex: 1,
+    padding: 16,
   },
   input: {
     backgroundColor: "#fff",

@@ -73,22 +73,19 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Header>Vamos emprestar!</Header>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Search");
-          }}
-        >
-          <TextInput placeholder="O que você precisa, Pedro?" />
-        </Pressable>
+
+        <View style={{ paddingHorizontal: 16 }}>
+          <TextInput
+            placeholder="O que você precisa, Pedro?"
+            onFocus={() => navigation.navigate("Search")}
+          />
+        </View>
 
         <NearbyTitle />
-        <ProductHorizontalList products={products} />
+        <ProductHorizontalList products={products} showDistance />
 
         <CategoriesTitle />
-        <ScrollView
-          style={styles.categoriesList}
-          contentContainerStyle={styles.categoriesList}
-        >
+        <ScrollView contentContainerStyle={styles.categoriesList}>
           {categories?.map((category: any, i: any) => (
             <CategoryTile
               key={i}
@@ -110,15 +107,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flex: 1,
   },
-  scrollContainer: {
-    padding: 16,
-  },
+  scrollContainer: {},
   titleContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
     marginBottom: 12,
+    paddingHorizontal: 16,
   },
   titleView: {
     display: "flex",
@@ -134,5 +130,6 @@ const styles = StyleSheet.create({
   categoriesList: {
     display: "flex",
     gap: 16,
+    paddingHorizontal: 16,
   },
 });

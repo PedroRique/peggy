@@ -58,7 +58,12 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
   return (
     <TouchableOpacity style={styles.tileContainer} {...rest}>
       {loan.product && (
-        <ProductCard size={60} product={loan.product} hasShadow={false} />
+        <ProductCard
+          size={60}
+          product={loan.product}
+          hasShadow={false}
+          hasName={false}
+        />
       )}
       <View style={styles.loanText}>
         <>

@@ -17,7 +17,7 @@ export default function NewAddressScreen() {
       street,
       complement,
       number,
-      city: 'Rio de Janeiro',
+      city: "Rio de Janeiro",
       latitude: null,
       longitude: null,
     });
@@ -27,7 +27,7 @@ export default function NewAddressScreen() {
     <SafeAreaView style={styles.container}>
       <Header title="Novo endereço" hasBack hasBorder />
 
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.newProductForm}>
           <TextInput
             label="Endereço"

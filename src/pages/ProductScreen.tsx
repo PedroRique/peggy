@@ -23,12 +23,13 @@ export default function ProductScreen() {
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
-  const [userData, setUserData] = useState<UserData>();
+  const [lenderUserData, setLenderUserData] = useState<UserData>();
 
   useEffect(() => {
-    getUserData();
+    getLenderUserData();
     getCategoryLabel();
   }, []);
 
@@ -39,9 +40,9 @@ export default function ProductScreen() {
     setCategoryLabel(categoryLabel || "");
   };
 
-  const getUserData = async () => {
+  const getLenderUserData = async () => {
     const result = await fetchUserData(product?.userId);
-    setUserData(result);
+    setLenderUserData(result);
   };
 
   return (
@@ -70,27 +71,26 @@ export default function ProductScreen() {
         <Text style={styles.productDescription}>{product?.description}</Text>
 
         <View style={styles.userContainer}>
-          <Avatar imageUrl={userData?.photoURL} />
+          <Avatar imageUrl={lenderUserData?.photoURL} />
           <View>
             <BoldText style={{ color: "#333333" }}>Emprestado por</BoldText>
             <BoldText style={{ fontSize: 24, color: "#333333" }}>
-              {userData?.name}
+              {lenderUserData?.name}
             </BoldText>
           </View>
         </View>
       </View>
 
-      <View style={styles.productFooter}>
-        {/* <BoldText style={styles.price}>
-          P$80<BoldText style={styles.recurrence}>/dia</BoldText>
-        </BoldText> */}
-        <Button
-          title="Pegar emprestado"
-          onPress={() => {
-            navigation.navigate("NewLoanRequest");
-          }}
-        />
-      </View>
+      {currentUserData?.uid !== lenderUserData?.uid && (
+        <View style={styles.productFooter}>
+          <Button
+            title="Pegar emprestado"
+            onPress={() => {
+              navigation.navigate("NewLoanRequest");
+            }}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }

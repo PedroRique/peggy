@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { Text } from "./Text/Text";
 import { BoldText } from "./Text/BoldText";
+import { Colors } from "../shared/Colors";
 
 export const TextInput = ({
   style,
@@ -15,7 +16,7 @@ export const TextInput = ({
   ...rest
 }: React.PropsWithChildren<TextInputProps & { label?: string }>) => (
   <View>
-    <BoldText style={styles.label}>{label}</BoldText>
+    {label && <BoldText style={styles.label}>{label}</BoldText>}
     <ReactTextInput
       value={value}
       multiline={multiline}
@@ -28,7 +29,7 @@ export const TextInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.White,
     padding: 16,
     borderRadius: 8,
     fontSize: 18,

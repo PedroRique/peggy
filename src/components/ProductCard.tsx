@@ -9,12 +9,14 @@ import {
 import { Product } from "../models/Product";
 import { Text } from "./Text/Text";
 import { Colors } from "../shared/Colors";
+import { BoldText } from "./Text/BoldText";
 
 interface ProductCardProps
   extends Pick<TouchableOpacityProps, "style" | "onPress"> {
   product: Product;
   showDistance?: boolean;
   hasShadow?: boolean;
+  hasName?: boolean;
   size?: number;
 }
 
@@ -25,22 +27,22 @@ export const ProductCard = ({
   size = 150,
   showDistance = false,
   hasShadow = true,
+  hasName = true,
   ...rest
 }: ProductCardProps) => {
   return (
     <TouchableOpacity
       disabled={!onPress}
       onPress={onPress}
-      style={[
-        styles.productContainer,
-        style,
-        { width: size, height: size },
-        hasShadow && styles.shadowStyle,
-      ]}
+      style={[styles.productContainer, style, { width: size }]}
       {...rest}
     >
       <ImageBackground
-        style={styles.product}
+        style={[
+          styles.product,
+          hasShadow && styles.shadowStyle,
+          { width: size, height: size },
+        ]}
         source={{ uri: product.imageUrl }}
         resizeMode="cover"
       >
@@ -51,6 +53,11 @@ export const ProductCard = ({
           </View>
         )}
       </ImageBackground>
+      {hasName && (
+        <BoldText style={{ marginTop: 16 }}>
+          {product.name}
+        </BoldText>
+      )}
     </TouchableOpacity>
   );
 };
@@ -70,20 +77,20 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   product: {
-    flex: 1,
     display: "flex",
     alignItems: "flex-end",
     justifyContent: "flex-end",
-  },
-  productContainer: {
     borderRadius: 8,
     backgroundColor: Colors.White,
     overflow: "hidden",
+  },
+  productContainer: {
+    backgroundColor: Colors.White
   },
   shadowStyle: {
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-},
+  },
 });
