@@ -77,7 +77,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={userData?.name} hasBack hasBorder />
+      <Header title={userData?.name} hasBorder />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
           <Avatar
@@ -92,13 +92,6 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </View>
-
-        {/* <View style={styles.peggiesContainer}>
-          <BoldText style={styles.peggiesText}>Você possui:</BoldText>
-          <BoldText style={styles.peggiesText}>
-            <Text style={styles.peggiesTextBig}>120</Text> Peggies
-          </BoldText>
-        </View> */}
 
         <View style={styles.myContainer}>
           <SectionHeader title="Seus produtos" route="NewProduct" />
@@ -141,26 +134,6 @@ const styles = StyleSheet.create({
     color: "#777777",
     fontSize: 16,
     width: "70%",
-  },
-  peggiesContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#D9D9D9",
-    paddingVertical: 20,
-    paddingHorizontal: 12,
-    borderRadius: 7,
-    marginBottom: 32,
-  },
-  peggiesText: {
-    fontSize: 24,
-    display: "flex",
-    alignItems: "center",
-  },
-  peggiesTextBig: {
-    fontSize: 32,
-    lineHeight: 24,
   },
   myContainer: {
     marginBottom: 32,
