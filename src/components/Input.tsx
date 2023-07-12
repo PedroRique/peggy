@@ -14,7 +14,7 @@ export const TextInput = ({
   label,
   ...rest
 }: React.PropsWithChildren<TextInputProps & { label?: string }>) => (
-  <View style={{ flex: 1 }}>
+  <View>
     <BoldText style={styles.label}>{label}</BoldText>
     <ReactTextInput
       value={value}

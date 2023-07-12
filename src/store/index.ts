@@ -10,11 +10,11 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import { CategoryState, categorySlice } from "./slices/category.slice";
 import { LoanState, loanSlice } from "./slices/loan.slice";
 import { ProductState, productSlice } from "./slices/product.slice";
 import { UserState, userSlice } from "./slices/user.slice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface AppState {
   category: CategoryState;
@@ -25,7 +25,7 @@ export interface AppState {
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage: AsyncStorage,
   blacklist: [loanSlice.name, productSlice.name],
 };
 
@@ -45,7 +45,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(logger),
+    }),
 });
 
 export const persistor = persistStore(store);

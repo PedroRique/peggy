@@ -31,7 +31,12 @@ export const ProductCard = ({
     <TouchableOpacity
       disabled={!onPress}
       onPress={onPress}
-      style={[styles.productContainer, style, { width: size, height: size }, hasShadow && styles.shadowStyle]}
+      style={[
+        styles.productContainer,
+        style,
+        { width: size, height: size },
+        hasShadow && styles.shadowStyle,
+      ]}
       {...rest}
     >
       <ImageBackground
@@ -72,6 +77,7 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     borderRadius: 8,
+    backgroundColor: Colors.White,
     overflow: "hidden",
   },
   shadowStyle: {
@@ -79,5 +85,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-  }
+},
 });

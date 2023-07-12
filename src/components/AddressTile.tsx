@@ -28,9 +28,12 @@ export default function AddressTile({ address, ...rest }: AddressTileProps) {
         <TouchableOpacity style={styles.addressContainer} {...rest}>
           <Feather name="map-pin" color={Colors.Blue} size={32}></Feather>
           <View style={styles.addressText}>
-            <BoldText size={18}>{address.street}</BoldText>
+            <BoldText size={18}>
+              {address.street} {address.number}
+            </BoldText>
             <Text size={14}>
-              {address.complement} - {address.city}
+              {address.complement && `${address.complement} - `}
+              {address.city}
             </Text>
           </View>
 
@@ -54,6 +57,7 @@ const styles = StyleSheet.create({
     elevation: 10,
     borderRadius: 8,
     overflow: "hidden",
+    backgroundColor: Colors.White,
     gap: 12,
     padding: 16,
   },

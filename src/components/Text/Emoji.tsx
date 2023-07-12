@@ -1,12 +1,6 @@
 import React from "react";
+import { Text } from "./Text";
 const Emoji = (props: { symbol: string; label: string }) => (
-  <span
-    className="emoji"
-    role="img"
-    aria-label={props.label ? props.label : ""}
-    aria-hidden={props.label ? "false" : "true"}
-  >
-    {props.symbol}
-  </span>
+  <Text>{props.symbol}</Text>
 );
 export default Emoji;

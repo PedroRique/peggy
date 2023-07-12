@@ -1,5 +1,4 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
-import Geolocation from "@react-native-community/geolocation";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
@@ -19,6 +18,7 @@ import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
 import { productSlice } from "../store/slices/product.slice";
 import { loanSlice } from "../store/slices/loan.slice";
+import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 
 const NearbyTitle = () => {
   return (
@@ -61,7 +61,7 @@ export default function HomeScreen() {
   const init = async () => {
     getCategories();
     getProducts();
-    getCurrentPosition();
+    // getCurrentPosition();
   };
 
   const getCategories = async () => {
@@ -74,19 +74,19 @@ export default function HomeScreen() {
     setProducts(result);
   };
 
-  const getCurrentPosition = () => {
-    Geolocation.getCurrentPosition((info) =>
-      setCurrentPosition({
-        latitude: info.coords.latitude,
-        longitude: info.coords.longitude,
-      })
-    );
-  };
+  // const getCurrentPosition = () => {
+  //   Geolocation.getCurrentPosition((info) =>
+  //     setCurrentPosition({
+  //       latitude: info.coords.latitude,
+  //       longitude: info.coords.longitude,
+  //     })
+  //   );
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
         <Header>Vamos emprestar!</Header>
@@ -99,23 +99,7 @@ export default function HomeScreen() {
         </Pressable>
 
         <NearbyTitle />
-        <ScrollView style={styles.nearbyProducts} horizontal>
-          {products?.map((product, i) => (
-            <ProductCard
-              key={i}
-              product={product}
-              onPress={() => {
-                dispatch(loanSlice.actions.setSelectedLoan(null));
-                dispatch(productSlice.actions.setSelectedProduct(product));
-                navigation.navigate("Product");
-              }}
-              showDistance
-              style={{
-                marginRight: 12,
-              }}
-            />
-          ))}
-        </ScrollView>
+        <ProductHorizontalList products={products} />
 
         <CategoriesTitle />
         <ScrollView
@@ -163,10 +147,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "RedHatDisplay",
     marginLeft: 8,
-  },
-  nearbyProducts: {
-    gap: 12,
-    padding: 16,
   },
   categoriesList: {
     display: "flex",

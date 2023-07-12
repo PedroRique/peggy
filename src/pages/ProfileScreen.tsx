@@ -25,6 +25,7 @@ import {
 import { Colors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 
 const SectionHeader = ({ title, route }: { title: string; route: any }) => {
   const navigation = useNavigation<StackTypes>();
@@ -92,24 +93,16 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <View style={styles.peggiesContainer}>
+        {/* <View style={styles.peggiesContainer}>
           <BoldText style={styles.peggiesText}>Você possui:</BoldText>
           <BoldText style={styles.peggiesText}>
             <Text style={styles.peggiesTextBig}>120</Text> Peggies
           </BoldText>
-        </View>
+        </View> */}
 
         <View style={styles.myContainer}>
           <SectionHeader title="Seus produtos" route="NewProduct" />
-          <View style={styles.products}>
-            {products.map((product, i) => (
-              <ProductCard
-                key={i}
-                product={product}
-                style={{ minWidth: "calc(50% - 6px)" }}
-              ></ProductCard>
-            ))}
-          </View>
+          <ProductHorizontalList products={products} />
         </View>
 
         <View style={styles.myContainer}>
@@ -133,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   scrollContainer: {
-    padding: 16,
+    paddingVertical: 16,
   },
   avatarContainer: {
     display: "flex",
@@ -142,6 +135,7 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 48,
     marginTop: 12,
+    paddingHorizontal: 16,
   },
   avatarBio: {
     color: "#777777",
@@ -170,6 +164,7 @@ const styles = StyleSheet.create({
   },
   myContainer: {
     marginBottom: 32,
+    overflow: "visible",
   },
   myHeader: {
     display: "flex",
@@ -177,6 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   myHeaderTitle: {
     fontSize: 24,
@@ -195,6 +191,7 @@ const styles = StyleSheet.create({
   },
   addresses: {
     display: "flex",
+    paddingHorizontal: 16,
     gap: 12,
   },
 });

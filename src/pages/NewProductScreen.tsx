@@ -44,7 +44,7 @@ export default function NewProductScreen() {
     <SafeAreaView style={styles.container}>
       <Header title="Novo produto" hasBack hasBorder />
 
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.newProductForm}>
           <BoldText style={{ marginBottom: 4 }}>Foto do produto</BoldText>
           <TouchableOpacity style={styles.addImageBtn} onPress={getPhoto}>

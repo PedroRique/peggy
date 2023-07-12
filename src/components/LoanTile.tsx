@@ -9,42 +9,50 @@ import {
 import { useSelector } from "react-redux";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { Colors } from "../shared/Colors";
-import { STATUS_MESSAGES } from "../shared/Constants";
+import { LOAN_TILE_STATUS_MESSAGES } from "../shared/Constants";
 import { AppState } from "../store";
 import { ProductCard } from "./ProductCard";
 import { Text } from "./Text/Text";
+import { useState, useEffect } from "react";
 
 type LoanTileProps = TouchableOpacityProps & { loan: LoanWithInfo };
 
 export default function LoanTile({ loan, ...rest }: LoanTileProps) {
   const userData = useSelector((state: AppState) => state.user.userData);
 
+  const [firstSentence, setFirstSentence] = useState<JSX.Element | null>(<></>);
+  const [secondSentence, setSecondSentence] = useState<JSX.Element | null>(
+    <></>
+  );
+
+  useEffect(() => {
+    getSentence();
+  }, [userData]);
+
   const getSentence = () => {
     const { startDate, endDate, borrower } = loan;
     const borrowerName =
-      borrower?.uid === userData?.uid ? "Você" : borrower?.name || "";
+      borrower?.uid === userData?.uid
+        ? "Você"
+        : (loan.status == LoanStatus.ACCEPTED ? "Você" : borrower?.name) || "";
     const productName = loan.product?.name || "";
 
-    const getMessage = STATUS_MESSAGES[loan.status];
-    const firstSentence = getMessage
+    const getMessage = LOAN_TILE_STATUS_MESSAGES[loan.status];
+    const firstS = getMessage
       ? getMessage({ borrowerName, productName, startDate, endDate })
       : null;
-    const secondSentence =
+    const secondS =
       loan.status !== LoanStatus.PENDING &&
       loan.status !== LoanStatus.RETURNED ? (
         <>em {"Z"}</>
-      ) : null;
+      ) : (
+        <>
+          de {startDate} até {endDate}
+        </>
+      );
 
-    return (
-      <>
-        {firstSentence && <Text>{firstSentence}</Text>}
-        {secondSentence && (
-          <Text size={14} style={styles.endDateText}>
-            {secondSentence}
-          </Text>
-        )}
-      </>
-    );
+    setFirstSentence(firstS);
+    setSecondSentence(secondS);
   };
 
   return (
@@ -52,7 +60,16 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
       {loan.product && (
         <ProductCard size={60} product={loan.product} hasShadow={false} />
       )}
-      <View style={styles.loanText}>{getSentence()}</View>
+      <View style={styles.loanText}>
+        <>
+          {firstSentence && <Text>{firstSentence}</Text>}
+          {secondSentence && (
+            <Text size={14} style={styles.endDateText}>
+              {secondSentence}
+            </Text>
+          )}
+        </>
+      </View>
 
       <Pressable onPress={() => {}}>
         <Feather name="arrow-right" color={Colors.Orange} size={24}></Feather>

@@ -9,31 +9,28 @@ interface StatusMessagesProps {
   endDate: string;
 }
 
-export const STATUS_MESSAGES = {
+export const LOAN_TILE_STATUS_MESSAGES = {
   [LoanStatus.PENDING]: ({
     borrowerName,
     productName,
-    startDate,
-    endDate,
   }: StatusMessagesProps) => (
     <>
       <BoldText>{borrowerName}</BoldText> quer pegar emprestado{" "}
       <BoldText>{productName}</BoldText>
-      <br />
-      de {startDate} até {endDate}
     </>
   ),
-  [LoanStatus.ACCEPTED]: ({ borrowerName }: StatusMessagesProps) => (
+  [LoanStatus.ACCEPTED]: ({
+    borrowerName,
+    productName,
+  }: StatusMessagesProps) => (
     <>
-      <BoldText>{borrowerName}</BoldText> aprovou o empréstimo{" "}
-      <Emoji symbol={"👌"} label={'okay'} />
+      <BoldText>{borrowerName}</BoldText> aprovou o empréstimo de{" "}
+      <BoldText>{productName}</BoldText> <Emoji symbol={"👌"} label={"okay"} />
     </>
   ),
   [LoanStatus.DENIED]: ({ borrowerName }: StatusMessagesProps) => (
     <>
       <BoldText>{borrowerName}</BoldText> negou o empréstimo
-      <br />
-      em {"Z"}
     </>
   ),
   [LoanStatus.PROGRESS]: ({
@@ -45,15 +42,11 @@ export const STATUS_MESSAGES = {
     <>
       <BoldText>{borrowerName}</BoldText> está com{" "}
       <BoldText>{productName}</BoldText>
-      <br />
-      de {startDate} até {endDate}
     </>
   ),
   [LoanStatus.CANCELED]: ({ borrowerName }: StatusMessagesProps) => (
     <>
       <BoldText>{borrowerName}</BoldText> cancelou o empréstimo
-      <br />
-      em {"Z"}
     </>
   ),
   [LoanStatus.RETURNED]: ({
@@ -65,8 +58,6 @@ export const STATUS_MESSAGES = {
     <>
       <BoldText>{borrowerName}</BoldText> pegou emprestado{" "}
       <BoldText>{productName}</BoldText>
-      <br />
-      de {startDate} até {endDate}
     </>
   ),
 };
