@@ -34,16 +34,20 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
     const borrowerName =
       borrower?.uid === userData?.uid
         ? "Você"
-        : (loan.status == LoanStatus.ACCEPTED ? "Você" : borrower?.name) || "";
+        : (loan.status == LoanStatus.ACCEPTED ||
+          loan.status == LoanStatus.DENIED
+            ? "Você"
+            : borrower?.name) || "";
     const productName = loan.product?.name || "";
 
     const getMessage = LOAN_TILE_STATUS_MESSAGES[loan.status];
     const firstS = getMessage
-      ? getMessage({ borrowerName, productName, startDate, endDate })
+      ? getMessage({ borrowerName, productName })
       : null;
     const secondS =
       loan.status !== LoanStatus.PENDING &&
-      loan.status !== LoanStatus.RETURNED ? (
+      loan.status !== LoanStatus.RETURNED &&
+      loan.status !== LoanStatus.PROGRESS ? (
         <>em {"Z"}</>
       ) : (
         <>

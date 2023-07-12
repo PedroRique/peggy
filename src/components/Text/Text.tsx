@@ -3,6 +3,7 @@ import { Text as ReactText, TextProps } from "react-native";
 export const Text = ({
   size = 16,
   weight = "600",
+  color,
   children,
   style,
   ...rest
@@ -21,12 +22,14 @@ export const Text = ({
       | "700"
       | "800"
       | "900";
+    color?: string;
   }
 >) => (
   <ReactText
     style={[
       { fontFamily: "RedHatDisplay", fontSize: size, fontWeight: weight },
       style,
+      !!color && { color },
     ]}
     {...rest}
   >

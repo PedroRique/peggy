@@ -14,14 +14,17 @@ import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
+import { Text } from "../components/Text/Text";
 
 const Tab = createMaterialTopTabNavigator();
 
 const LoansSection = ({
   title,
+  emptyText,
   loans,
 }: {
   title: string;
+  emptyText: string;
   loans: LoanWithInfo[];
 }) => {
   const dispatch = useDispatch();
@@ -32,39 +35,81 @@ const LoansSection = ({
       <BoldText style={styles.sectionTitle}>{title}</BoldText>
 
       <View style={styles.loansContainer}>
-        {loans.map((loan, i) => (
-          <LoanTile
-            key={i}
-            loan={loan}
-            onPress={() => {
-              dispatch(productSlice.actions.setSelectedProduct(null));
-              dispatch(loanSlice.actions.setSelectedLoan(loan));
-              navigation.navigate("NewLoanRequest");
-            }}
-          />
-        ))}
+        {loans && loans.length ? (
+          loans.map((loan, i) => (
+            <LoanTile
+              key={i}
+              loan={loan}
+              onPress={() => {
+                dispatch(productSlice.actions.setSelectedProduct(null));
+                dispatch(loanSlice.actions.setSelectedLoan(loan));
+                navigation.navigate("NewLoanRequest");
+              }}
+            />
+          ))
+        ) : (
+          <Text color={Colors.Grey}>{emptyText}</Text>
+        )}
       </View>
     </View>
   );
 };
 
 const LoansTab = ({ type }: { type: "lender" | "borrower" }) => {
-  const [loans, setLoans] = useState<LoanWithInfo[]>([]);
+  const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
+  const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
   const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
   useEffect(() => {
     getLoans();
   }, []);
 
   const getLoans = async () => {
-    const result = await fetchLoansWithProductInfo(type);
-    setPendingLoans(result.filter((l) => l.status === LoanStatus.PENDING));
-    setLoans(result.filter((l) => l.status !== LoanStatus.PENDING));
+    try {
+      const result = await fetchLoansWithProductInfo(type);
+      let groups: Record<string, LoanWithInfo[]> = {
+        pending: [],
+        progress: [],
+        other: [],
+      };
+      const groupedLoans = result.reduce((accumulator, loan) => {
+        if (loan.status === LoanStatus.PENDING) {
+          accumulator.pending.push(loan);
+        } else if (
+          loan.status === LoanStatus.PROGRESS ||
+          loan.status === LoanStatus.ACCEPTED
+        ) {
+          accumulator.progress.push(loan);
+        } else {
+          accumulator.other.push(loan);
+        }
+        return accumulator;
+      }, groups);
+
+      setPendingLoans(groupedLoans.pending);
+      setProgressLoans(groupedLoans.progress);
+      setOtherLoans(groupedLoans.other);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <View style={styles.tabInner}>
-      <LoansSection title="Pendente" loans={pendingLoans} />
-      <LoansSection title="Ativos" loans={loans} />
+      <LoansSection
+        title="Pendente"
+        emptyText="Nenhum empréstimo pendente."
+        loans={pendingLoans}
+      />
+      <LoansSection
+        title="Ativos"
+        emptyText="Nenhum empréstimo em progresso."
+        loans={progreesLoans}
+      />
+      <LoansSection
+        title="Histórico"
+        emptyText="Nenhum empréstimo no histórico."
+        loans={otherLoans}
+      />
     </View>
   );
 };
@@ -79,7 +124,13 @@ const BorrowingTab = () => {
 
 function LoanTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarIndicatorStyle: {
+          backgroundColor: Colors.Orange,
+        },
+      }}
+    >
       <Tab.Screen name="Emprestando" component={LendingTab} />
       <Tab.Screen name="Pegando Emprestado" component={BorrowingTab} />
     </Tab.Navigator>
@@ -89,7 +140,7 @@ function LoanTabs() {
 export default function LoansScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Empréstimos"} />
+      <Header title={"Empréstimos"} hasBorder />
       <LoanTabs></LoanTabs>
     </SafeAreaView>
   );

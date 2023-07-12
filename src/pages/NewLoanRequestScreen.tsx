@@ -93,7 +93,7 @@ export default function NewLoanRequestScreen() {
 
         {product && (
           <View style={styles.productSummary}>
-            <ProductCard product={product} size={60} />
+            <ProductCard product={product} size={60} hasName={false} />
             <BoldText size={24} numberOfLines={2}>
               {product?.name}
             </BoldText>

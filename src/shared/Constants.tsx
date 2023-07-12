@@ -5,59 +5,38 @@ import { LoanStatus } from "../models/Loan";
 interface StatusMessagesProps {
   borrowerName: string;
   productName: string;
-  startDate: string;
-  endDate: string;
+  middleText?: string;
+  emoji?: string;
 }
+const LoanStatusMessage = ({
+  borrowerName,
+  productName,
+  middleText,
+  emoji = "",
+}: StatusMessagesProps) => (
+  <>
+    <BoldText>{borrowerName}</BoldText> {middleText}{" "}
+    <BoldText>{productName}</BoldText> {!!emoji && <Emoji symbol={emoji} />}
+  </>
+);
 
 export const LOAN_TILE_STATUS_MESSAGES = {
-  [LoanStatus.PENDING]: ({
-    borrowerName,
-    productName,
-  }: StatusMessagesProps) => (
-    <>
-      <BoldText>{borrowerName}</BoldText> quer pegar emprestado{" "}
-      <BoldText>{productName}</BoldText>
-    </>
+  [LoanStatus.PENDING]: (props: StatusMessagesProps) => (
+    <LoanStatusMessage middleText="quer pegar emprestado" {...props} />
   ),
-  [LoanStatus.ACCEPTED]: ({
-    borrowerName,
-    productName,
-  }: StatusMessagesProps) => (
-    <>
-      <BoldText>{borrowerName}</BoldText> aprovou o empréstimo de{" "}
-      <BoldText>{productName}</BoldText> <Emoji symbol={"👌"} label={"okay"} />
-    </>
+  [LoanStatus.ACCEPTED]: (props: StatusMessagesProps) => (
+    <LoanStatusMessage middleText="aprovou o empréstimo de" emoji={"👌"} {...props} />
   ),
-  [LoanStatus.DENIED]: ({ borrowerName }: StatusMessagesProps) => (
-    <>
-      <BoldText>{borrowerName}</BoldText> negou o empréstimo
-    </>
+  [LoanStatus.DENIED]: (props: StatusMessagesProps) => (
+    <LoanStatusMessage middleText="negou o empréstimo de" emoji={"😕"} {...props} />
   ),
-  [LoanStatus.PROGRESS]: ({
-    borrowerName,
-    productName,
-    startDate,
-    endDate,
-  }: StatusMessagesProps) => (
-    <>
-      <BoldText>{borrowerName}</BoldText> está com{" "}
-      <BoldText>{productName}</BoldText>
-    </>
+  [LoanStatus.PROGRESS]: (props: StatusMessagesProps) => (
+    <LoanStatusMessage middleText="está com" {...props} />
   ),
-  [LoanStatus.CANCELED]: ({ borrowerName }: StatusMessagesProps) => (
-    <>
-      <BoldText>{borrowerName}</BoldText> cancelou o empréstimo
-    </>
+  [LoanStatus.CANCELED]: (props: StatusMessagesProps) => (
+    <LoanStatusMessage middleText="cancelou o empréstimo de" emoji={"😕"} {...props} />
   ),
-  [LoanStatus.RETURNED]: ({
-    borrowerName,
-    productName,
-    startDate,
-    endDate,
-  }: StatusMessagesProps) => (
-    <>
-      <BoldText>{borrowerName}</BoldText> pegou emprestado{" "}
-      <BoldText>{productName}</BoldText>
-    </>
+  [LoanStatus.RETURNED]: (props: StatusMessagesProps) => (
+    <LoanStatusMessage middleText="pegou emprestado" emoji="👏" {...props} />
   ),
 };
