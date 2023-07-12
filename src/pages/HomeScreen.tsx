@@ -8,7 +8,7 @@ import { StackTypes } from "../../App";
 import CategoryTile from "../components/CategoryTile";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
-import { ProductCard } from "../components/ProductCard";
+import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 import { Text } from "../components/Text/Text";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/category.service";
@@ -16,9 +16,6 @@ import { fetchProducts } from "../services/product.service";
 import { Colors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
-import { productSlice } from "../store/slices/product.slice";
-import { loanSlice } from "../store/slices/loan.slice";
-import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 
 const NearbyTitle = () => {
   return (
@@ -49,10 +46,6 @@ export default function HomeScreen() {
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState<Product[]>();
-  const [currentPosition, setCurrentPosition] = useState<{
-    latitude: number;
-    longitude: number;
-  }>();
 
   useEffect(() => {
     init();
@@ -61,7 +54,6 @@ export default function HomeScreen() {
   const init = async () => {
     getCategories();
     getProducts();
-    // getCurrentPosition();
   };
 
   const getCategories = async () => {
@@ -73,15 +65,6 @@ export default function HomeScreen() {
     const result = await fetchProducts();
     setProducts(result);
   };
-
-  // const getCurrentPosition = () => {
-  //   Geolocation.getCurrentPosition((info) =>
-  //     setCurrentPosition({
-  //       latitude: info.coords.latitude,
-  //       longitude: info.coords.longitude,
-  //     })
-  //   );
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
