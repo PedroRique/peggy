@@ -1,34 +1,34 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { BoldText } from "../components/Text/BoldText";
-import { userSlice } from "../store/slices/user.slice";
-import Button from "../components/Button";
-import { createUser } from "../services/user.service";
-import { useDispatch } from "react-redux";
-import { TextInput } from "../components/Input";
-import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch } from "react-redux";
+import { StackTypes } from "../../App";
+import Button from "../components/Button";
+import { TextInput } from "../components/Input";
+import { BoldText } from "../components/Text/BoldText";
+import { createUser } from "../services/user.service";
+import { PColors } from "../shared/Colors";
+import { userSlice } from "../store/slices/user.slice";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
 export default function RegisterScreen() {
   const dispatch = useDispatch();
-  const navigation = useNavigation<StackTypes>()
+  const navigation = useNavigation<StackTypes>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-
   const registerUser = async () => {
-    if (name === '' || email === '' || password === '') {
-      console.log('Preencha nome, email e senha');
+    if (name === "" || email === "" || password === "") {
+      console.log("Preencha nome, email e senha");
       return;
     }
 
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!emailRegex.test(email)) {
-      console.log('Por favor, insira um e-mail válido');
+      console.log("Por favor, insira um e-mail válido");
       return;
     }
 
@@ -39,21 +39,22 @@ export default function RegisterScreen() {
     });
 
     if (result !== null && result !== undefined) {
-      console.log('Cadastro bem-sucedido');
-      dispatch(userSlice.actions.setProfile({
-        name,
-        email,
-        uid: "",
-        photoURL: null,
-        addresses: [],
-        rate: 0
-      }));
-      navigation.navigate('Main');
+      console.log("Cadastro bem-sucedido");
+      dispatch(
+        userSlice.actions.setUserData({
+          name,
+          email,
+          uid: "",
+          photoURL: null,
+          addresses: [],
+          rate: 0,
+        })
+      );
+      navigation.navigate("Main");
     } else {
-      console.log('Credenciais inválidas');
+      console.log("Credenciais inválidas");
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,36 +63,28 @@ export default function RegisterScreen() {
       </View>
       <View style={styles.loginContainer}>
         <View>
-          <View>
-            <TextInput
-              label="Nome"
-              style={styles.input}
-              placeholder="Insira seu nome"
-              value={name}
-              onChangeText={setName}
-            />
-          </View>
-          <View>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                label="E-mail"
-                style={styles.input}
-                placeholder="Insira seu e-mail"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
-            <View>
-              <TextInput
-                label="Senha"
-                style={styles.input}
-                placeholder="Insira sua senha"
-                showEyeIcon={true}
-                value={password}
-                onChangeText={setPassword}
-              />
-            </View>
-          </View>
+          <TextInput
+            label="Nome"
+            style={styles.input}
+            placeholder="Insira seu nome"
+            value={name}
+            onChangeText={setName}
+          />
+          <TextInput
+            label="E-mail"
+            style={styles.input}
+            placeholder="Insira seu e-mail"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            label="Senha"
+            style={styles.input}
+            placeholder="Insira sua senha"
+            showEyeIcon={true}
+            value={password}
+            onChangeText={setPassword}
+          />
         </View>
       </View>
       <View>
@@ -101,10 +94,16 @@ export default function RegisterScreen() {
         <BoldText style={[styles.forgotText, styles.center]}>
           Já possui uma conta?
         </BoldText>
-        <TouchableOpacity onPress={() => {navigation.navigate("Login")}}>
-        <BoldText style={[styles.underlineText, styles.center, styles.forgotText]}>
-          Fazer login
-        </BoldText>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Login");
+          }}
+        >
+          <BoldText
+            style={[styles.underlineText, styles.center, styles.forgotText]}
+          >
+            Fazer login
+          </BoldText>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -114,7 +113,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: PColors.White,
     height: "100%",
   },
   center: {
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: PColors.White,
     padding: 16,
     borderRadius: 8,
     fontSize: 18,
@@ -142,10 +141,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    
-  },
-  passwordContainer: {
-    position: "relative",
   },
   icon: {
     position: "absolute",
@@ -157,7 +152,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   forgotText: {
-    color: "#00C2FF",
+    color: PColors.Blue,
     marginTop: 20,
   },
   underlineText: {

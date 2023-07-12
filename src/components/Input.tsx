@@ -20,8 +20,8 @@ export const TextInput = ({
 
   return (
     <View style={{ flex: 1 }}>
-      <BoldText style={styles.label}>{label}</BoldText>
-      <View style={styles.inputContainer}>
+      {label && <BoldText style={styles.label}>{label}</BoldText>}
+      <View>
         <ReactTextInput
           value={value}
           multiline={multiline}

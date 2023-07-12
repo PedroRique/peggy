@@ -1,19 +1,20 @@
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
-import { useSelector } from "react-redux";
-import { AppState } from "../store";
-import { fetchUserData } from "../services/user.service";
-import { useEffect, useState } from "react";
-import { UserData } from "../models/UserData";
 import { Text } from "../components/Text/Text";
-import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
+import { UserData } from "../models/UserData";
+import { fetchUserData } from "../services/user.service";
+import { PColors } from "../shared/Colors";
+import { AppState } from "../store";
 
 export default function ProductScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -23,12 +24,13 @@ export default function ProductScreen() {
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
-  const [userData, setUserData] = useState<UserData>();
+  const [lenderUserData, setLenderUserData] = useState<UserData>();
 
   useEffect(() => {
-    getUserData();
+    getLenderUserData();
     getCategoryLabel();
   }, []);
 
@@ -39,9 +41,9 @@ export default function ProductScreen() {
     setCategoryLabel(categoryLabel || "");
   };
 
-  const getUserData = async () => {
+  const getLenderUserData = async () => {
     const result = await fetchUserData(product?.userId);
-    setUserData(result);
+    setLenderUserData(result);
   };
 
   return (
@@ -52,8 +54,8 @@ export default function ProductScreen() {
         resizeMode="cover"
       >
         <View style={styles.productInner}>
-          <Header hasBack color="#fff">
-            <Rating value={4.7} color="#fff" />
+          <Header hasBack color={PColors.White}>
+            <Rating value={4.7} color={PColors.White} />
           </Header>
         </View>
       </ImageBackground>
@@ -70,27 +72,24 @@ export default function ProductScreen() {
         <Text style={styles.productDescription}>{product?.description}</Text>
 
         <View style={styles.userContainer}>
-          <Avatar imageUrl={userData?.photoURL} />
+          <Avatar imageUrl={lenderUserData?.photoURL} />
           <View>
-            <BoldText style={{ color: "#333333" }}>Emprestado por</BoldText>
-            <BoldText style={{ fontSize: 24, color: "#333333" }}>
-              {userData?.name}
-            </BoldText>
+            <BoldText>Emprestado por</BoldText>
+            <BoldText size={24}>{lenderUserData?.name}</BoldText>
           </View>
         </View>
       </View>
 
-      <View style={styles.productFooter}>
-        {/* <BoldText style={styles.price}>
-          P$80<BoldText style={styles.recurrence}>/dia</BoldText>
-        </BoldText> */}
-        <Button
-          title="Pegar emprestado"
-          onPress={() => {
-            navigation.navigate("NewLoanRequest");
-          }}
-        />
-      </View>
+      {currentUserData?.uid !== lenderUserData?.uid && (
+        <View style={styles.productFooter}>
+          <Button
+            title="Pegar emprestado"
+            onPress={() => {
+              navigation.navigate("NewLoanRequest");
+            }}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   productDescription: {
-    color: "#777777",
+    color: PColors.Grey,
     marginBottom: 24,
   },
   userContainer: {

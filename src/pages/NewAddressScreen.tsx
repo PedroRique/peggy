@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 
 export default function NewAddressScreen() {
   const [number, setNumber] = useState("");
@@ -17,7 +17,7 @@ export default function NewAddressScreen() {
       street,
       complement,
       number,
-      city: 'Rio de Janeiro',
+      city: "Rio de Janeiro",
       latitude: null,
       longitude: null,
     });
@@ -27,7 +27,7 @@ export default function NewAddressScreen() {
     <SafeAreaView style={styles.container}>
       <Header title="Novo endereço" hasBack hasBorder />
 
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.newProductForm}>
           <TextInput
             label="Endereço"
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: Colors.Blue,
+    borderColor: PColors.Blue,
     overflow: "hidden",
     marginBottom: 24,
     backgroundColor: "white",

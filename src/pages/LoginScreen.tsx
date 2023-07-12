@@ -1,4 +1,3 @@
-import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -9,7 +8,7 @@ import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
 import { signInUser } from "../services/user.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { userSlice } from "../store/slices/user.slice";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
@@ -19,8 +18,6 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-
 
   const loginUser = async () => {
     if (email === "" || password === "") {
@@ -36,7 +33,7 @@ export default function LoginScreen() {
     if (result) {
       const { displayName, uid, email, photoURL } = result.user;
       dispatch(
-        userSlice.actions.setProfile({
+        userSlice.actions.setUserData({
           name: displayName,
           uid,
           email,
@@ -61,35 +58,28 @@ export default function LoginScreen() {
       </View>
       <View style={styles.loginContainer}>
         <View>
-          <View>
-            <TextInput
-              label="E-mail"
-              style={styles.input}
-              placeholder="Insira seu e-mail"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-          <View>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                label="Senha"
-                showEyeIcon={true}
-                style={styles.input}
-                placeholder="Insira sua senha"
-                value={password}
-                onChangeText={setPassword}
-              />
-              {/* TODO: pass to inside of the text input component */}
-              
-            </View>
-            <BoldText
-              style={[styles.forgotPassword, styles.forgotText]}
-              onPress={handleForgotPassword}
-            >
-              Esqueceu a senha?
-            </BoldText>
-          </View>
+          <TextInput
+            label="E-mail"
+            style={styles.input}
+            placeholder="Insira seu e-mail"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            label="Senha"
+            showEyeIcon={true}
+            style={styles.input}
+            placeholder="Insira sua senha"
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <BoldText
+            style={[styles.forgotPassword, styles.forgotText]}
+            onPress={handleForgotPassword}
+          >
+            Esqueceu a senha?
+          </BoldText>
         </View>
       </View>
       <View>
@@ -118,7 +108,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: PColors.White,
     height: "100%",
   },
   center: {
@@ -138,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: PColors.White,
     padding: 16,
     borderRadius: 8,
     fontSize: 18,
@@ -160,7 +150,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   forgotText: {
-    color: Colors.Blue,
+    color: PColors.Blue,
     marginTop: 20,
   },
   underlineText: {

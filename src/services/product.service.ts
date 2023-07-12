@@ -32,10 +32,11 @@ export const searchProducts = async (searchKey: string) => {
   return await commonFetch<Product>(q);
 };
 
-export const fetchProductsById = async (userId: string) => {
+export const fetchProductsById = async (userId?: string) => {
+  const finalUserId = userId || FIREBASE_AUTH.currentUser?.uid;
   const q = query(
     collection(FIREBASE_DB, "products"),
-    where("userId", "==", userId)
+    where("userId", "==", finalUserId)
   );
   return await commonFetch<Product>(q);
 };
@@ -51,8 +52,15 @@ export const fetchProductsByCategory = async (categoryId: string) => {
   return await commonFetch<Product>(q);
 };
 
-export const addProduct = async (product: Product) => {
-  const docRef = await addDoc(collection(FIREBASE_DB, "products"), product);
+export const addProduct = async (product: Omit<Product, "userId">) => {
+  const finalProduct: Product = {
+    ...product,
+    userId: FIREBASE_AUTH.currentUser?.uid || "",
+  };
+  const docRef = await addDoc(
+    collection(FIREBASE_DB, "products"),
+    finalProduct
+  );
 
   return docRef.id;
 };
