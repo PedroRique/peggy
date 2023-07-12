@@ -6,7 +6,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { useEffect, useState } from "react";
 import LoanTile from "../components/LoanTile";
 import { BoldText } from "../components/Text/BoldText";
-import { LoanStatus, LoanWithInfo } from "../models/Loan";
+import { LoanStatus, LoanType, LoanWithInfo } from "../models/Loan";
 import { fetchLoansWithProductInfo } from "../services/loan.service";
 import { Colors } from "../shared/Colors";
 import { useDispatch } from "react-redux";
@@ -55,7 +55,7 @@ const LoansSection = ({
   );
 };
 
-const LoansTab = ({ type }: { type: "lender" | "borrower" }) => {
+const LoansTab = ({ type }: { type: LoanType }) => {
   const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
   const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
   const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
@@ -115,11 +115,11 @@ const LoansTab = ({ type }: { type: "lender" | "borrower" }) => {
 };
 
 const LendingTab = () => {
-  return <LoansTab type="lender" />;
+  return <LoansTab type="lend" />;
 };
 
 const BorrowingTab = () => {
-  return <LoansTab type="borrower" />;
+  return <LoansTab type="borrow" />;
 };
 
 function LoanTabs() {

@@ -19,8 +19,10 @@ export interface Loan extends LoanRequest {
 
 export interface LoanWithInfo extends Loan {
   status: LoanStatus;
+  type: LoanType;
   product?: Product;
   borrower?: UserData;
+  lender?: UserData;
 }
 
 export enum LoanStatus {
@@ -31,3 +33,5 @@ export enum LoanStatus {
   CANCELED,
   RETURNED,
 }
+
+export type LoanType = 'lend' | 'borrow';

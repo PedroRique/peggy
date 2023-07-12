@@ -1,4 +1,5 @@
 import { Feather } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -13,9 +14,10 @@ import { LOAN_TILE_STATUS_MESSAGES } from "../shared/Constants";
 import { AppState } from "../store";
 import { ProductCard } from "./ProductCard";
 import { Text } from "./Text/Text";
-import { useState, useEffect } from "react";
 
-type LoanTileProps = TouchableOpacityProps & { loan: LoanWithInfo };
+type LoanTileProps = TouchableOpacityProps & {
+  loan: LoanWithInfo;
+};
 
 export default function LoanTile({ loan, ...rest }: LoanTileProps) {
   const userData = useSelector((state: AppState) => state.user.userData);
@@ -30,33 +32,30 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
   }, [userData]);
 
   const getSentence = () => {
-    const { startDate, endDate, borrower } = loan;
-    const borrowerName =
-      borrower?.uid === userData?.uid
-        ? "Você"
-        : (loan.status == LoanStatus.ACCEPTED ||
-          loan.status == LoanStatus.DENIED
-            ? "Você"
-            : borrower?.name) || "";
+    const { startDate, endDate, borrower, lender } = loan;
+    const acceptedOrDenied = loan.status === LoanStatus.ACCEPTED || loan.status === LoanStatus.DENIED;
+    const name = loan.type === "lend"
+      ? acceptedOrDenied ? "Você" : borrower?.name || ""
+      : acceptedOrDenied ? lender?.name || "" : "Você";
+  
     const productName = loan.product?.name || "";
-
+  
     const getMessage = LOAN_TILE_STATUS_MESSAGES[loan.status];
-    const firstS = getMessage
-      ? getMessage({ borrowerName, productName })
+    const firstSentence = getMessage
+      ? getMessage({ borrowerName: name, productName })
       : null;
-    const secondS =
+  
+    const secondSentence =
       loan.status !== LoanStatus.PENDING &&
       loan.status !== LoanStatus.RETURNED &&
-      loan.status !== LoanStatus.PROGRESS ? (
-        <>em {"Z"}</>
-      ) : (
-        <>
-          de {startDate} até {endDate}
-        </>
-      );
-
-    setFirstSentence(firstS);
-    setSecondSentence(secondS);
+      loan.status !== LoanStatus.PROGRESS
+        ? <>em "Z"</>
+        : <>
+            de {startDate} até {endDate}
+          </>;
+  
+    setFirstSentence(firstSentence);
+    setSecondSentence(secondSentence);
   };
 
   return (
