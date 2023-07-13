@@ -30,6 +30,7 @@ import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
 import { convertUserToUserData } from "./src/services/utils.service";
+import EditProfileScreen from "./src/pages/EditProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -116,6 +117,7 @@ const Navigation = () => {
       >
         {user ? (
           <>
+            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Product" component={ProductScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
