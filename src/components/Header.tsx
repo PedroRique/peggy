@@ -58,13 +58,13 @@ export const Header = ({
             onPress={toggleModal}
           >
             <View style={styles.modalContent}>
-              <View>
+              <View style={styles.modalInner}>
                 <TouchableOpacity>
                 <View style={styles.logoutButton}>
                   <Feather name="edit" size={24} color="black" />
                   <Text>Editar perfil</Text>
                 </View>
-                </TouchableOpacity>\
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.logoutButton}
                   onPress={() => {
@@ -122,6 +122,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 16,
     borderRadius: 8,
+  },
+  modalInner:{
+    display:"flex",
+    gap:12,
   },
   modalText: {
     fontSize: 18,
