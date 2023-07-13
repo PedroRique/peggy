@@ -56,13 +56,13 @@ export const Header = ({
             <View style={styles.modalContent}>
               <View style={styles.modalInner}>
                 <TouchableOpacity>
-                <View style={styles.logoutButton}>
+                <View style={styles.optionsButton}>
                   <Feather name="edit" size={24} color="black" />
                   <Text>Editar perfil</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.logoutButton}
+                  style={styles.optionsButton}
                   onPress={() => {
                     toggleModal(); 
                     signOut(FIREBASE_AUTH);
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     position:"absolute",
-    right:16,
-    top:70,
+    right:24,
+    top:56,
     backgroundColor: "white",
     padding: 16,
     borderRadius: 8,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
-  logoutButton:{
+  optionsButton:{
     flexDirection:"row",
     alignItems:"center",
     gap:12,
