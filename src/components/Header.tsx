@@ -4,6 +4,8 @@ import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
 import { useState } from "react";
+import { signOut } from "firebase/auth";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
 
 interface HeaderProps {
   title?: string | null;
@@ -62,8 +64,8 @@ export const Header = ({
                 <TouchableOpacity
                   style={styles.logoutButton}
                   onPress={() => {
-                    navigation.navigate("Login");
                     toggleModal(); 
+                    signOut(FIREBASE_AUTH);
                   }}
                 >
                   <Feather name="log-out" size={24} color="black" />
