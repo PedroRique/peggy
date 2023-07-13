@@ -1,5 +1,4 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
-import Geolocation from "@react-native-community/geolocation";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
@@ -9,25 +8,24 @@ import { StackTypes } from "../../App";
 import CategoryTile from "../components/CategoryTile";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
-import { ProductCard } from "../components/ProductCard";
+import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 import { Text } from "../components/Text/Text";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/category.service";
 import { fetchProducts } from "../services/product.service";
-import { Colors } from "../shared/Colors";
+import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
-import { productSlice } from "../store/slices/product.slice";
 
 const NearbyTitle = () => {
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
-        <Feather name="map-pin" size={24} color={Colors.Blue} />
+        <Feather name="map-pin" size={24} color={PColors.Blue} />
         <Text style={styles.title}>Por perto</Text>
       </View>
 
-      <FontAwesome5 name="arrow-right" size={32} color={Colors.Orange} />
+      <FontAwesome5 name="arrow-right" size={32} color={PColors.Orange} />
     </View>
   );
 };
@@ -48,10 +46,6 @@ export default function HomeScreen() {
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState<Product[]>();
-  const [currentPosition, setCurrentPosition] = useState<{
-    latitude: number;
-    longitude: number;
-  }>();
 
   useEffect(() => {
     init();
@@ -60,7 +54,6 @@ export default function HomeScreen() {
   const init = async () => {
     getCategories();
     getProducts();
-    getCurrentPosition();
   };
 
   const getCategories = async () => {
@@ -73,53 +66,26 @@ export default function HomeScreen() {
     setProducts(result);
   };
 
-  const getCurrentPosition = () => {
-    Geolocation.getCurrentPosition((info) =>
-      setCurrentPosition({
-        latitude: info.coords.latitude,
-        longitude: info.coords.longitude,
-      })
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
         <Header>Vamos emprestar!</Header>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Search");
-          }}
-        >
-          <TextInput placeholder="O que você precisa, Pedro?" />
-        </Pressable>
+
+        <View style={{ paddingHorizontal: 16 }}>
+          <TextInput
+            placeholder="O que você precisa, Pedro?"
+            onFocus={() => navigation.navigate("Search")}
+          />
+        </View>
 
         <NearbyTitle />
-        <ScrollView style={styles.nearbyProducts} horizontal>
-          {products?.map((product, i) => (
-            <ProductCard
-              key={i}
-              product={product}
-              onPress={() => {
-                dispatch(productSlice.actions.setSelectedProduct(product));
-                navigation.navigate("Product");
-              }}
-              showDistance
-              style={{
-                marginRight: 12,
-              }}
-            />
-          ))}
-        </ScrollView>
+        <ProductHorizontalList products={products} showDistance />
 
         <CategoriesTitle />
-        <ScrollView
-          style={styles.categoriesList}
-          contentContainerStyle={styles.categoriesList}
-        >
+        <ScrollView contentContainerStyle={styles.categoriesList}>
           {categories?.map((category: any, i: any) => (
             <CategoryTile
               key={i}
@@ -141,15 +107,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flex: 1,
   },
-  scrollContainer: {
-    padding: 16,
-  },
+  scrollContainer: {},
   titleContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
     marginBottom: 12,
+    paddingHorizontal: 16,
   },
   titleView: {
     display: "flex",
@@ -162,12 +127,9 @@ const styles = StyleSheet.create({
     fontFamily: "RedHatDisplay",
     marginLeft: 8,
   },
-  nearbyProducts: {
-    gap: 12,
-    padding: 16,
-  },
   categoriesList: {
     display: "flex",
     gap: 16,
+    paddingHorizontal: 16,
   },
 });

@@ -32,13 +32,7 @@ export const Header = ({
   };
 
   return (
-    <View
-      style={[
-        styles.headerContainer,
-        hasBack && styles.hasBackStyles,
-        hasBorder && styles.hasBorderStyles,
-      ]}
-    >
+    <View style={[styles.headerContainer, hasBorder && styles.hasBorderStyles]}>
       {hasBack && (
         <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
           <FontAwesome5 name="arrow-left" size={32} color={color} />
@@ -90,10 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 16,
-  },
-  hasBackStyles: {
-    paddingHorizontal: 16,
+    padding: 16,
   },
   hasBorderStyles: {
     borderBottomColor: "#ededed",
@@ -101,7 +92,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontFamily: 'RedHatDisplay',
+    fontFamily: "RedHatDisplay",
   },
   more: {},
   rowContainer: {

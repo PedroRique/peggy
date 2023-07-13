@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "peggy-app",
+    "develop": "peggy-app"
+  },
+  "targets": {},
+  "etags": {}
+}

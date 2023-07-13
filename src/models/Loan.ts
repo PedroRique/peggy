@@ -13,20 +13,25 @@ export interface LoanRequest {
 }
 
 export interface Loan extends LoanRequest {
+  uid?: string;
   status: LoanStatus;
 }
 
 export interface LoanWithInfo extends Loan {
   status: LoanStatus;
+  type: LoanType;
   product?: Product;
   borrower?: UserData;
+  lender?: UserData;
 }
 
 export enum LoanStatus {
-  REQUESTING = 1,
+  PENDING = 1,
   ACCEPTED,
   DENIED,
   PROGRESS,
   CANCELED,
   RETURNED,
 }
+
+export type LoanType = 'lend' | 'borrow';

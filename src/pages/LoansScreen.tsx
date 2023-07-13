@@ -1,70 +1,77 @@
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/Header";
-
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useEffect, useState } from "react";
-import LoanTile from "../components/LoanTile";
-import { BoldText } from "../components/Text/BoldText";
-import { LoanWithInfo } from "../models/Loan";
+import { LoansSection } from "../components/LoansList";
+import { LoanType, LoanWithInfo } from "../models/Loan";
 import { fetchLoansWithProductInfo } from "../services/loan.service";
-import { Colors } from "../shared/Colors";
+import { groupLoansBySection } from "../services/utils.service";
+import { PColors } from "../shared/Colors";
 
 const Tab = createMaterialTopTabNavigator();
 
-const LendingTab = () => {
-  const [loans, setLoans] = useState<LoanWithInfo[]>([]);
+const LoansTab = ({ type }: { type: LoanType }) => {
+  const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
+  const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
+  const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
   useEffect(() => {
     getLoans();
   }, []);
 
   const getLoans = async () => {
-    const result = await fetchLoansWithProductInfo("lender");
-    setLoans(result);
+    try {
+      const result = await fetchLoansWithProductInfo(type);
+      const groupedLoans = groupLoansBySection(result);
+
+      setPendingLoans(groupedLoans.pending);
+      setProgressLoans(groupedLoans.progress);
+      setOtherLoans(groupedLoans.other);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <View style={styles.tabInner}>
-      <BoldText style={styles.sectionTitle}>Ativos</BoldText>
-
-      <View style={styles.loansContainer}>
-        {loans.map((loan, i) => (
-          <LoanTile key={i} loan={loan} />
-        ))}
-      </View>
+      <LoansSection
+        title="Pendente"
+        emptyText="Nenhum empréstimo pendente."
+        loans={pendingLoans}
+      />
+      <LoansSection
+        title="Ativos"
+        emptyText="Nenhum empréstimo em progresso."
+        loans={progreesLoans}
+      />
+      <LoansSection
+        title="Histórico"
+        emptyText="Nenhum empréstimo no histórico."
+        loans={otherLoans}
+      />
     </View>
   );
 };
 
+const LendingTab = () => {
+  return <LoansTab type="lend" />;
+};
+
 const BorrowingTab = () => {
-  const [loans, setLoans] = useState<LoanWithInfo[]>([]);
-  useEffect(() => {
-    getLoans();
-  }, []);
-
-  const getLoans = async () => {
-    const result = await fetchLoansWithProductInfo("borrower");
-    setLoans(result);
-  };
-
-  return (
-    <View style={styles.tabInner}>
-      <BoldText style={styles.sectionTitle}>Ativos</BoldText>
-
-      <View style={styles.loansContainer}>
-        {loans.map((loan, i) => (
-          <LoanTile key={i} loan={loan} />
-        ))}
-      </View>
-    </View>
-  );
+  return <LoansTab type="borrow" />;
 };
 
 function LoanTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarIndicatorStyle: {
+          backgroundColor: PColors.Orange,
+        },
+      }}
+    >
       <Tab.Screen name="Emprestando" component={LendingTab} />
-      <Tab.Screen name="Pegando" component={BorrowingTab} />
+      <Tab.Screen name="Pegando Emprestado" component={BorrowingTab} />
     </Tab.Navigator>
   );
 }
@@ -72,7 +79,7 @@ function LoanTabs() {
 export default function LoansScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Empréstimos"} />
+      <Header title={"Empréstimos"} hasBorder />
       <LoanTabs></LoanTabs>
     </SafeAreaView>
   );
@@ -82,24 +89,14 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flex: 1,
-    padding: 16,
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
   },
   scrollContainer: {
     padding: 16,
   },
   tabInner: {
-    backgroundColor: Colors.White,
+    backgroundColor: PColors.White,
     padding: 16,
     flex: 1,
-  },
-  sectionTitle: {
-    fontWeight: "700",
-    fontSize: 20,
-    marginBottom: 16,
-  },
-  loansContainer: {
-    display: "flex",
-    gap: 12,
   },
 });

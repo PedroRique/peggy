@@ -23,7 +23,7 @@ export const productSlice = createSlice({
     setProfileProducts: (state, action) => {
       state.profileProducts = action.payload;
     },
-    setSelectedProduct: (state, action: PayloadAction<Product>) => {
+    setSelectedProduct: (state, action: PayloadAction<Product | null>) => {
       state.selectedProduct = action.payload;
     },
   },
