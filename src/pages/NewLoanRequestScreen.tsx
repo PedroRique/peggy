@@ -12,12 +12,12 @@ import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
+import { LoanStatus } from "../models/Loan";
 import { UserData } from "../models/UserData";
 import { createLoan, updateLoanStatus } from "../services/loan.service";
 import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel } from "../services/utils.service";
 import { AppState } from "../store";
-import { LoanStatus } from "../models/Loan";
 
 export default function NewLoanRequestScreen() {
   const loan = useSelector((state: AppState) => state.loan.selectedLoan);
@@ -61,6 +61,14 @@ export default function NewLoanRequestScreen() {
     return await updateLoanStatus(loan?.uid || "", status);
   };
 
+  const onPickUp = () => {
+    console.log("fluxo de entrega");
+  };
+
+  const onGiveBack = () => {
+    console.log("fluxo de devolução");
+  };
+
   const onCreate = async () => {
     await createLoan({
       address,
@@ -76,6 +84,64 @@ export default function NewLoanRequestScreen() {
 
   const isLoanRequest = () => {
     return borrowerUserData && borrowerUserData.uid !== currentUserData?.uid;
+  };
+
+  const getButtons = () => {
+    if (!loan || !loan.uid) {
+      return <Button title="Solicitar" onPress={onCreate} />;
+    }
+
+    const isTodayPickUpDate = true;
+    const isTodayGiveBackDate = true;
+  
+    const { status } = loan;
+  
+    if (status === LoanStatus.PENDING) {
+      if (isLoanRequest()) {
+        return (
+          <>
+            <Button
+              title="Negar"
+              onPress={() => onUpdateStatus(LoanStatus.DENIED)}
+              outlined
+            />
+            <Button
+              title="Aceitar"
+              onPress={() => onUpdateStatus(LoanStatus.ACCEPTED)}
+            />
+          </>
+        );
+      } else {
+        return (
+          <Button
+            title="Cancelar"
+            onPress={() => onUpdateStatus(LoanStatus.CANCELED)}
+          />
+        );
+      }
+    }
+  
+    if (status === LoanStatus.ACCEPTED && isTodayPickUpDate) {
+      const buttonTitle = isLoanRequest() ? "Entregar" : "Receber";
+      return (
+        <Button
+          title={buttonTitle}
+          onPress={() => onUpdateStatus(LoanStatus.PROGRESS)}
+        />
+      );
+    }
+  
+    if (status === LoanStatus.PROGRESS && isTodayGiveBackDate) {
+      const buttonTitle = isLoanRequest() ? "Receber" : "Devolver";
+      return (
+        <Button
+          title={buttonTitle}
+          onPress={() => onUpdateStatus(LoanStatus.RETURNED)}
+        />
+      );
+    }
+  
+    return null;
   };
 
   return (
@@ -164,38 +230,7 @@ export default function NewLoanRequestScreen() {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.footer}>
-        {loan && loan.uid ? (
-          <>
-            {loan.status === LoanStatus.PENDING && (
-              <>
-                {isLoanRequest() ? (
-                  <>
-                    <Button
-                      title="Negar"
-                      onPress={() => onUpdateStatus(LoanStatus.DENIED)}
-                      outlined
-                    />
-                    <Button
-                      title="Aceitar"
-                      onPress={() => onUpdateStatus(LoanStatus.ACCEPTED)}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      title="Cancelar"
-                      onPress={() => onUpdateStatus(LoanStatus.CANCELED)}
-                    />
-                  </>
-                )}
-              </>
-            )}
-          </>
-        ) : (
-          <Button title="Solicitar" onPress={onCreate} />
-        )}
-      </View>
+      <View style={styles.footer}>{getButtons()}</View>
     </SafeAreaView>
   );
 }

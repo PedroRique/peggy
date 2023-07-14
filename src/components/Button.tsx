@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { Text } from "./Text/Text";
 import { PColors } from "../shared/Colors";
 
@@ -11,14 +11,14 @@ export interface ButtonProps {
 export default function Button(props: ButtonProps) {
   const { onPress, title = "Save", outlined } = props;
   return (
-    <Pressable
+    <TouchableOpacity
       style={[styles.button, outlined && styles.outlinedButton]}
       onPress={onPress}
     >
       <Text style={[styles.text, outlined && styles.outlinedText]}>
         {title}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: PColors.Blue,
+    flex: 1,
   },
   outlinedButton: {
     backgroundColor: PColors.White,
