@@ -10,7 +10,7 @@ import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { ProductCard } from "../components/ProductCard";
-import { Rating } from "../components/Rating";
+import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
@@ -246,7 +246,7 @@ export default function NewLoanRequestScreen() {
             <BoldText size={24} numberOfLines={2}>
               {product?.name}
             </BoldText>
-            <Rating value={4.7} />
+            <Rate value={4.7} />
           </View>
         )}
 

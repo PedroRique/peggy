@@ -8,24 +8,21 @@ import { StackTypes } from "../../App";
 import AddressTile from "../components/AddressTile";
 import { Avatar } from "../components/Avatar";
 import { Header } from "../components/Header";
-import { ProductCard } from "../components/ProductCard";
-import { Rating } from "../components/Rating";
+import { ProductHorizontalList } from "../components/ProductsHorizontalList";
+import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { ImageFolder } from "../models/ImageFolder.enum";
 import { Product } from "../models/Product";
-import { UserData } from "../models/UserData";
 import { pickImage } from "../services/camera.service";
 import { fetchProductsById } from "../services/product.service";
 import {
   fetchCurrentUserData,
-  fetchUserData,
   updateUserPhotoURL,
 } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
-import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 
 const SectionHeader = ({ title, route }: { title: string; route: any }) => {
   const navigation = useNavigation<StackTypes>();
@@ -86,7 +83,7 @@ export default function ProfileScreen() {
             onPress={getPhotoUrl}
           />
           <View>
-            <Rating value={4.7} color={PColors.Blue} />
+            <Rate value={4.7} color={PColors.Blue} />
             <Text style={styles.avatarBio}>
               Carioca, 27 anos. Itens com ótimo estado.
             </Text>

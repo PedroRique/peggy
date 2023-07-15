@@ -7,7 +7,7 @@ import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
-import { Rating } from "../components/Rating";
+import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
 import { Text } from "../components/Text/Text";
@@ -55,7 +55,7 @@ export default function ProductScreen() {
       >
         <View style={styles.productInner}>
           <Header hasBack color={PColors.White}>
-            <Rating value={4.7} color={PColors.White} />
+            <Rate value={4.7} color={PColors.White} />
           </Header>
         </View>
       </ImageBackground>
