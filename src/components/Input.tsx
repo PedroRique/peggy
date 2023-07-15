@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import MaskInput, { MaskInputProps } from "react-native-mask-input";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
@@ -8,13 +8,18 @@ import { Text } from "./Text/Text";
 
 export const TextInput = ({
   style,
+  containerStyle,
   value,
   multiline,
   label,
   showEyeIcon = false,
   ...rest
 }: React.PropsWithChildren<
-  MaskInputProps & { label?: string; showEyeIcon?: boolean }
+  MaskInputProps & {
+    label?: string;
+    showEyeIcon?: boolean;
+    containerStyle?: ViewStyle;
+  }
 >) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
@@ -23,7 +28,7 @@ export const TextInput = ({
   };
 
   return (
-    <View>
+    <View style={containerStyle}>
       {label && <BoldText style={styles.label}>{label}</BoldText>}
       <View>
         <MaskInput
