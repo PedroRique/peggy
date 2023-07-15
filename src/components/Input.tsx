@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MaskInput, { MaskInputProps } from "react-native-mask-input";
+import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
 
@@ -28,6 +29,7 @@ export const TextInput = ({
         <MaskInput
           value={value}
           multiline={multiline}
+          placeholderTextColor={PColors.Grey}
           secureTextEntry={showEyeIcon ? secureTextEntry : false}
           style={[styles.input, showEyeIcon && styles.inputWithIcon, style]}
           {...rest}
