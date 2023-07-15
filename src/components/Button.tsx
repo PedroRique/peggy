@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: PColors.Blue,
-    flex: 1,
   },
   outlinedButton: {
     backgroundColor: PColors.White,

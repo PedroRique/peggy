@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { TextInput as ReactTextInput, TextInputProps, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Text } from './Text/Text';
-import { BoldText } from './Text/BoldText';
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  TextInput as ReactTextInput,
+  StyleSheet,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { BoldText } from "./Text/BoldText";
+import { Text } from "./Text/Text";
 
 export const TextInput = ({
   style,
@@ -11,7 +17,9 @@ export const TextInput = ({
   label,
   showEyeIcon = false,
   ...rest
-}: React.PropsWithChildren<TextInputProps & { label?: string; showEyeIcon?: boolean }>) => {
+}: React.PropsWithChildren<
+  TextInputProps & { label?: string; showEyeIcon?: boolean }
+>) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const toggleSecureTextEntry = () => {
@@ -19,7 +27,7 @@ export const TextInput = ({
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       {label && <BoldText style={styles.label}>{label}</BoldText>}
       <View>
         <ReactTextInput
@@ -35,7 +43,7 @@ export const TextInput = ({
             onPress={toggleSecureTextEntry}
           >
             <Feather
-              name={secureTextEntry ? 'eye-off' : 'eye'}
+              name={secureTextEntry ? "eye-off" : "eye"}
               size={24}
               color="gray"
               style={styles.icon}
@@ -50,7 +58,7 @@ export const TextInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 8,
     fontSize: 18,
@@ -65,7 +73,7 @@ const styles = StyleSheet.create({
   },
   textLength: {
     fontSize: 12,
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
   },
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   iconContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 16,
     right: 16,
   },

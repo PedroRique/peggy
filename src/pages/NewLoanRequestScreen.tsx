@@ -37,6 +37,7 @@ export default function NewLoanRequestScreen() {
   const [endDate, setEndDate] = useState("");
   const [pickUpTime, setPickUpTime] = useState("");
   const [giveBackTime, setGiveBackTime] = useState("");
+  const [sentence, setSentence] = useState(<></>);
 
   useEffect(() => {
     getLenderUserData();
@@ -51,6 +52,10 @@ export default function NewLoanRequestScreen() {
       setAddress(loan.address);
     }
   }, [loan]);
+
+  useEffect(() => {
+    getSentence(loan?.status);
+  }, [lenderUserData]);
 
   const getLenderUserData = async () => {
     const result = await fetchUserData(product?.userId);
@@ -86,6 +91,42 @@ export default function NewLoanRequestScreen() {
     return borrowerUserData && borrowerUserData.uid !== currentUserData?.uid;
   };
 
+  const sentenceMap = {
+    [LoanStatus.PENDING]: isLoanRequest()
+      ? "Empreste para"
+      : "Quero pegar emprestado de",
+    [LoanStatus.ACCEPTED]: `Empréstimo aprovado ${
+      isLoanRequest() ? "para" : "por"
+    }`,
+    [LoanStatus.DENIED]: `Empréstimo negado ${isLoanRequest() ? "a" : "por"}`,
+    [LoanStatus.PROGRESS]: isLoanRequest()
+      ? "Emprestando para"
+      : "Pegando emprestado de",
+    [LoanStatus.CANCELED]: "Empréstimo cancelado por",
+    [LoanStatus.RETURNED]: isLoanRequest()
+      ? "Emprestou para"
+      : "Pegou emprestado de",
+  };
+
+  const getSentence = (status?: LoanStatus) => {
+    if (!status) return;
+
+    let sentence = "";
+    const name = isLoanRequest()
+      ? borrowerUserData?.name
+      : status === LoanStatus.CANCELED
+      ? "Você"
+      : lenderUserData?.name;
+
+    sentence = sentenceMap[status];
+
+    setSentence(
+      <Text size={24}>
+        {sentence} <BoldText size={24}>{name}</BoldText>
+      </Text>
+    );
+  };
+
   const getButtons = () => {
     if (!loan || !loan.uid) {
       return <Button title="Solicitar" onPress={onCreate} />;
@@ -93,9 +134,9 @@ export default function NewLoanRequestScreen() {
 
     const isTodayPickUpDate = true;
     const isTodayGiveBackDate = true;
-  
+
     const { status } = loan;
-  
+
     if (status === LoanStatus.PENDING) {
       if (isLoanRequest()) {
         return (
@@ -120,7 +161,7 @@ export default function NewLoanRequestScreen() {
         );
       }
     }
-  
+
     if (status === LoanStatus.ACCEPTED && isTodayPickUpDate) {
       const buttonTitle = isLoanRequest() ? "Entregar" : "Receber";
       return (
@@ -130,7 +171,7 @@ export default function NewLoanRequestScreen() {
         />
       );
     }
-  
+
     if (status === LoanStatus.PROGRESS && isTodayGiveBackDate) {
       const buttonTitle = isLoanRequest() ? "Receber" : "Devolver";
       return (
@@ -140,7 +181,7 @@ export default function NewLoanRequestScreen() {
         />
       );
     }
-  
+
     return null;
   };
 
@@ -149,13 +190,7 @@ export default function NewLoanRequestScreen() {
       <Header title="Detalhes" hasBack hasBorder />
 
       <ScrollView style={styles.scrollContainer}>
-        <Text size={24}>
-          {isLoanRequest() ? "Empreste" : "Pegue emprestado"}{" "}
-          {isLoanRequest() ? "para" : "de"}{" "}
-          <BoldText size={24}>
-            {isLoanRequest() ? borrowerUserData?.name : lenderUserData?.name}
-          </BoldText>
-        </Text>
+        {sentence}
 
         {product && (
           <View style={styles.productSummary}>
