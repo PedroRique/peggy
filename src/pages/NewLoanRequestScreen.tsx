@@ -1,3 +1,4 @@
+import { isAfter } from "date-fns";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Masks } from "react-native-mask-input";
@@ -39,10 +40,37 @@ export default function NewLoanRequestScreen() {
   const [pickUpTime, setPickUpTime] = useState("");
   const [giveBackTime, setGiveBackTime] = useState("");
   const [sentence, setSentence] = useState(<></>);
+  const [formValid, setFormValid] = useState(false);
 
   useEffect(() => {
     getLenderUserData();
   }, []);
+
+  useEffect(() => {
+    const startDateObject = getDateObject(startDate);
+    const endDateObject = getDateObject(endDate);
+    
+    setFormValid(
+      !!address &&
+        !!startDate &&
+        !!endDate &&
+        !!pickUpTime &&
+        !!giveBackTime &&
+        startDate.length == 10 &&
+        endDate.length == 10 &&
+        pickUpTime.length == 5 &&
+        giveBackTime.length == 5 &&
+        isAfter(startDateObject, new Date()) &&
+        isAfter(endDateObject, startDateObject)
+    );
+  }, [address, startDate, endDate, pickUpTime, giveBackTime]);
+
+  const getDateObject = (date: string): Date => {
+    const [day, month, year] = date.split("/");
+    const formattedDate = [year, month, day].join("-");
+    const dateObject = new Date(formattedDate);
+    return dateObject;
+  };
 
   useEffect(() => {
     if (loan) {
@@ -135,7 +163,7 @@ export default function NewLoanRequestScreen() {
     if (!loan || !loan.uid) {
       return (
         <View style={{ flex: 1 }}>
-          <Button title="Solicitar" onPress={onCreate} />
+          <Button title="Solicitar" onPress={onCreate} disabled={!formValid} />
         </View>
       );
     }
