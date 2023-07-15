@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { Masks } from "react-native-mask-input";
 import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -12,7 +13,7 @@ import { Rating } from "../components/Rating";
 import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
-import { LoanStatus } from "../models/Loan";
+import { LoanRequest, LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
 import { createLoan, updateLoanStatus } from "../services/loan.service";
 import { fetchUserData } from "../services/user.service";
@@ -54,7 +55,7 @@ export default function NewLoanRequestScreen() {
   }, [loan]);
 
   useEffect(() => {
-    getSentence(loan?.status);
+    getSentence(loan);
   }, [lenderUserData]);
 
   const getLenderUserData = async () => {
@@ -75,7 +76,7 @@ export default function NewLoanRequestScreen() {
   };
 
   const onCreate = async () => {
-    await createLoan({
+    const req: LoanRequest = {
       address,
       endDate,
       giveBackTime,
@@ -84,7 +85,8 @@ export default function NewLoanRequestScreen() {
       lenderUserId: product?.userId || "",
       productId: product?.uid || "",
       startDate,
-    });
+    };
+    await createLoan(req);
   };
 
   const isLoanRequest = () => {
@@ -108,28 +110,34 @@ export default function NewLoanRequestScreen() {
       : "Pegou emprestado de",
   };
 
-  const getSentence = (status?: LoanStatus) => {
-    if (!status) return;
+  const getSentence = (loan: LoanWithInfo | null) => {
+    let sentenceTxt = "Quero pegar emprestado de";
+    let name: string | null | undefined = lenderUserData?.name;
 
-    let sentence = "";
-    const name = isLoanRequest()
-      ? borrowerUserData?.name
-      : status === LoanStatus.CANCELED
-      ? "Você"
-      : lenderUserData?.name;
+    if (loan) {
+      name = isLoanRequest()
+        ? borrowerUserData?.name
+        : loan.status === LoanStatus.CANCELED
+        ? "Você"
+        : lenderUserData?.name;
 
-    sentence = sentenceMap[status];
+      sentenceTxt = sentenceMap[loan.status];
+    }
 
     setSentence(
       <Text size={24}>
-        {sentence} <BoldText size={24}>{name}</BoldText>
+        {sentenceTxt} <BoldText size={24}>{name}</BoldText>
       </Text>
     );
   };
 
   const getButtons = () => {
     if (!loan || !loan.uid) {
-      return <Button title="Solicitar" onPress={onCreate} />;
+      return (
+        <View style={{ flex: 1 }}>
+          <Button title="Solicitar" onPress={onCreate} />
+        </View>
+      );
     }
 
     const isTodayPickUpDate = true;
@@ -141,23 +149,29 @@ export default function NewLoanRequestScreen() {
       if (isLoanRequest()) {
         return (
           <>
-            <Button
-              title="Negar"
-              onPress={() => onUpdateStatus(LoanStatus.DENIED)}
-              outlined
-            />
-            <Button
-              title="Aceitar"
-              onPress={() => onUpdateStatus(LoanStatus.ACCEPTED)}
-            />
+            <View style={{ flex: 1 }}>
+              <Button
+                title="Negar"
+                onPress={() => onUpdateStatus(LoanStatus.DENIED)}
+                outlined
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                title="Aceitar"
+                onPress={() => onUpdateStatus(LoanStatus.ACCEPTED)}
+              />
+            </View>
           </>
         );
       } else {
         return (
-          <Button
-            title="Cancelar"
-            onPress={() => onUpdateStatus(LoanStatus.CANCELED)}
-          />
+          <View style={{ flex: 1 }}>
+            <Button
+              title="Cancelar"
+              onPress={() => onUpdateStatus(LoanStatus.CANCELED)}
+            />
+          </View>
         );
       }
     }
@@ -165,25 +179,31 @@ export default function NewLoanRequestScreen() {
     if (status === LoanStatus.ACCEPTED && isTodayPickUpDate) {
       const buttonTitle = isLoanRequest() ? "Entregar" : "Receber";
       return (
-        <Button
-          title={buttonTitle}
-          onPress={() => onUpdateStatus(LoanStatus.PROGRESS)}
-        />
+        <View style={{ flex: 1 }}>
+          <Button
+            title={buttonTitle}
+            onPress={() => onUpdateStatus(LoanStatus.PROGRESS)}
+          />
+        </View>
       );
     }
 
     if (status === LoanStatus.PROGRESS && isTodayGiveBackDate) {
       const buttonTitle = isLoanRequest() ? "Receber" : "Devolver";
       return (
-        <Button
-          title={buttonTitle}
-          onPress={() => onUpdateStatus(LoanStatus.RETURNED)}
-        />
+        <View style={{ flex: 1 }}>
+          <Button
+            title={buttonTitle}
+            onPress={() => onUpdateStatus(LoanStatus.RETURNED)}
+          />
+        </View>
       );
     }
 
     return null;
   };
+
+  const hourMask = [/\d/, /\d/, ":", /\d/, /\d/];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -203,27 +223,8 @@ export default function NewLoanRequestScreen() {
         )}
 
         <View style={styles.loanForm}>
-          <View style={styles.row}>
-            <TextInput
-              label="De:"
-              placeholder="DD/MM/YYYY"
-              value={startDate}
-              editable={!loan}
-              selectTextOnFocus={!loan}
-              onChangeText={setStartDate}
-            ></TextInput>
-            <TextInput
-              label="Até:"
-              placeholder="DD/MM/YYYY"
-              value={endDate}
-              editable={!loan}
-              selectTextOnFocus={!loan}
-              onChangeText={setEndDate}
-            ></TextInput>
-          </View>
-
           <View style={{ marginBottom: 32 }}>
-            <BoldText>Buscar e devolver em:</BoldText>
+            <BoldText>Buscar e devolver em</BoldText>
             <DropDown
               label={"Selecione um endereço"}
               mode={"outlined"}
@@ -244,28 +245,64 @@ export default function NewLoanRequestScreen() {
               }
             />
           </View>
+          <View style={styles.row}>
+            <View style={{ flex: 2 }}>
+              <TextInput
+                label="Buscar no dia"
+                placeholder="DD/MM/YYYY"
+                value={startDate}
+                editable={!loan}
+                selectTextOnFocus={!loan}
+                onChangeText={setStartDate}
+                mask={Masks.DATE_DDMMYYYY}
+              ></TextInput>
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextInput
+                label="as"
+                placeholder="00:00"
+                value={pickUpTime}
+                editable={!loan}
+                selectTextOnFocus={!loan}
+                onChangeText={setPickUpTime}
+                mask={hourMask}
+              ></TextInput>
+            </View>
+          </View>
 
           <View style={styles.row}>
-            <TextInput
-              label="Buscar as:"
-              placeholder="00:00"
-              value={pickUpTime}
-              editable={!loan}
-              selectTextOnFocus={!loan}
-              onChangeText={setPickUpTime}
-            ></TextInput>
-            <TextInput
-              label="Devolver as:"
-              placeholder="00:00"
-              value={giveBackTime}
-              editable={!loan}
-              selectTextOnFocus={!loan}
-              onChangeText={setGiveBackTime}
-            ></TextInput>
+            <View style={{ flex: 2 }}>
+              <TextInput
+                label="Devolver no dia"
+                placeholder="DD/MM/YYYY"
+                value={endDate}
+                editable={!loan}
+                selectTextOnFocus={!loan}
+                onChangeText={setEndDate}
+                mask={Masks.DATE_DDMMYYYY}
+              ></TextInput>
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextInput
+                label="as"
+                placeholder="00:00"
+                value={giveBackTime}
+                editable={!loan}
+                selectTextOnFocus={!loan}
+                onChangeText={setGiveBackTime}
+                mask={hourMask}
+              ></TextInput>
+            </View>
           </View>
         </View>
       </ScrollView>
-      <View style={styles.footer}>{getButtons()}</View>
+      <View style={styles.footer}>
+        <View
+          style={{ flex: 1, display: "flex", flexDirection: "row", gap: 12 }}
+        >
+          {getButtons()}
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
