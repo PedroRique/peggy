@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/Header";
 import { LoansSection } from "../components/LoansList";
@@ -33,7 +33,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   };
 
   return (
-    <View style={styles.tabInner}>
+    <ScrollView style={styles.tabInner}>
       <LoansSection
         title="Pendente"
         emptyText="Nenhum empréstimo pendente."
@@ -49,7 +49,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
         emptyText="Nenhum empréstimo no histórico."
         loans={otherLoans}
       />
-    </View>
+    </ScrollView>
   );
 };
 
