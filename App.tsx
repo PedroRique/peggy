@@ -49,7 +49,7 @@ type StackNavigation = {
 const TabBarIconMapping: Record<string, string> = {
   Home: "home",
   Profile: "user",
-  Loans: "inbox",
+  Loans: "repeat",
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;

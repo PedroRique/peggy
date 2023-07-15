@@ -82,12 +82,14 @@ export default function ProductScreen() {
 
       {currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
-          <Button
-            title="Pegar emprestado"
-            onPress={() => {
-              navigation.navigate("NewLoanRequest");
-            }}
-          />
+          <View style={{ flex: 1 }}>
+            <Button
+              title="Pegar emprestado"
+              onPress={() => {
+                navigation.navigate("NewLoanRequest");
+              }}
+            />
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -144,6 +146,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#E5E5E5",
     borderTopWidth: 1,
     padding: 16,
+    width: "100%",
   },
   price: {
     fontSize: 32,
