@@ -137,6 +137,6 @@ export const signInUser = async ({ email, password }: SignInUserRequest) => {
     );
     return result;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

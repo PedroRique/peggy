@@ -12,6 +12,7 @@ import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { PaperProvider } from "react-native-paper";
+import { ToastProvider } from "react-native-toast-notifications";
 import { Provider, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { FIREBASE_AUTH } from "./firebaseConfig";
@@ -26,10 +27,10 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
+import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
-import { convertUserToUserData } from "./src/services/utils.service";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -111,7 +112,7 @@ const Navigation = () => {
         screenOptions={{
           headerShown: false,
           animation: "slide_from_right",
-          presentation: 'card',
+          presentation: "card",
         }}
       >
         {user ? (
@@ -159,7 +160,9 @@ export default function App() {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <PaperProvider>
-              <Navigation></Navigation>
+              <ToastProvider duration={2000}>
+                <Navigation></Navigation>
+              </ToastProvider>
             </PaperProvider>
           </PersistGate>
         </Provider>
