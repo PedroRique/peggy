@@ -74,7 +74,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={userData?.name} hasBorder />
+      <Header title={userData?.name} hasBorder hasMore/>
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
           <Avatar
@@ -114,9 +114,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
+    
   },
   scrollContainer: {
-    paddingVertical: 16,
+    
   },
   avatarContainer: {
     display: "flex",
