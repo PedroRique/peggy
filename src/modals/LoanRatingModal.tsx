@@ -30,6 +30,7 @@ export const LoanRatingModal = ({
         comment: "",
         ratedId: loan.lenderUserId,
         raterId: loan.borrowerUserId,
+        loanId: loan.uid,
       }, 'users');
 
       await updateRatings({
@@ -37,6 +38,7 @@ export const LoanRatingModal = ({
         comment: productComment,
         ratedId: loan.productId,
         raterId: loan.borrowerUserId,
+        loanId: loan.uid,
       }, 'products');
     } else {
       await updateRatings({
@@ -44,6 +46,7 @@ export const LoanRatingModal = ({
         comment: productComment,
         ratedId: loan.borrowerUserId,
         raterId: loan.lenderUserId,
+        loanId: loan.uid,
       }, 'products');
     }
 
