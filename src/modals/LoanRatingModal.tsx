@@ -8,6 +8,7 @@ import { Rating } from "../components/Rating";
 import { Text } from "../components/Text/Text";
 import { LoanWithInfo } from "../models/Loan";
 import { updateProductRatings } from "../services/product.service";
+import { updateUserRatings } from "../services/user.service";
 
 export const LoanRatingModal = ({
   loan,
@@ -16,61 +17,86 @@ export const LoanRatingModal = ({
   loan: LoanWithInfo;
   onClose: () => void;
 }) => {
-  const [lenderRate, setLenderRate] = useState<number | null>(null);
+  const [userRate, setUserRate] = useState<number | null>(null);
   const [productRate, setProductRate] = useState<number | null>(null);
   const [productComment, setProductComment] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   const saveRate = async () => {
-    if (!productRate || !loan?.borrowerUserId) return;
     setIsSaving(true);
-    
-    await updateProductRatings(loan.productId, {
-      rate: productRate,
-      comment: productComment,
-      userId: loan?.borrowerUserId,
-    });
+
+    if (loan.type === "borrow") {
+      await updateUserRatings(loan.lenderUserId, {
+        rate: userRate,
+        comment: "",
+        userId: loan?.borrowerUserId,
+      });
+
+      await updateProductRatings(loan.productId, {
+        rate: productRate,
+        comment: productComment,
+        userId: loan?.borrowerUserId,
+      });
+    } else {
+      await updateUserRatings(loan.borrowerUserId, {
+        rate: userRate,
+        comment: "",
+        userId: loan?.lenderUserId,
+      });
+    }
 
     onClose();
   };
 
   return (
     <View style={styles.modalContainer}>
-      <View style={styles.header}>
-        {!lenderRate && <Avatar imageUrl={loan?.lender?.photoURL} />}
+      <View style={styles.row}>
+        <Avatar
+          imageUrl={
+            loan.type === "borrow"
+              ? loan?.lender?.photoURL
+              : loan.borrower?.photoURL
+          }
+        />
         <Text size={24} weight="700">
           Avalie sua experiência com{" "}
-          {lenderRate ? "o item" : loan?.lender?.name}
+          {loan.type === "borrow" ? loan?.lender?.name : loan.borrower?.name}
         </Text>
       </View>
 
-      {loan && loan.product && lenderRate && (
-        <View style={styles.productContainer}>
-          <ProductCard product={loan.product} size={60} hasName={false} />
-          <Text size={24} weight="700" numberOfLines={2}>
-            {loan.product?.name}
-          </Text>
-        </View>
-      )}
-
       <View style={styles.ratingContainer}>
-        {lenderRate ? (
-          <Rating onRate={setProductRate} />
-        ) : (
-          <Rating onRate={setLenderRate} />
-        )}
+        <Rating key={"user"} onRate={setUserRate} />
       </View>
 
-      {lenderRate && (
-        <TextInput
-          label="Comentário"
-          multiline={true}
-          numberOfLines={4}
-          value={productComment}
-          placeholder="Conte um pouco mais sobre sua experiência com o produto."
-          containerStyle={styles.textarea}
-          onChangeText={setProductComment}
-        />
+      {loan.type === "borrow" && (
+        <>
+          {loan.product && (
+            <View style={styles.row}>
+              <ProductCard
+                product={loan.product}
+                size={50}
+                hasName={false}
+                hasShadow={false}
+              />
+              <Text size={24} weight="700">
+                Avalie sua experiência com {loan?.product.name}
+              </Text>
+            </View>
+          )}
+          <View style={styles.ratingContainer}>
+            <Rating key={"product"} onRate={setProductRate} />
+          </View>
+
+          <TextInput
+            label="Comentário"
+            multiline={true}
+            numberOfLines={4}
+            value={productComment}
+            placeholder="Conte um pouco mais sobre sua experiência com o produto."
+            containerStyle={styles.textarea}
+            onChangeText={setProductComment}
+          />
+        </>
       )}
 
       <Button title="Enviar" onPress={() => saveRate()} loading={isSaving} />
@@ -84,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 7,
   },
-  header: {
+  row: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -93,14 +119,8 @@ const styles = StyleSheet.create({
   ratingContainer: {
     display: "flex",
     alignItems: "center",
-    marginVertical: 32,
-  },
-  productContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
     marginVertical: 16,
+    marginBottom: 32,
   },
   textarea: {
     marginBottom: 16,

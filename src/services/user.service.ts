@@ -11,8 +11,10 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import uuid from "react-native-uuid";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import { Address } from "../models/Address";
+import { Rating } from "../models/Rating";
 import { UserData } from "../models/UserData";
 
 interface CreateUserRequest {
@@ -122,6 +124,19 @@ export const fetchUserData = async (
         ...userData,
         uid,
       };
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateUserRatings = async (userId: string, rating: Rating) => {
+  try {
+    if (rating) {
+      const ref = doc(FIREBASE_DB, "users", userId);
+      await updateDoc(ref, {
+        ratings: arrayUnion({ ...rating, ratingId: uuid.v4() }),
+      });
     }
   } catch (error) {
     console.error(error);
