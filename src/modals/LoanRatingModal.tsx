@@ -7,8 +7,7 @@ import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { Text } from "../components/Text/Text";
 import { LoanWithInfo } from "../models/Loan";
-import { updateProductRatings } from "../services/product.service";
-import { updateUserRatings } from "../services/user.service";
+import { updateRatings } from "../services/rating.service";
 
 export const LoanRatingModal = ({
   loan,
@@ -26,23 +25,26 @@ export const LoanRatingModal = ({
     setIsSaving(true);
 
     if (loan.type === "borrow") {
-      await updateUserRatings(loan.lenderUserId, {
+      await updateRatings({
         rate: userRate,
         comment: "",
-        userId: loan?.borrowerUserId,
-      });
+        ratedId: loan.lenderUserId,
+        raterId: loan.borrowerUserId,
+      }, 'users');
 
-      await updateProductRatings(loan.productId, {
+      await updateRatings({
         rate: productRate,
         comment: productComment,
-        userId: loan?.borrowerUserId,
-      });
+        ratedId: loan.productId,
+        raterId: loan.borrowerUserId,
+      }, 'products');
     } else {
-      await updateUserRatings(loan.borrowerUserId, {
-        rate: userRate,
-        comment: "",
-        userId: loan?.lenderUserId,
-      });
+      await updateRatings({
+        rate: productRate,
+        comment: productComment,
+        ratedId: loan.borrowerUserId,
+        raterId: loan.lenderUserId,
+      }, 'products');
     }
 
     onClose();

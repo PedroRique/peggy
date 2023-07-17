@@ -67,19 +67,3 @@ export const addProduct = async (product: Omit<Product, "userId">) => {
 
   return docRef.id;
 };
-
-export const updateProductRatings = async (
-  productId: string,
-  rating: Rating
-) => {
-  try {
-    if (rating) {
-      const ref = doc(FIREBASE_DB, "products", productId);
-      await updateDoc(ref, {
-        ratings: arrayUnion({ ...rating, ratingId: uuid.v4() }),
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
