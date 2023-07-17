@@ -1,17 +1,20 @@
 import {
-  Query,
   addDoc,
   and,
+  arrayUnion,
   collection,
+  doc,
   endAt,
-  getDocs,
   orderBy,
   query,
   startAt,
+  updateDoc,
   where,
 } from "firebase/firestore";
+import uuid from "react-native-uuid";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import { Product } from "../models/Product";
+import { Rating } from "../models/Rating";
 import { commonFetch } from "./utils.service";
 
 export const fetchProducts = async () => {
@@ -63,4 +66,20 @@ export const addProduct = async (product: Omit<Product, "userId">) => {
   );
 
   return docRef.id;
+};
+
+export const updateProductRatings = async (
+  productId: string,
+  rating: Rating
+) => {
+  try {
+    if (rating) {
+      const ref = doc(FIREBASE_DB, "products", productId);
+      await updateDoc(ref, {
+        ratings: arrayUnion({ ...rating, ratingId: uuid.v4() }),
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };

@@ -1,32 +1,50 @@
-import { TouchableOpacity, StyleSheet } from "react-native";
-import { Text } from "./Text/Text";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { PColors } from "../shared/Colors";
+import { Text } from "./Text/Text";
 
 export interface ButtonProps {
   onPress: () => void;
   title: string;
   disabled?: boolean;
   outlined?: boolean;
+  loading?: boolean;
+  loadingText?: string;
 }
 
-export default function Button(props: ButtonProps) {
-  const { onPress, title = "Save", outlined, disabled = false } = props;
+export default function Button({
+  onPress,
+  title = "Save",
+  loadingText = "Enviando",
+  outlined,
+  disabled = false,
+  loading,
+}: ButtonProps) {
   return (
     <TouchableOpacity
-      style={[styles.button, outlined && styles.outlinedButton, disabled && styles.disabledButton]}
-      onPress={() => disabled ? null : onPress()}
+      style={[
+        styles.button,
+        outlined && styles.outlinedButton,
+        disabled && styles.disabledButton,
+      ]}
+      onPress={() => (disabled ? null : onPress())}
     >
       <Text style={[styles.text, outlined && styles.outlinedText]}>
-        {title}
+        {loading ? loadingText : title}
       </Text>
+
+      {loading && <ActivityIndicator color={PColors.White} />}
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 12,
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,

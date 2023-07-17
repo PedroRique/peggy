@@ -1,10 +1,12 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Header } from "../components/Header";
 import { LoansSection } from "../components/LoansList";
-import { LoanType, LoanWithInfo } from "../models/Loan";
+import { LoanRatingModal } from "../modals/LoanRatingModal";
+import { LoanStatus, LoanType, LoanWithInfo } from "../models/Loan";
 import { fetchLoansWithProductInfo } from "../services/loan.service";
 import { groupLoansBySection } from "../services/utils.service";
 import { PColors } from "../shared/Colors";
@@ -12,9 +14,13 @@ import { PColors } from "../shared/Colors";
 const Tab = createMaterialTopTabNavigator();
 
 const LoansTab = ({ type }: { type: LoanType }) => {
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [loanToRate, setLoanToRate] = useState<LoanWithInfo | null>(null);
+
   const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
   const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
   const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
+
   useEffect(() => {
     getLoans();
   }, []);
@@ -22,6 +28,8 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   const getLoans = async () => {
     try {
       const result = await fetchLoansWithProductInfo(type);
+
+      checkForPendingRates(result);
       const groupedLoans = groupLoansBySection(result);
 
       setPendingLoans(groupedLoans.pending);
@@ -30,6 +38,18 @@ const LoansTab = ({ type }: { type: LoanType }) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const checkForPendingRates = (result: LoanWithInfo[]) => {
+    const toRateLoans = result.filter((l) => l.status === LoanStatus.RETURNED);
+    if (toRateLoans.length) {
+      setLoanToRate(toRateLoans[0]);
+      setShowRatingModal(true);
+    }
+  };
+
+  const hideRatingModal = () => {
+    setShowRatingModal(false);
   };
 
   return (
@@ -49,6 +69,15 @@ const LoansTab = ({ type }: { type: LoanType }) => {
         emptyText="Nenhum empréstimo no histórico."
         loans={otherLoans}
       />
+      {loanToRate && (
+        <Modal
+          isVisible={showRatingModal}
+          onBackdropPress={hideRatingModal}
+          onDismiss={hideRatingModal}
+        >
+          <LoanRatingModal loan={loanToRate} onClose={hideRatingModal} />
+        </Modal>
+      )}
     </ScrollView>
   );
 };

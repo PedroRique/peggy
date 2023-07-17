@@ -1,22 +1,38 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { Text } from "../components/Text/Text";
-import { AppState } from "../store";
+import { LoanWithInfo } from "../models/Loan";
+import { updateProductRatings } from "../services/product.service";
 
-export const LoanRatingModal = () => {
-  const loan = useSelector((state: AppState) => state.loan.selectedLoan);
-
+export const LoanRatingModal = ({
+  loan,
+  onClose,
+}: {
+  loan: LoanWithInfo;
+  onClose: () => void;
+}) => {
   const [lenderRate, setLenderRate] = useState<number | null>(null);
   const [productRate, setProductRate] = useState<number | null>(null);
   const [productComment, setProductComment] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
-  const saveRate = () => {};
+  const saveRate = async () => {
+    if (!productRate || !loan?.borrowerUserId) return;
+    setIsSaving(true);
+    
+    await updateProductRatings(loan.productId, {
+      rate: productRate,
+      comment: productComment,
+      userId: loan?.borrowerUserId,
+    });
+
+    onClose();
+  };
 
   return (
     <View style={styles.modalContainer}>
@@ -57,7 +73,7 @@ export const LoanRatingModal = () => {
         />
       )}
 
-      <Button title="Enviar" onPress={() => saveRate()} />
+      <Button title="Enviar" onPress={() => saveRate()} loading={isSaving} />
     </View>
   );
 };
@@ -65,6 +81,8 @@ export const LoanRatingModal = () => {
 const styles = StyleSheet.create({
   modalContainer: {
     padding: 16,
+    backgroundColor: "white",
+    borderRadius: 7,
   },
   header: {
     display: "flex",
