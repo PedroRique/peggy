@@ -35,14 +35,18 @@ import { userSlice } from "./src/store/slices/user.slice";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-type StackNavigation = {
+export type StackNavigation = {
   Main: undefined;
   Product: undefined;
   Login: undefined;
   Register: undefined;
   Search: undefined;
-  NewProduct: undefined;
-  NewAddress: undefined;
+  NewProduct: {
+    onAdd: () => void;
+  };
+  NewAddress: {
+    onAdd: () => void;
+  };
   NewLoanRequest: undefined;
   Category: undefined;
 };

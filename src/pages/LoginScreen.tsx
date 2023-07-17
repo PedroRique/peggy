@@ -50,7 +50,6 @@ export default function LoginScreen() {
         navigation.navigate("Main");
       })
       .catch(({ code }: { code: FirebaseError }) => {
-        console.log(code);
         toast.show(FIREBASE_ERROR_MESSAGES[code], {
           type: "danger",
         });

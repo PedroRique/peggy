@@ -1,10 +1,13 @@
 import { Feather } from "@expo/vector-icons";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useToast } from "react-native-toast-notifications";
 import { useSelector } from "react-redux";
+import { StackNavigation } from "../../App";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
@@ -17,6 +20,9 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 
 export default function NewProductScreen() {
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<StackNavigation, "NewProduct">>();
+  const toast = useToast();
   const [showDropDown, setShowDropDown] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -27,12 +33,20 @@ export default function NewProductScreen() {
   );
 
   const createProduct = async () => {
-    await addProduct({
+    addProduct({
       name,
       description,
       imageUrl,
       category,
-    });
+    })
+      .then(() => {
+        toast.show("Endereço adicionado com sucesso!", { type: "success" });
+        navigation.goBack();
+        route.params.onAdd();
+      })
+      .catch((e) => {
+        toast.show("Falha ao criar o item.");
+      });
   };
 
   const getPhoto = async () => {
@@ -58,6 +72,7 @@ export default function NewProductScreen() {
           <TextInput
             label="Nome do produto"
             placeholder="Nome do produto"
+            value={name}
             onChangeText={setName}
           ></TextInput>
 

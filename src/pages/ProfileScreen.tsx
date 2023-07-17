@@ -24,15 +24,24 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
 
-const SectionHeader = ({ title, route }: { title: string; route: any }) => {
+const SectionHeader = ({
+  title,
+  route,
+  onAdd,
+}: {
+  title: string;
+  route: any;
+  onAdd: () => void;
+}) => {
   const navigation = useNavigation<StackTypes>();
+
   return (
     <View style={styles.myHeader}>
       <BoldText style={styles.myHeaderTitle}>{title}</BoldText>
       <Pressable
         style={styles.addButton}
         onPress={() => {
-          navigation.navigate(route);
+          navigation.navigate(route, { onAdd });
         }}
       >
         <Feather name="plus" color={PColors.White} size={32} />
@@ -47,9 +56,13 @@ export default function ProfileScreen() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
+    getProfileInfo();
+  }, []);
+
+  const getProfileInfo = () => {
     getUserProducts();
     getUserData();
-  }, []);
+  };
 
   const getUserData = async () => {
     const result = await fetchCurrentUserData();
@@ -74,7 +87,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={userData?.name} hasBorder hasMore/>
+      <Header title={userData?.name} hasBorder hasMore />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
           <Avatar
@@ -91,12 +104,20 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.myContainer}>
-          <SectionHeader title="Seus produtos" route="NewProduct" />
+          <SectionHeader
+            title="Seus produtos"
+            route="NewProduct"
+            onAdd={getProfileInfo}
+          />
           <ProductHorizontalList products={products} />
         </View>
 
         <View style={styles.myContainer}>
-          <SectionHeader title="Seus endereços" route="NewAddress" />
+          <SectionHeader
+            title="Seus endereços"
+            route="NewAddress"
+            onAdd={getProfileInfo}
+          />
           <View style={styles.addresses}>
             {!!userData?.addresses?.length &&
               userData.addresses.map((address, i) => (
@@ -114,11 +135,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
-    
   },
-  scrollContainer: {
-    
-  },
+  scrollContainer: {},
   avatarContainer: {
     display: "flex",
     flexDirection: "row",
