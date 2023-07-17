@@ -2,18 +2,22 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useToast } from "react-native-toast-notifications";
 import { useDispatch } from "react-redux";
 import { StackTypes } from "../../App";
 import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { BoldText } from "../components/Text/BoldText";
+import { FirebaseError } from "../models/FirebaseError";
 import { signInUser } from "../services/user.service";
 import { PColors } from "../shared/Colors";
+import { FIREBASE_ERROR_MESSAGES } from "../shared/Constants";
 import { userSlice } from "../store/slices/user.slice";
 const Login = require("../../assets/images/Logo/peggy-logo.png");
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
+  const toast = useToast();
   const navigation = useNavigation<StackTypes>();
 
   const [email, setEmail] = useState("");
@@ -21,32 +25,35 @@ export default function LoginScreen() {
 
   const loginUser = async () => {
     if (email === "" || password === "") {
-      console.log("Preencha o email e a senha");
+      toast.show("Preencha o e-mail e a senha", {
+        type: "warning",
+      });
       return;
     }
 
-    const result = await signInUser({
+    signInUser({
       email,
       password,
-    });
-
-    if (result) {
-      const { displayName, uid, email, photoURL } = result.user;
-      dispatch(
-        userSlice.actions.setUserData({
-          name: displayName,
-          uid,
-          email,
-          photoURL,
-          addresses: [],
-          rate: 5,
-        })
-      );
-      console.log("Login bem-sucedido");
-      navigation.navigate("Main");
-    } else {
-      console.log("Credenciais inválidas");
-    }
+    })
+      .then((result) => {
+        const { displayName, uid, email, photoURL } = result.user;
+        dispatch(
+          userSlice.actions.setUserData({
+            name: displayName,
+            uid,
+            email,
+            photoURL,
+            addresses: [],
+            rate: 5,
+          })
+        );
+        navigation.navigate("Main");
+      })
+      .catch(({ code }: { code: FirebaseError }) => {
+        toast.show(FIREBASE_ERROR_MESSAGES[code], {
+          type: "danger",
+        });
+      });
   };
 
   const handleForgotPassword = () => {};

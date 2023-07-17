@@ -1,10 +1,8 @@
 import {
-  Query,
   addDoc,
   and,
   collection,
   endAt,
-  getDocs,
   orderBy,
   query,
   startAt,
@@ -53,14 +51,18 @@ export const fetchProductsByCategory = async (categoryId: string) => {
 };
 
 export const addProduct = async (product: Omit<Product, "userId">) => {
-  const finalProduct: Product = {
-    ...product,
-    userId: FIREBASE_AUTH.currentUser?.uid || "",
-  };
-  const docRef = await addDoc(
-    collection(FIREBASE_DB, "products"),
-    finalProduct
-  );
+  try {
+    const finalProduct: Product = {
+      ...product,
+      userId: FIREBASE_AUTH.currentUser?.uid || "",
+    };
+    const docRef = await addDoc(
+      collection(FIREBASE_DB, "products"),
+      finalProduct
+    );
 
-  return docRef.id;
+    return docRef.id;
+  } catch (error) {
+    throw error;
+  }
 };

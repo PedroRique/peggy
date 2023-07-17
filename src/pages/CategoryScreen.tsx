@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import { Header } from "../components/Header";
 import { ProductCard } from "../components/ProductCard";
-import { Rating } from "../components/Rating";
+import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Product } from "../models/Product";
 import { fetchProductsByCategory } from "../services/product.service";
@@ -43,7 +43,7 @@ export default function CategoryScreen() {
       >
         <View style={styles.bannerInner}>
           <Header hasBack color={PColors.White}>
-            <Rating color={PColors.White} value={4.7} />
+            <Rate color={PColors.White} value={4.7} />
           </Header>
         </View>
       </ImageBackground>

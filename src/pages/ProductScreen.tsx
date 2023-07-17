@@ -7,7 +7,7 @@ import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
-import { Rating } from "../components/Rating";
+import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
 import { Text } from "../components/Text/Text";
@@ -55,7 +55,7 @@ export default function ProductScreen() {
       >
         <View style={styles.productInner}>
           <Header hasBack color={PColors.White}>
-            <Rating value={4.7} color={PColors.White} />
+            <Rate value={4.7} color={PColors.White} />
           </Header>
         </View>
       </ImageBackground>
@@ -82,12 +82,14 @@ export default function ProductScreen() {
 
       {currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
-          <Button
-            title="Pegar emprestado"
-            onPress={() => {
-              navigation.navigate("NewLoanRequest");
-            }}
-          />
+          <View style={{ flex: 1 }}>
+            <Button
+              title="Pegar emprestado"
+              onPress={() => {
+                navigation.navigate("NewLoanRequest");
+              }}
+            />
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -144,6 +146,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#E5E5E5",
     borderTopWidth: 1,
     padding: 16,
+    width: "100%",
   },
   price: {
     fontSize: 32,
