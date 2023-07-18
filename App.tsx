@@ -16,6 +16,7 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { Provider, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { FIREBASE_AUTH } from "./firebaseConfig";
+import { LoanType } from "./src/models/Loan";
 import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import LoansScreen from "./src/pages/LoansScreen";
@@ -36,6 +37,9 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 export type StackNavigation = {
+  Loans?: {
+    initialTab: LoanType;
+  };
   Main: undefined;
   Product: undefined;
   Login: undefined;

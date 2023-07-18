@@ -1,8 +1,10 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { StackNavigation } from "../../App";
 import { Header } from "../components/Header";
 import { LoansSection } from "../components/LoansList";
 import { LoanRatingModal } from "../modals/LoanRatingModal";
@@ -96,8 +98,15 @@ const BorrowingTab = () => {
 };
 
 function LoanTabs() {
+  const route = useRoute<RouteProp<StackNavigation, "Loans">>();
+  
   return (
     <Tab.Navigator
+      initialRouteName={
+        route.params?.initialTab === "borrow"
+          ? "Pegando Emprestado"
+          : "Emprestando"
+      }
       screenOptions={{
         tabBarIndicatorStyle: {
           backgroundColor: PColors.Orange,

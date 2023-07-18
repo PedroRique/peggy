@@ -1,10 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import { isAfter } from "date-fns";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Masks } from "react-native-mask-input";
 import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useToast } from "react-native-toast-notifications";
 import { useSelector } from "react-redux";
+import { StackTypes } from "../../App";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
@@ -23,6 +26,8 @@ import { formatAddressLabel } from "../services/utils.service";
 import { AppState } from "../store";
 
 export default function NewLoanRequestScreen() {
+  const toast = useToast();
+  const navigation = useNavigation<StackTypes>();
   const loan = useSelector((state: AppState) => state.loan.selectedLoan);
   const product = useSelector(
     (state: AppState) =>
@@ -111,7 +116,7 @@ export default function NewLoanRequestScreen() {
     console.log("fluxo de devolução");
   };
 
-  const onCreate = async () => {
+  const onCreate = () => {
     const req: LoanRequest = {
       address,
       endDate,
@@ -122,7 +127,17 @@ export default function NewLoanRequestScreen() {
       productId: product?.uid || "",
       startDate,
     };
-    await createLoan(req);
+
+    createLoan(req)
+      .then(() => {
+        navigation.navigate("Loans", { initialTab: 'borrow' });
+        toast.show("Solicitação feita com sucesso!", { type: "success" });
+      })
+      .catch(() => {
+        toast.show("Ocorreu um erro na solicitação de empréstimo", {
+          type: "danger",
+        });
+      });
   };
 
   const isLoanRequest = () => {

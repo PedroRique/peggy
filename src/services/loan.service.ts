@@ -20,15 +20,17 @@ import { UserData } from "../models/UserData";
 import { commonFetch } from "./utils.service";
 
 export const createLoan = async (loanRequest: LoanRequest) => {
-  const loan: Loan = {
-    ...loanRequest,
-    status: LoanStatus.PENDING,
-    hasLenderRate: false,
-    hasBorrowerRate: false
-  };
-  const docRef = await addDoc(collection(FIREBASE_DB, "loans"), loan);
-
-  return docRef.id;
+  try {
+    const loan: Loan = {
+      ...loanRequest,
+      status: LoanStatus.PENDING,
+      hasLenderRate: false,
+      hasBorrowerRate: false,
+    };
+    return await addDoc(collection(FIREBASE_DB, "loans"), loan);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const updateLoanStatus = async (loanId: string, status: LoanStatus) => {
