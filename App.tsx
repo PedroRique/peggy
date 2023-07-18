@@ -32,6 +32,9 @@ import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
+import { convertUserToUserData } from "./src/services/utils.service";
+import EditProfileScreen from "./src/pages/EditProfileScreen";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -89,6 +92,7 @@ function Main() {
       <Tab.Screen name="Loans" component={LoansScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+
     </Tab.Navigator>
   );
 }
@@ -125,16 +129,19 @@ const Navigation = () => {
       >
         {user ? (
           <>
+            
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Product" component={ProductScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
             <Stack.Screen name="Search" component={SearchScreen} />
             <Stack.Screen name="NewProduct" component={NewProductScreen} />
             <Stack.Screen name="NewAddress" component={NewAddressScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen
               name="NewLoanRequest"
               component={NewLoanRequestScreen}
             />
+
           </>
         ) : (
           <>

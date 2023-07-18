@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  updateProfile as updateFirebaseProfile,
 } from "firebase/auth";
 import {
   arrayRemove,
@@ -20,6 +21,10 @@ interface CreateUserRequest {
   name: string;
   email: string;
   password: string;
+}
+interface ProfileData {
+  name: string;
+  bio: string;
 }
 
 interface SignInUserRequest {
@@ -142,5 +147,17 @@ export const signInUser = async ({ email, password }: SignInUserRequest) => {
     return result;
   } catch (error) {
     throw error;
+  }
+};
+
+export const updateEditProfile = async ({bio, name}): Promise<void> => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      await updateProfile(user, { bio, name });
+      await updateDoc(doc(FIREBASE_DB, "users", user.uid), { bio, name });
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
