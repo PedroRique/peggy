@@ -1,5 +1,5 @@
 export interface Rating {
-  rate: number | null;
+  rate: number;
   comment: string;
   loanId?: string;
   raterId: string;

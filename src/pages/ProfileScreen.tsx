@@ -96,7 +96,7 @@ export default function ProfileScreen() {
             onPress={getPhotoUrl}
           />
           <View>
-            <Rate value={4.7} color={PColors.Blue} />
+            <Rate value={userData?.rate} color={PColors.Blue} />
             <Text style={styles.avatarBio}>
               Carioca, 27 anos. Itens com ótimo estado.
             </Text>

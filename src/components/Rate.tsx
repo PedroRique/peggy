@@ -5,14 +5,14 @@ import { PColors } from "../shared/Colors";
 
 export const Rate = ({
   color = PColors.Blue,
-  value,
+  value = 0,
 }: {
   color?: string;
-  value: number;
+  value?: number;
 }) => {
   return (
     <BoldText style={[styles.ratingTextSize, { color }]} numberOfLines={1}>
-      {value} <FontAwesome name="star" size={24} color={color} />
+      {value ? value.toFixed(1) : '--'} <FontAwesome name="star" size={24} color={color} />
     </BoldText>
   );
 };

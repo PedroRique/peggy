@@ -17,6 +17,7 @@ import { Address } from "../models/Address";
 import { LoanRequest, LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
 import { createLoan, updateLoanStatus } from "../services/loan.service";
+import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel } from "../services/utils.service";
 import { AppState } from "../store";
@@ -41,15 +42,22 @@ export default function NewLoanRequestScreen() {
   const [giveBackTime, setGiveBackTime] = useState("");
   const [sentence, setSentence] = useState(<></>);
   const [formValid, setFormValid] = useState(false);
+  const [rate, setRate] = useState<number>();
 
   useEffect(() => {
     getLenderUserData();
+    getProductRate();
   }, []);
+
+  const getProductRate = async () => {
+    const rate = await getRate(product?.ratings);
+    setRate(rate);
+  };
 
   useEffect(() => {
     const startDateObject = getDateObject(startDate);
     const endDateObject = getDateObject(endDate);
-    
+
     setFormValid(
       !!address &&
         !!startDate &&
@@ -246,7 +254,7 @@ export default function NewLoanRequestScreen() {
             <BoldText size={24} numberOfLines={2}>
               {product?.name}
             </BoldText>
-            <Rate value={4.7} />
+            <Rate value={rate} />
           </View>
         )}
 

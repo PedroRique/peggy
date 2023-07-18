@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import { Header } from "../components/Header";
 import { ProductCard } from "../components/ProductCard";
-import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Product } from "../models/Product";
 import { fetchProductsByCategory } from "../services/product.service";
@@ -42,9 +41,7 @@ export default function CategoryScreen() {
         resizeMode="cover"
       >
         <View style={styles.bannerInner}>
-          <Header hasBack color={PColors.White}>
-            <Rate color={PColors.White} value={4.7} />
-          </Header>
+          <Header hasBack color={PColors.White}></Header>
         </View>
       </ImageBackground>
 
@@ -90,6 +87,7 @@ const styles = StyleSheet.create({
     height: 150,
     width: "100%",
     paddingHorizontal: 16,
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   categoryBody: {
     padding: 16,

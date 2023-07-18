@@ -3,10 +3,14 @@ import {
   arrayUnion,
   collection,
   doc,
+  documentId,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import { Rating } from "../models/Rating";
+import { commonFetch } from "./utils.service";
 
 export const updateRatings = async (
   rating: Rating,
@@ -49,4 +53,22 @@ export const checkBorrowerRate = async (loanId?: string) => {
       });
     }
   } catch (error) {}
+};
+
+export const getRate = async (ratingIds?: string[]) => {
+  try {
+    const q = query(
+      collection(FIREBASE_DB, "ratings"),
+      where(documentId(), "in", ratingIds)
+    );
+    const ratings = await commonFetch<Rating>(q);
+
+    const rate = ratings
+      ? ratings.reduce((acc, r) => acc + r.rate, 0) / ratings.length
+      : 0;
+
+    return rate;
+  } catch (error) {
+    console.error(error);
+  }
 };
