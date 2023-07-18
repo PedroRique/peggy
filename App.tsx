@@ -21,6 +21,7 @@ import CategoryScreen from "./src/pages/CategoryScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import LoansScreen from "./src/pages/LoansScreen";
 import LoginScreen from "./src/pages/LoginScreen";
+import { NearbyScreen } from "./src/pages/NearbyScreen";
 import NewAddressScreen from "./src/pages/NewAddressScreen";
 import NewLoanRequestScreen from "./src/pages/NewLoanRequestScreen";
 import NewProductScreen from "./src/pages/NewProductScreen";
@@ -53,6 +54,7 @@ export type StackNavigation = {
   };
   NewLoanRequest: undefined;
   Category: undefined;
+  Nearby: undefined;
 };
 
 const TabBarIconMapping: Record<string, string> = {
@@ -135,6 +137,7 @@ const Navigation = () => {
               name="NewLoanRequest"
               component={NewLoanRequestScreen}
             />
+            <Stack.Screen name="Nearby" component={NearbyScreen} />
           </>
         ) : (
           <>
