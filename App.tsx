@@ -125,8 +125,7 @@ const Navigation = () => {
             <Stack.Screen name="Search" component={SearchScreen} />
             <Stack.Screen name="NewProduct" component={NewProductScreen} />
             <Stack.Screen name="NewAddress" component={NewAddressScreen} />
-            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen}/>
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen
               name="NewLoanRequest"
               component={NewLoanRequestScreen}

@@ -28,7 +28,6 @@ import { ProductHorizontalList } from "../components/ProductsHorizontalList";
 import AddressTile from "../components/AddressTile";
 import { color } from "react-native-reanimated";
 import { StackTypes } from "../../App";
-import EditProfileScreen from "./EditProfileScreen";
 
 interface ProfileScreenProps {
   route: {
@@ -63,6 +62,8 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
   const newBio = route?.params?.newBio || null;
   const noBio = "Você não possui uma biografia.";
 
+  const navigation = useNavigation<StackTypes>();
+
   useEffect(() => {
     getUserProducts();
     getUserData();
@@ -96,7 +97,9 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
         <View style={styles.avatarContainer}>
           <Avatar size={100} imageUrl={userData?.photoURL} onPress={getPhotoUrl} />
           <View>
+            <View>
             <Rating value={4.7} color={PColors.Blue} />
+            </View>
             {newBio || (userData && userData.bio) ? (
               <Text style={styles.avatarBio}>
                 {newBio || userData?.bio}
@@ -104,7 +107,7 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
             ) : (
               <Text style={styles.avatarBio}>
                 {noBio}{" "}
-                <TouchableOpacity onPress={() => {navigation.navigate("EditProfileScreen")}}>
+                <TouchableOpacity onPress={() => {navigation.navigate("EditProfile")}}>
                   <Text color={PColors.Blue}>Adicione.</Text>{" "}
                 </TouchableOpacity>
               </Text>
@@ -118,7 +121,7 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
           ) : (
             <Text>
               <Text style={{ paddingLeft: 16 }}>Você não possui nenhum item.</Text>
-              <TouchableOpacity onPress={() => {navigation.navigate("NewProductScreen")}}>
+              <TouchableOpacity onPress={() => {navigation.navigate("NewProduct")}}>
                 <Text color={PColors.Blue}> Adicione.</Text>{" "}
               </TouchableOpacity>
             </Text>
@@ -135,7 +138,7 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
             ) : (
               <Text>
                 <Text>Você não possui nenhum endereço.</Text>
-                <TouchableOpacity onPress={() => {navigation.navigate("NewAddresScreen")}}>
+                <TouchableOpacity onPress={() => {navigation.navigate("NewAddress")}}>
                   <Text color={PColors.Blue}> Adicione.</Text>{" "}
                 </TouchableOpacity>
               </Text>
@@ -167,7 +170,7 @@ const styles = StyleSheet.create({
     color: PColors.Grey,
     fontSize: 16,
     overflow: "hidden",
-    width: "140px",
+    width: "240px",
   },
   myContainer: {
     marginBottom: 32,

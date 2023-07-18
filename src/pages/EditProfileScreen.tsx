@@ -7,16 +7,19 @@ import { TextInput } from "../components/Input";
 import { PColors } from "../shared/Colors";
 import { updateEditProfile, fetchCurrentUserData } from "../services/user.service";
 import Button from "../components/Button";
+import { useDispatch } from "react-redux";
+import { userSlice } from "../store/slices/user.slice"; 
 
 export default function EditProfileScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const isFocused = useIsFocused(); // Retorna true quando a tela está em foco
+  const isFocused = useIsFocused();
 
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
 
-  // Buscar dados do usuário atual e definir no estado
+  const dispatch = useDispatch(); 
+
   const loadUserData = () => {
     fetchCurrentUserData().then((userData) => {
       if (userData) {
@@ -27,15 +30,13 @@ export default function EditProfileScreen() {
   };
 
   useEffect(() => {
-    // Carrega os dados do usuário toda vez que a tela estiver em foco
-    if (isFocused) {
-      loadUserData();
-    }
+    loadUserData();
   }, [isFocused]);
 
   const handleSaveProfile = async () => {
     try {
       await updateEditProfile({ name, bio });
+      dispatch(userSlice.actions.setUserData({ name, bio }));
       navigation.navigate("Profile");
     } catch (error) {
       console.log('Erro ao atualizar o perfil:', error);
