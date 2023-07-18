@@ -1,17 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
-import { Rating } from "../components/Rating";
+import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
 import { Text } from "../components/Text/Text";
 import { UserData } from "../models/UserData";
+import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
@@ -28,11 +29,18 @@ export default function ProductScreen() {
 
   const [categoryLabel, setCategoryLabel] = useState("");
   const [lenderUserData, setLenderUserData] = useState<UserData>();
+  const [rate, setRate] = useState<number>();
 
   useEffect(() => {
     getLenderUserData();
     getCategoryLabel();
+    getProductRate();
   }, []);
+
+  const getProductRate = async () => {
+    const rate = await getRate(product?.ratings);
+    setRate(rate);
+  };
 
   const getCategoryLabel = () => {
     const categoryLabel = categories
@@ -55,12 +63,12 @@ export default function ProductScreen() {
       >
         <View style={styles.productInner}>
           <Header hasBack color={PColors.White}>
-            <Rating value={4.7} color={PColors.White} />
+            <Rate value={rate} color={PColors.White} />
           </Header>
         </View>
       </ImageBackground>
 
-      <View style={styles.productBody}>
+      <ScrollView style={{backgroundColor: 'white'}} contentContainerStyle={styles.productBody}>
         <Text style={styles.productTitle}>{product?.name}</Text>
 
         {!!product?.category && (
@@ -78,16 +86,18 @@ export default function ProductScreen() {
             <BoldText size={24}>{lenderUserData?.name}</BoldText>
           </View>
         </View>
-      </View>
+      </ScrollView>
 
       {currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
-          <Button
-            title="Pegar emprestado"
-            onPress={() => {
-              navigation.navigate("NewLoanRequest");
-            }}
-          />
+          <View style={{ flex: 1 }}>
+            <Button
+              title="Pegar emprestado"
+              onPress={() => {
+                navigation.navigate("NewLoanRequest");
+              }}
+            />
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -144,6 +154,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#E5E5E5",
     borderTopWidth: 1,
     padding: 16,
+    width: "100%",
   },
   price: {
     fontSize: 32,

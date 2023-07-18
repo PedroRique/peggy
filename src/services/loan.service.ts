@@ -23,6 +23,8 @@ export const createLoan = async (loanRequest: LoanRequest) => {
   const loan: Loan = {
     ...loanRequest,
     status: LoanStatus.PENDING,
+    hasLenderRate: false,
+    hasBorrowerRate: false
   };
   const docRef = await addDoc(collection(FIREBASE_DB, "loans"), loan);
 

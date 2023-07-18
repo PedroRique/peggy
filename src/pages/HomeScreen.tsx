@@ -1,7 +1,7 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";

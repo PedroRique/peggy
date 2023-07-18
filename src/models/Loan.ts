@@ -15,6 +15,8 @@ export interface LoanRequest {
 export interface Loan extends LoanRequest {
   uid?: string;
   status: LoanStatus;
+  hasLenderRate: boolean;
+  hasBorrowerRate: boolean;
 }
 
 export interface LoanWithInfo extends Loan {
