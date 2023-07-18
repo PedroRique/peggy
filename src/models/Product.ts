@@ -5,4 +5,5 @@ export interface Product {
   category: string;
   imageUrl: string;
   userId: string;
+  ratings: string[];
 }

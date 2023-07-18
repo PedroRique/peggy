@@ -15,6 +15,7 @@ import {
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import { Address } from "../models/Address";
 import { UserData } from "../models/UserData";
+import { getRate } from "./rating.service";
 
 interface CreateUserRequest {
   name: string;
@@ -123,8 +124,11 @@ export const fetchUserData = async (
     if (uid) {
       const result = await getDoc(doc(FIREBASE_DB, "users", uid));
       const userData = result.data() as UserData;
+      const rate = await getRate(userData.ratings);
+
       return {
         ...userData,
+        rate,
         uid,
       };
     }
@@ -142,7 +146,7 @@ export const signInUser = async ({ email, password }: SignInUserRequest) => {
     );
     return result;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 

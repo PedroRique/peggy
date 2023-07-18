@@ -7,4 +7,5 @@ export interface UserData {
   photoURL?: string | null;
   addresses?: Address[];
   rate?: number;
+  ratings?: string[];
 }
