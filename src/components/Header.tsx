@@ -55,7 +55,10 @@ export const Header = ({
           >
             <View style={styles.modalContent}>
               <View style={styles.modalInner}>
-                <TouchableOpacity>
+                <TouchableOpacity  
+                onPress={() => {
+                navigation.navigate("EditProfileScreen");
+          }}>
                 <View style={styles.optionsButton}>
                   <Feather name="edit" size={24} color="black" />
                   <Text>Editar perfil</Text>

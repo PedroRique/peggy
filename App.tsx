@@ -81,6 +81,7 @@ function Main() {
       <Tab.Screen name="Loans" component={LoansScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+
     </Tab.Navigator>
   );
 }
@@ -117,17 +118,20 @@ const Navigation = () => {
       >
         {user ? (
           <>
-            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+            
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Product" component={ProductScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
             <Stack.Screen name="Search" component={SearchScreen} />
             <Stack.Screen name="NewProduct" component={NewProductScreen} />
             <Stack.Screen name="NewAddress" component={NewAddressScreen} />
+            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen}/>
             <Stack.Screen
               name="NewLoanRequest"
               component={NewLoanRequestScreen}
             />
+
           </>
         ) : (
           <>
