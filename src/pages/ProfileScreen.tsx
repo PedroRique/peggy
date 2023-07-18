@@ -60,9 +60,8 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
   const userData = useSelector((state: AppState) => state.user.userData);
   const [products, setProducts] = useState<Product[]>([]);
 
-  // Obter a nova bio da rota se estiver disponível
   const newBio = route?.params?.newBio || null;
-  const noBio = "Você não possui uma biografia." ;
+  const noBio = "Você não possui uma biografia.";
 
   useEffect(() => {
     getUserProducts();
@@ -92,38 +91,55 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-    <Header title={userData?.name} hasBorder hasMore />
-    <ScrollView style={styles.scrollContainer}>
-      <View style={styles.avatarContainer}>
-        <Avatar size={100} imageUrl={userData?.photoURL} onPress={getPhotoUrl} />
-        <View>
-          <Rating value={4.7} color={PColors.Blue} />
-          {newBio || (userData && userData.bio) ? (
-            <Text style={styles.avatarBio}>
-              {newBio || userData?.bio}
-            </Text>
-          ) : (
-              <Text style={ styles.avatarBio}>
-                {noBio} <TouchableOpacity onPress={() => {navigation.navigate(EditProfilScreen)}}>
-              <Text color={PColors.Blue}>Adicione.</Text> </TouchableOpacity> 
+      <Header title={userData?.name} hasBorder hasMore />
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.avatarContainer}>
+          <Avatar size={100} imageUrl={userData?.photoURL} onPress={getPhotoUrl} />
+          <View>
+            <Rating value={4.7} color={PColors.Blue} />
+            {newBio || (userData && userData.bio) ? (
+              <Text style={styles.avatarBio}>
+                {newBio || userData?.bio}
               </Text>
-            
-          )}
+            ) : (
+              <Text style={styles.avatarBio}>
+                {noBio}{" "}
+                <TouchableOpacity onPress={() => {navigation.navigate("EditProfileScreen")}}>
+                  <Text color={PColors.Blue}>Adicione.</Text>{" "}
+                </TouchableOpacity>
+              </Text>
+            )}
+          </View>
         </View>
-      </View>
-
         <View style={styles.myContainer}>
           <SectionHeader title="Seus produtos" route="NewProduct" />
-          <ProductHorizontalList products={products} />
+          {products?.length ? (
+            <ProductHorizontalList products={products} />
+          ) : (
+            <Text>
+              <Text style={{ paddingLeft: 16 }}>Você não possui nenhum item.</Text>
+              <TouchableOpacity onPress={() => {navigation.navigate("NewProductScreen")}}>
+                <Text color={PColors.Blue}> Adicione.</Text>{" "}
+              </TouchableOpacity>
+            </Text>
+          )}
         </View>
 
         <View style={styles.myContainer}>
           <SectionHeader title="Seus endereços" route="NewAddress" />
           <View style={styles.addresses}>
-            {!!userData?.addresses?.length &&
+            {userData?.addresses?.length ? (
               userData.addresses.map((address, i) => (
-                <AddressTile key={i} address={address}></AddressTile>
-              ))}
+                <AddressTile key={i} address={address} />
+              ))
+            ) : (
+              <Text>
+                <Text>Você não possui nenhum endereço.</Text>
+                <TouchableOpacity onPress={() => {navigation.navigate("NewAddresScreen")}}>
+                  <Text color={PColors.Blue}> Adicione.</Text>{" "}
+                </TouchableOpacity>
+              </Text>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -136,11 +152,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
-    
   },
-  scrollContainer: {
-    
-  },
+  scrollContainer: {},
   avatarContainer: {
     display: "flex",
     flexDirection: "row",
@@ -153,15 +166,12 @@ const styles = StyleSheet.create({
   avatarBio: {
     color: PColors.Grey,
     fontSize: 16,
-    
-    overflow:"hidden",
-    width:"140px"
-  
+    overflow: "hidden",
+    width: "140px",
   },
   myContainer: {
     marginBottom: 32,
     overflow: "visible",
-    
   },
   myHeader: {
     display: "flex",

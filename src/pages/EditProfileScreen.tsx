@@ -36,7 +36,7 @@ export default function EditProfileScreen() {
   const handleSaveProfile = async () => {
     try {
       await updateEditProfile({ name, bio });
-      navigation.navigate("Main");
+      navigation.navigate("Profile");
     } catch (error) {
       console.log('Erro ao atualizar o perfil:', error);
     }
@@ -81,11 +81,11 @@ export default function EditProfileScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: PColors.White,
     height: "100%",
   },
   inputContainer: {
+    padding: 16,
     flex: 1,
     justifyContent: "space-between",
     marginTop: 16,
