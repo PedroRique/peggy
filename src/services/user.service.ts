@@ -2,7 +2,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  updateProfile as updateFirebaseProfile,
 } from "firebase/auth";
 import {
   arrayRemove,
@@ -150,14 +149,20 @@ export const signInUser = async ({ email, password }: SignInUserRequest) => {
   }
 };
 
-export const updateEditProfile = async ({bio, name}): Promise<void> => {
+export const updateEditProfile = async ({
+  bio,
+  name,
+}: {
+  bio: string;
+  name: string;
+}): Promise<void> => {
   try {
     const user = FIREBASE_AUTH.currentUser;
     if (user) {
-      await updateProfile(user, { bio, name });
+      await updateProfile(user, { displayName: name });
       await updateDoc(doc(FIREBASE_DB, "users", user.uid), { bio, name });
     }
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

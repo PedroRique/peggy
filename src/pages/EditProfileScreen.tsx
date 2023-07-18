@@ -1,46 +1,46 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useIsFocused, useRoute } from "@react-navigation/native";
+import { useToast } from "react-native-toast-notifications";
+import { useDispatch, useSelector } from "react-redux";
+import { StackTypes } from "../../App";
+import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
+import { updateEditProfile } from "../services/user.service";
 import { PColors } from "../shared/Colors";
-import { updateEditProfile, fetchCurrentUserData } from "../services/user.service";
-import Button from "../components/Button";
-import { useDispatch } from "react-redux";
-import { userSlice } from "../store/slices/user.slice"; 
+import { AppState } from "../store";
+import { userSlice } from "../store/slices/user.slice";
 
 export default function EditProfileScreen() {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const navigation = useNavigation<StackTypes>();
+  const userData = useSelector((state: AppState) => state.user.userData);
 
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
 
-  const dispatch = useDispatch(); 
-
-  const loadUserData = () => {
-    fetchCurrentUserData().then((userData) => {
-      if (userData) {
-        setName(userData.name);
-        setBio(userData.bio);
-      }
-    });
-  };
-
   useEffect(() => {
-    loadUserData();
-  }, [isFocused]);
+    setName(userData?.name || "");
+    setBio(userData?.bio || "");
+  }, [userData]);
 
   const handleSaveProfile = async () => {
-    try {
-      await updateEditProfile({ name, bio });
-      dispatch(userSlice.actions.setUserData({ name, bio }));
-      navigation.navigate("Profile");
-    } catch (error) {
-      console.log('Erro ao atualizar o perfil:', error);
-    }
+    updateEditProfile({ name, bio })
+      .then(() => {
+        dispatch(userSlice.actions.setNameAndBio({ name, bio }));
+        toast.show("Perfil atualizado com sucesso!", {
+          type: "success",
+        });
+        navigation.navigate("Profile");
+      })
+      .catch((e) => {
+        toast.show("Ocorreu um erro ao tentar atualizar seu perfil", {
+          type: "danger",
+        });
+      });
   };
 
   const handleBioTextChange = (text: string) => {

@@ -16,5 +16,12 @@ export const userSlice = createSlice({
     setUserData: (state, action: PayloadAction<UserData | null>) => {
       state.userData = action.payload;
     },
+    setNameAndBio: (state, action: PayloadAction<{name: string, bio: string}>) => {
+      state.userData = {
+        ...state.userData,
+        name: action.payload.name, 
+        bio: action.payload.bio
+      };
+    },
   },
 });

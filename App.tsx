@@ -18,6 +18,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { FIREBASE_AUTH } from "./firebaseConfig";
 import { LoanType } from "./src/models/Loan";
 import CategoryScreen from "./src/pages/CategoryScreen";
+import EditProfileScreen from "./src/pages/EditProfileScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import LoansScreen from "./src/pages/LoansScreen";
 import LoginScreen from "./src/pages/LoginScreen";
@@ -32,9 +33,6 @@ import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
-import { convertUserToUserData } from "./src/services/utils.service";
-import EditProfileScreen from "./src/pages/EditProfileScreen";
-
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -43,6 +41,7 @@ export type StackNavigation = {
   Loans?: {
     initialTab: LoanType;
   };
+  Profile: undefined;
   Main: undefined;
   Product: undefined;
   Login: undefined;
@@ -56,6 +55,7 @@ export type StackNavigation = {
   };
   NewLoanRequest: undefined;
   Category: undefined;
+  EditProfile: undefined;
 };
 
 const TabBarIconMapping: Record<string, string> = {
@@ -92,7 +92,6 @@ function Main() {
       <Tab.Screen name="Loans" component={LoansScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
-
     </Tab.Navigator>
   );
 }
@@ -129,7 +128,6 @@ const Navigation = () => {
       >
         {user ? (
           <>
-            
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Product" component={ProductScreen} />
             <Stack.Screen name="Category" component={CategoryScreen} />
@@ -141,7 +139,6 @@ const Navigation = () => {
               name="NewLoanRequest"
               component={NewLoanRequestScreen}
             />
-
           </>
         ) : (
           <>
