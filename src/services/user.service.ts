@@ -21,6 +21,10 @@ interface CreateUserRequest {
   email: string;
   password: string;
 }
+interface ProfileData {
+  name: string;
+  bio: string;
+}
 
 interface SignInUserRequest {
   email: string;
@@ -140,6 +144,24 @@ export const signInUser = async ({ email, password }: SignInUserRequest) => {
       password
     );
     return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateEditProfile = async ({
+  bio,
+  name,
+}: {
+  bio: string;
+  name: string;
+}): Promise<void> => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      await updateProfile(user, { displayName: name });
+      await updateDoc(doc(FIREBASE_DB, "users", user.uid), { bio, name });
+    }
   } catch (error) {
     throw error;
   }

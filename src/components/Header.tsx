@@ -1,11 +1,18 @@
-import { View, StyleSheet, Pressable, TouchableOpacity, Modal, Text } from "react-native";
-import { BoldText } from "./Text/BoldText";
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { StackTypes } from "../../App";
-import { useState } from "react";
 import { signOut } from "firebase/auth";
+import { useState } from "react";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { StackTypes } from "../../App";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { BoldText } from "./Text/BoldText";
 
 interface HeaderProps {
   title?: string | null;
@@ -43,7 +50,12 @@ export const Header = ({
       <BoldText style={[styles.title, { color }]}>{children || title}</BoldText>
       {hasMore && (
         <TouchableOpacity onPress={toggleModal}>
-          <Feather name="more-vertical" size={24} color="black" style={styles.more} />
+          <Feather
+            name="more-vertical"
+            size={24}
+            color="black"
+            style={styles.more}
+          />
         </TouchableOpacity>
       )}
       {hasMore && (
@@ -55,16 +67,21 @@ export const Header = ({
           >
             <View style={styles.modalContent}>
               <View style={styles.modalInner}>
-                <TouchableOpacity>
-                <View style={styles.optionsButton}>
-                  <Feather name="edit" size={24} color="black" />
-                  <Text>Editar perfil</Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    toggleModal()
+                    navigation.navigate("EditProfile");
+                  }}
+                >
+                  <View style={styles.optionsButton}>
+                    <Feather name="edit" size={24} color="black" />
+                    <Text>Editar perfil</Text>
+                  </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.optionsButton}
                   onPress={() => {
-                    toggleModal(); 
+                    toggleModal();
                     signOut(FIREBASE_AUTH);
                   }}
                 >
@@ -98,9 +115,7 @@ const styles = StyleSheet.create({
   },
   more: {},
   rowContainer: {
-    
     alignItems: "center",
-
   },
   modalContainer: {
     flex: 1,
@@ -109,26 +124,24 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    position:"absolute",
-    right:24,
-    top:56,
+    position: "absolute",
+    right: 24,
+    top: 56,
     backgroundColor: "white",
     padding: 16,
     borderRadius: 8,
   },
-  modalInner:{
-    display:"flex",
-    gap:12,
+  modalInner: {
+    display: "flex",
+    gap: 12,
   },
   modalText: {
     fontSize: 18,
     marginBottom: 20,
   },
-  optionsButton:{
-    flexDirection:"row",
-    alignItems:"center",
-    gap:12,
-
-    
+  optionsButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
   },
 });

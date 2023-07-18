@@ -8,4 +8,5 @@ export interface UserData {
   addresses?: Address[];
   rate?: number;
   ratings?: string[];
+  bio?: string;
 }

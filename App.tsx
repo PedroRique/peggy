@@ -18,6 +18,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { FIREBASE_AUTH } from "./firebaseConfig";
 import { LoanType } from "./src/models/Loan";
 import CategoryScreen from "./src/pages/CategoryScreen";
+import EditProfileScreen from "./src/pages/EditProfileScreen";
 import HomeScreen from "./src/pages/HomeScreen";
 import LoansScreen from "./src/pages/LoansScreen";
 import LoginScreen from "./src/pages/LoginScreen";
@@ -41,6 +42,7 @@ export type StackNavigation = {
   Loans?: {
     initialTab: LoanType;
   };
+  Profile: undefined;
   Main: undefined;
   Product: undefined;
   Login: undefined;
@@ -55,6 +57,7 @@ export type StackNavigation = {
   NewLoanRequest: undefined;
   Category: undefined;
   Nearby: undefined;
+  EditProfile: undefined;
 };
 
 const TabBarIconMapping: Record<string, string> = {
@@ -133,6 +136,7 @@ const Navigation = () => {
             <Stack.Screen name="Search" component={SearchScreen} />
             <Stack.Screen name="NewProduct" component={NewProductScreen} />
             <Stack.Screen name="NewAddress" component={NewAddressScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen
               name="NewLoanRequest"
               component={NewLoanRequestScreen}

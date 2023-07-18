@@ -1,7 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
@@ -55,6 +61,10 @@ export default function ProfileScreen() {
   const userData = useSelector((state: AppState) => state.user.userData);
   const [products, setProducts] = useState<Product[]>([]);
 
+  const noBio = "Você não possui uma biografia.";
+
+  const navigation = useNavigation<StackTypes>();
+
   useEffect(() => {
     getProfileInfo();
   }, []);
@@ -96,20 +106,49 @@ export default function ProfileScreen() {
             onPress={getPhotoUrl}
           />
           <View>
-            <Rate value={userData?.rate} color={PColors.Blue} />
-            <Text style={styles.avatarBio}>
-              Carioca, 27 anos. Itens com ótimo estado.
-            </Text>
+            <View>
+              <Rate value={userData?.rate} color={PColors.Blue} />
+            </View>
+            {userData?.bio ? (
+              <Text style={styles.avatarBio}>{userData?.bio}</Text>
+            ) : (
+              <Text style={styles.avatarBio}>
+                {noBio}{" "}
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("EditProfile");
+                  }}
+                >
+                  <Text color={PColors.Blue}>Adicione.</Text>
+                </TouchableOpacity>
+              </Text>
+            )}
           </View>
         </View>
-
         <View style={styles.myContainer}>
           <SectionHeader
             title="Seus produtos"
             route="NewProduct"
             onAdd={getProfileInfo}
           />
-          <ProductHorizontalList products={products} />
+          {products?.length ? (
+            <ProductHorizontalList products={products} />
+          ) : (
+            <Text>
+              <Text style={{ paddingLeft: 16 }}>
+                Você não possui nenhum item.
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("NewProduct", {
+                    onAdd: () => getProfileInfo(),
+                  });
+                }}
+              >
+                <Text color={PColors.Blue}> Adicione.</Text>
+              </TouchableOpacity>
+            </Text>
+          )}
         </View>
 
         <View style={styles.myContainer}>
@@ -119,10 +158,24 @@ export default function ProfileScreen() {
             onAdd={getProfileInfo}
           />
           <View style={styles.addresses}>
-            {!!userData?.addresses?.length &&
+            {userData?.addresses?.length ? (
               userData.addresses.map((address, i) => (
-                <AddressTile key={i} address={address}></AddressTile>
-              ))}
+                <AddressTile key={i} address={address} />
+              ))
+            ) : (
+              <Text>
+                <Text>Você não possui nenhum endereço.</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("NewAddress", {
+                      onAdd: () => getProfileInfo(),
+                    });
+                  }}
+                >
+                  <Text color={PColors.Blue}> Adicione.</Text>
+                </TouchableOpacity>
+              </Text>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -149,7 +202,8 @@ const styles = StyleSheet.create({
   avatarBio: {
     color: PColors.Grey,
     fontSize: 16,
-    width: "70%",
+    overflow: "hidden",
+    width: "240px",
   },
   myContainer: {
     marginBottom: 32,
