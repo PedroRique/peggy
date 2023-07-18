@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { useToast } from "react-native-toast-notifications";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { TextInput } from "../components/Input";
@@ -7,7 +8,11 @@ import { ProductCard } from "../components/ProductCard";
 import { Rating } from "../components/Rating";
 import { Text } from "../components/Text/Text";
 import { LoanWithInfo } from "../models/Loan";
-import { updateRatings } from "../services/rating.service";
+import {
+  checkBorrowerRate,
+  checkLenderRate,
+  updateRatings,
+} from "../services/rating.service";
 
 export const LoanRatingModal = ({
   loan,
@@ -16,6 +21,7 @@ export const LoanRatingModal = ({
   loan: LoanWithInfo;
   onClose: () => void;
 }) => {
+  const toast = useToast();
   const [userRate, setUserRate] = useState<number | null>(null);
   const [productRate, setProductRate] = useState<number | null>(null);
   const [productComment, setProductComment] = useState("");
@@ -24,31 +30,51 @@ export const LoanRatingModal = ({
   const saveRate = async () => {
     setIsSaving(true);
 
-    if (loan.type === "borrow") {
-      await updateRatings({
-        rate: userRate,
-        comment: "",
-        ratedId: loan.lenderUserId,
-        raterId: loan.borrowerUserId,
-        loanId: loan.uid,
-      }, 'users');
+    let promises: Promise<any>[] = [];
 
-      await updateRatings({
-        rate: productRate,
-        comment: productComment,
-        ratedId: loan.productId,
-        raterId: loan.borrowerUserId,
-        loanId: loan.uid,
-      }, 'products');
+    if (loan.type === "borrow") {
+      promises = [
+        updateRatings(
+          {
+            rate: userRate,
+            comment: "",
+            ratedId: loan.lenderUserId,
+            raterId: loan.borrowerUserId,
+            loanId: loan.uid,
+          },
+          "users"
+        ),
+        updateRatings(
+          {
+            rate: productRate,
+            comment: productComment,
+            ratedId: loan.productId,
+            raterId: loan.borrowerUserId,
+            loanId: loan.uid,
+          },
+          "products"
+        ),
+        checkBorrowerRate(loan.uid),
+      ];
     } else {
-      await updateRatings({
-        rate: productRate,
-        comment: productComment,
-        ratedId: loan.borrowerUserId,
-        raterId: loan.lenderUserId,
-        loanId: loan.uid,
-      }, 'products');
+      promises = [
+        updateRatings(
+          {
+            rate: userRate,
+            comment: "",
+            ratedId: loan.borrowerUserId,
+            raterId: loan.lenderUserId,
+            loanId: loan.uid,
+          },
+          "users"
+        ),
+        checkLenderRate(loan.uid),
+      ];
     }
+
+    Promise.all(promises).then(() => {
+      toast.show("Avaliação salva.", { type: "success" });
+    });
 
     onClose();
   };

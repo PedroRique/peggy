@@ -41,7 +41,12 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   };
 
   const checkForPendingRates = (result: LoanWithInfo[]) => {
-    const toRateLoans = result.filter((l) => l.status === LoanStatus.RETURNED);
+    const toRateLoans = result.filter(
+      (l) =>
+        l.status === LoanStatus.RETURNED &&
+        ((l.type === "borrow" && !l.hasBorrowerRate) ||
+          (l.type === "lend" && !l.hasLenderRate))
+    );
     if (toRateLoans.length) {
       setLoanToRate(toRateLoans[0]);
       setShowRatingModal(true);

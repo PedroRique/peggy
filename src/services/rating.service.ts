@@ -28,3 +28,25 @@ export const updateRatings = async (
     console.error(error);
   }
 };
+
+export const checkLenderRate = async (loanId?: string) => {
+  try {
+    if (loanId) {
+      const loanRef = doc(FIREBASE_DB, "loans", loanId);
+      await updateDoc(loanRef, {
+        hasLenderRate: true,
+      });
+    }
+  } catch (error) {}
+};
+
+export const checkBorrowerRate = async (loanId?: string) => {
+  try {
+    if (loanId) {
+      const loanRef = doc(FIREBASE_DB, "loans", loanId);
+      await updateDoc(loanRef, {
+        hasBorrowerRate: true,
+      });
+    }
+  } catch (error) {}
+};
