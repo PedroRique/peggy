@@ -1,7 +1,5 @@
-import { Feather, FontAwesome5 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { signOut } from "firebase/auth";
-import { useState } from "react";
+import { Feather } from "@expo/vector-icons";
+import React, { useState } from "react";
 import {
   Modal,
   Pressable,
@@ -10,9 +8,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { signOut } from "firebase/auth";
 import { StackTypes } from "../../App";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { BoldText } from "./Text/BoldText";
+import { ModalMore } from "./ModalMore";
+
+
+
 
 interface HeaderProps {
   title?: string | null;
@@ -40,58 +44,48 @@ export const Header = ({
     setModalVisible(!modalVisible);
   };
 
+  const botoes: Botao[] = [
+    {
+      label: 'Editar Perfil',
+      icon: 'edit',
+      action: () => {
+        toggleModal();
+        navigation.navigate("EditProfile");
+      },
+    },
+    {
+      label: 'Logout',
+      icon: 'log-out',
+      action: () => {
+        toggleModal();
+        signOut(FIREBASE_AUTH);
+      },
+    },
+  ];
+
   return (
     <View style={[styles.headerContainer, hasBorder && styles.hasBorderStyles]}>
       {hasBack && (
         <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
-          <FontAwesome5 name="arrow-left" size={32} color={color} />
+          <Feather name="arrow-left" size={32} color={color} />
         </Pressable>
       )}
       <BoldText style={[styles.title, { color }]}>{children || title}</BoldText>
-      {hasMore && (
+      {hasMore && botoes && botoes.length > 0 && (
         <TouchableOpacity onPress={toggleModal}>
           <Feather
             name="more-vertical"
             size={24}
             color="black"
-            style={styles.more}
           />
         </TouchableOpacity>
       )}
-      {hasMore && (
-        <Modal visible={modalVisible} transparent>
-          <TouchableOpacity
-            style={styles.modalContainer}
-            activeOpacity={1}
-            onPress={toggleModal}
-          >
-            <View style={styles.modalContent}>
-              <View style={styles.modalInner}>
-                <TouchableOpacity
-                  onPress={() => {
-                    toggleModal()
-                    navigation.navigate("EditProfile");
-                  }}
-                >
-                  <View style={styles.optionsButton}>
-                    <Feather name="edit" size={24} color="black" />
-                    <Text>Editar perfil</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.optionsButton}
-                  onPress={() => {
-                    toggleModal();
-                    signOut(FIREBASE_AUTH);
-                  }}
-                >
-                  <Feather name="log-out" size={24} color="black" />
-                  <Text>Logout</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </Modal>
+      {hasMore && botoes && botoes.length > 0 && (
+        <ModalMore
+          botoes={botoes}
+          modalVisible={modalVisible}
+          toggleModal={toggleModal}
+        />
       )}
     </View>
   );
@@ -113,35 +107,9 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: "RedHatDisplay",
   },
-  more: {},
+
   rowContainer: {
     alignItems: "center",
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    position: "absolute",
-    right: 24,
-    top: 56,
-    backgroundColor: "white",
-    padding: 16,
-    borderRadius: 8,
-  },
-  modalInner: {
-    display: "flex",
-    gap: 12,
-  },
-  modalText: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  optionsButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
+
 });
