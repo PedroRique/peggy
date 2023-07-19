@@ -30,7 +30,6 @@ export default function Button({
         styles.button,
         outlined && styles.outlinedButton,
         disabled && styles.disabledButton,
-        invertedColors && styles.invertedButton,
       ]}
       onPress={() => (disabled ? null : onPress())}
     >
@@ -38,7 +37,6 @@ export default function Button({
         style={[
           styles.text,
           outlined && styles.outlinedText,
-          invertedColors && styles.invertedText,
         ]}
       >
         {loading ? loadingText : title}
@@ -72,11 +70,6 @@ const styles = StyleSheet.create({
   disabledButton: {
     opacity: 0.5,
   },
-  invertedButton: {
-    backgroundColor: PColors.White,
-    borderColor: PColors.Blue,
-    borderWidth: 2,
-  },
   text: {
     fontSize: 22,
     lineHeight: 21,
@@ -85,9 +78,6 @@ const styles = StyleSheet.create({
     color: PColors.White,
   },
   outlinedText: {
-    color: PColors.Blue,
-  },
-  invertedText: {
     color: PColors.Blue,
   },
 });
