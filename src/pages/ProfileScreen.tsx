@@ -29,6 +29,7 @@ import {
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 const SectionHeader = ({
   title,
@@ -94,6 +95,9 @@ export default function ProfileScreen() {
       })
     );
   };
+
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -178,6 +182,9 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
+        <View style={styles.container}>
+
+    </View>
       </ScrollView>
     </SafeAreaView>
   );
