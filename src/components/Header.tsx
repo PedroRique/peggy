@@ -1,4 +1,4 @@
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   Modal,
@@ -67,7 +67,7 @@ export const Header = ({
     <View style={[styles.headerContainer, hasBorder && styles.hasBorderStyles]}>
       {hasBack && (
         <Pressable onPress={() => (onBack ? onBack() : navigation.goBack())}>
-          <Feather name="arrow-left" size={32} color={color} />
+          <FontAwesome5 name="arrow-left" size={32} color={color} />
         </Pressable>
       )}
       <BoldText style={[styles.title, { color }]}>{children || title}</BoldText>
@@ -81,11 +81,13 @@ export const Header = ({
         </TouchableOpacity>
       )}
       {hasMore && botoes && botoes.length > 0 && (
-        <ModalMore
-          botoes={botoes}
-          modalVisible={modalVisible}
-          toggleModal={toggleModal}
-        />
+        <View style={styles.positionModal}>
+          <ModalMore
+            botoes={botoes}
+            modalVisible={modalVisible}
+            toggleModal={toggleModal}
+          />
+        </View>
       )}
     </View>
   );
@@ -111,5 +113,10 @@ const styles = StyleSheet.create({
   rowContainer: {
     alignItems: "center",
   },
+  positionModal:{
+    position: "absolute",
+    right: 24,
+    top: 56,
+  }
 
 });

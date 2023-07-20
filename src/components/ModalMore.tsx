@@ -47,20 +47,6 @@ export const ModalMore = ({ botoes, modalVisible, toggleModal }: ModalMoreProps)
     </Modal>
   );
 };
-// const botoes: Botao[] = [
-//  {
-//  label:,
-//  icon:,
-//  action: () => {
-//    toggleModal();
-//  },
-//},
-//const [modalVisible, setModalVisible] = useState(false);
-
-//const toggleModal = () => {
-//  setModalVisible(!modalVisible);
-//};
-
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
@@ -69,9 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    position: "absolute",
-    right: 24,
-    top: 56,
     backgroundColor: "white",
     padding: 16,
     borderRadius: 8,
