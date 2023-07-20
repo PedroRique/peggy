@@ -136,7 +136,7 @@ export default function ProfileScreen() {
             onAdd={getProfileInfo}
           />
           {products?.length ? (
-            <ProductHorizontalList products={products} />
+            <ProductHorizontalList products={products} hasTrash/>
           ) : (
             <Text>
               <Text style={{ paddingLeft: 16 }}>

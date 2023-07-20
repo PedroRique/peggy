@@ -10,9 +10,11 @@ import { StackTypes } from "../../App";
 export const ProductHorizontalList = ({
   products,
   showDistance = false,
+  hasTrash = false,
 }: {
   products?: Product[];
   showDistance?: boolean;
+  hasTrash?: boolean;
 }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>();
@@ -29,6 +31,7 @@ export const ProductHorizontalList = ({
               navigation.navigate("Product");
             }}
             showDistance={showDistance}
+            hasTrash={hasTrash}
             style={{
               marginRight: 12,
             }}
