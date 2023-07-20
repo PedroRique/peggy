@@ -135,7 +135,7 @@ export default function ProfileScreen() {
           <BoldText size={16} style={styles.peggiesText}>
             <Image source={coin} style={styles.coinIcon} />
             <Text size={36} weight="900">
-              120
+              {userData?.balance}
             </Text>{" "}
             Peggies
           </BoldText>
