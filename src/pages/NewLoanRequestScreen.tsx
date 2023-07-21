@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { isAfter } from "date-fns";
+import { isBefore, startOfDay } from "date-fns";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Masks } from "react-native-mask-input";
@@ -22,7 +22,7 @@ import { UserData } from "../models/UserData";
 import { createLoan, updateLoanStatus } from "../services/loan.service";
 import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
-import { formatAddressLabel } from "../services/utils.service";
+import { formatAddressLabel, getDateObject } from "../services/utils.service";
 import { AppState } from "../store";
 
 export default function NewLoanRequestScreen() {
@@ -69,21 +69,16 @@ export default function NewLoanRequestScreen() {
         !!endDate &&
         !!pickUpTime &&
         !!giveBackTime &&
+        !!startDateObject &&
+        !!endDateObject &&
         startDate.length == 10 &&
         endDate.length == 10 &&
         pickUpTime.length == 5 &&
         giveBackTime.length == 5 &&
-        isAfter(startDateObject, new Date()) &&
-        isAfter(endDateObject, startDateObject)
+        !isBefore(startDateObject, startOfDay(new Date())) &&
+        !isBefore(endDateObject, startDateObject)
     );
   }, [address, startDate, endDate, pickUpTime, giveBackTime]);
-
-  const getDateObject = (date: string): Date => {
-    const [day, month, year] = date.split("/");
-    const formattedDate = [year, month, day].join("-");
-    const dateObject = new Date(formattedDate);
-    return dateObject;
-  };
 
   useEffect(() => {
     if (loan) {
@@ -130,7 +125,7 @@ export default function NewLoanRequestScreen() {
 
     createLoan(req)
       .then(() => {
-        navigation.navigate("Loans", { initialTab: 'borrow' });
+        navigation.navigate("Loans", { initialTab: "borrow" });
         toast.show("Solicitação feita com sucesso!", { type: "success" });
       })
       .catch(() => {

@@ -45,8 +45,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 32,
+    padding: 12,
     borderRadius: 4,
     elevation: 3,
     backgroundColor: PColors.Blue,
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   text: {
-    fontSize: 22,
+    fontSize: 20,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,

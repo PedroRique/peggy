@@ -28,6 +28,7 @@ export default function NewProductScreen() {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
+  const [price, setPrice] = useState<any>(null);
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
@@ -38,6 +39,7 @@ export default function NewProductScreen() {
       description,
       imageUrl,
       category,
+      price,
     })
       .then(() => {
         toast.show("Endereço adicionado com sucesso!", { type: "success" });
@@ -84,20 +86,29 @@ export default function NewProductScreen() {
             onChangeText={setDescription}
           ></TextInput>
 
-          <BoldText>Categoria do produto</BoldText>
-          <DropDown
-            label={"Categoria do produto"}
-            mode={"outlined"}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            value={category}
-            setValue={setCategory}
-            list={categories.map((categ: Category) => ({
-              label: categ.name,
-              value: categ.id,
-            }))}
-          />
+          <View style={{ marginBottom: 32 }}>
+            <BoldText>Categoria do produto</BoldText>
+            <DropDown
+              label={"Categoria do produto"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={category}
+              setValue={setCategory}
+              list={categories.map((categ: Category) => ({
+                label: categ.name,
+                value: categ.id,
+              }))}
+            />
+          </View>
+
+          <TextInput
+            label="Preço diário"
+            placeholder="Preço diário"
+            value={price}
+            onChangeText={setPrice}
+          ></TextInput>
         </View>
       </ScrollView>
       <View style={styles.footer}>

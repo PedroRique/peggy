@@ -16,6 +16,7 @@ import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
+import { PriceTag } from "../components/PriceTag";
 
 export default function ProductScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -90,6 +91,7 @@ export default function ProductScreen() {
 
       {currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
+          <PriceTag price={product?.price}/>
           <View style={{ flex: 1 }}>
             <Button
               title="Pegar emprestado"
@@ -154,6 +156,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#E5E5E5",
     borderTopWidth: 1,
     padding: 16,
+    gap: 12,
     width: "100%",
   },
   price: {
