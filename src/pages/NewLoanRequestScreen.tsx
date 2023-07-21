@@ -24,6 +24,7 @@ import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel, getDateObject } from "../services/utils.service";
 import { AppState } from "../store";
+import React from "react";
 
 export default function NewLoanRequestScreen() {
   const toast = useToast();

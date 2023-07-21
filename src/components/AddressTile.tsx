@@ -12,14 +12,26 @@ import { removeAddress } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
+import ConfirmationModal from "./ConfirmationModal";
 
 type AddressTileProps = TouchableOpacityProps & { address: Address };
 
 export default function AddressTile({ address, ...rest }: AddressTileProps) {
   const [isRemoved, setIsRemoved] = useState(false);
-  const remove = () => {
+  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+
+  const handleDeleteConfirm = () => {
+    setIsConfirmationVisible(false);
     setIsRemoved(true);
     removeAddress(address);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsConfirmationVisible(false);
+  };
+
+  const remove = () => {
+    setIsConfirmationVisible(true); 
   };
 
   return (
@@ -42,6 +54,12 @@ export default function AddressTile({ address, ...rest }: AddressTileProps) {
           </Pressable>
         </TouchableOpacity>
       )}
+      <ConfirmationModal
+        visible={isConfirmationVisible}
+        question="Tem certeza que deseja excluir esse endereço?"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </>
   );
 }

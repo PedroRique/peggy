@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { PColors } from "../shared/Colors";
@@ -10,6 +11,7 @@ export interface ButtonProps {
   outlined?: boolean;
   loading?: boolean;
   loadingText?: string;
+  invertedColors?: boolean;
 }
 
 export default function Button({
@@ -19,17 +21,24 @@ export default function Button({
   outlined,
   disabled = false,
   loading,
+  invertedColors = false,
 }: ButtonProps) {
   return (
     <TouchableOpacity
       style={[
+        styles.defaultButton,
         styles.button,
         outlined && styles.outlinedButton,
         disabled && styles.disabledButton,
       ]}
       onPress={() => (disabled ? null : onPress())}
     >
-      <Text style={[styles.text, outlined && styles.outlinedText]}>
+      <Text
+        style={[
+          styles.text,
+          outlined && styles.outlinedText,
+        ]}
+      >
         {loading ? loadingText : title}
       </Text>
 
@@ -39,6 +48,9 @@ export default function Button({
 }
 
 const styles = StyleSheet.create({
+  defaultButton: {
+    height: 48
+  },
   button: {
     display: "flex",
     flexDirection: "row",
