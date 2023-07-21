@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -99,7 +99,7 @@ const BorrowingTab = () => {
 
 function LoanTabs() {
   const route = useRoute<RouteProp<StackNavigation, "Loans">>();
-  
+
   return (
     <Tab.Navigator
       initialRouteName={
