@@ -1,22 +1,19 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
+import React, { useState } from "react";
+import { GestureResponderEvent, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import Modal from "react-native-modal";
 import { StackTypes } from "../../App";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
-import { BoldText } from "./Text/BoldText";
 import { ModalMore } from "./ModalMore";
+import { BoldText } from "./Text/BoldText";
 
-
-
+export interface MenuAction {
+  label: string;
+  icon: string;
+  action: () => void;
+}
 
 interface HeaderProps {
   title?: string | null;
@@ -40,24 +37,28 @@ export const Header = ({
   const navigation = useNavigation<StackTypes>();
   const [modalVisible, setModalVisible] = useState(false);
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
+  const showModal = (ev: GestureResponderEvent) => {
+    console.log(ev);
+    setModalVisible(true);
+  };
+  const hideModal = () => {
+    setModalVisible(false);
   };
 
-  const botoes: Botao[] = [
+  const botoes: MenuAction[] = [
     {
-      label: 'Editar Perfil',
-      icon: 'edit',
+      label: "Editar Perfil",
+      icon: "edit",
       action: () => {
-        toggleModal();
+        hideModal();
         navigation.navigate("EditProfile");
       },
     },
     {
-      label: 'Logout',
-      icon: 'log-out',
+      label: "Logout",
+      icon: "log-out",
       action: () => {
-        toggleModal();
+        hideModal();
         signOut(FIREBASE_AUTH);
       },
     },
@@ -72,22 +73,21 @@ export const Header = ({
       )}
       <BoldText style={[styles.title, { color }]}>{children || title}</BoldText>
       {hasMore && botoes && botoes.length > 0 && (
-        <TouchableOpacity onPress={toggleModal}>
-          <Feather
-            name="more-vertical"
-            size={24}
-            color="black"
-          />
+        <TouchableOpacity onPress={showModal}>
+          <Feather name="more-vertical" size={24} color="black" />
         </TouchableOpacity>
       )}
       {hasMore && botoes && botoes.length > 0 && (
-        <View style={styles.positionModal}>
-          <ModalMore
-            botoes={botoes}
-            modalVisible={modalVisible}
-            toggleModal={toggleModal}
-          />
-        </View>
+        <Modal
+          isVisible={modalVisible}
+          onBackdropPress={hideModal}
+          onDismiss={hideModal}
+          style={styles.positionModal}
+          animationIn={'fadeIn'}
+          animationOut={'fadeOut'}
+        >
+          <ModalMore botoes={botoes} />
+        </Modal>
       )}
     </View>
   );
@@ -113,10 +113,9 @@ const styles = StyleSheet.create({
   rowContainer: {
     alignItems: "center",
   },
-  positionModal:{
+  positionModal: {
     position: "absolute",
-    right: 24,
-    top: 56,
-  }
-
+    right: 20,
+    top: 30,
+  },
 });

@@ -64,7 +64,7 @@ export const getRate = async (ratingIds?: string[]) => {
     const ratings = await commonFetch<Rating>(q);
 
     const rate = ratings
-      ? ratings.reduce((acc, r) => acc + r.rate, 0) / ratings.length
+      ? ratings.reduce((acc, r) => acc + (r.rate || 0), 0) / ratings.length
       : 0;
 
     return rate;

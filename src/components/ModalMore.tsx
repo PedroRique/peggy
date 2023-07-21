@@ -1,50 +1,31 @@
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-interface Botao {
-  label: string;
-  icon: "edit" | "log-out" | "user" | "settings";
-  action: () => void;
-}
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { MenuAction } from "./Header";
 
 interface ModalMoreProps {
-  botoes: Botao[];
-  modalVisible: boolean;
-  toggleModal: () => void;
+  botoes: MenuAction[];
 }
 
-export const ModalMore = ({ botoes, modalVisible, toggleModal }: ModalMoreProps) => {
+export const ModalMore = ({ botoes }: ModalMoreProps) => {
   return (
-    <Modal visible={modalVisible} transparent>
-      <TouchableOpacity
-        style={styles.modalContainer}
-        activeOpacity={1}
-        onPress={toggleModal}
-      >
-        <View style={styles.modalContent}>
-          <View style={styles.modalInner}>
-            {botoes.map((botao, index) => (
-              <TouchableOpacity key={index} onPress={() => {
-                toggleModal();
-                botao.action();
-              }}>
-                <View style={styles.optionsButton}>
-                  <Feather name={botao.icon} size={24} color="black" />
-                  <Text>{botao.label}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </TouchableOpacity>
-    </Modal>
+    <View style={styles.modalContent}>
+      <View style={styles.modalInner}>
+        {botoes.map((botao, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              botao.action();
+            }}
+          >
+            <View style={styles.optionsButton}>
+              <Feather name={botao.icon as any} size={24} color="black" />
+              <Text>{botao.label}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
   );
 };
 const styles = StyleSheet.create({
