@@ -45,3 +45,32 @@ export const groupLoansBySection = (result: LoanWithInfo[]) => {
   }, groups);
   return groupedLoans;
 };
+
+export const getDateObject = (date: string): Date | null => {
+  const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+  const match = date.match(dateRegex);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, day, month, year] = match;
+  const numericDay = parseInt(day, 10);
+  const numericMonth = parseInt(month, 10);
+  const numericYear = parseInt(year, 10);
+
+  if (
+    isNaN(numericDay) ||
+    isNaN(numericMonth) ||
+    isNaN(numericYear) ||
+    numericMonth < 1 ||
+    numericMonth > 12 ||
+    numericDay < 1 ||
+    numericDay > 31
+  ) {
+    return null;
+  }
+
+  const dateObject = new Date(numericYear, numericMonth - 1, numericDay);
+  return dateObject;
+};

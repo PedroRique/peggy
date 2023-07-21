@@ -9,4 +9,5 @@ export interface UserData {
   rate?: number;
   ratings?: string[];
   bio?: string;
+  balance?: number;
 }

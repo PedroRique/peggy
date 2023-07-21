@@ -1,7 +1,7 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackNavigation } from "../../App";
@@ -18,10 +18,17 @@ const Tab = createMaterialTopTabNavigator();
 const LoansTab = ({ type }: { type: LoanType }) => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [loanToRate, setLoanToRate] = useState<LoanWithInfo | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
   const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
   const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await getLoans();
+    setRefreshing(false);
+  }, []);
 
   useEffect(() => {
     getLoans();
@@ -60,7 +67,12 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   };
 
   return (
-    <ScrollView style={styles.tabInner}>
+    <ScrollView
+      contentContainerStyle={styles.tabInner}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <LoansSection
         title="Pendente"
         emptyText="Nenhum empréstimo pendente."
@@ -99,7 +111,7 @@ const BorrowingTab = () => {
 
 function LoanTabs() {
   const route = useRoute<RouteProp<StackNavigation, "Loans">>();
-  
+
   return (
     <Tab.Navigator
       initialRouteName={

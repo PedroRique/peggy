@@ -13,6 +13,7 @@ import {
   checkLenderRate,
   updateRatings,
 } from "../services/rating.service";
+import React from "react";
 
 export const LoanRatingModal = ({
   loan,
@@ -80,7 +81,7 @@ export const LoanRatingModal = ({
   };
 
   return (
-    <View style={styles.modalContainer}>
+    <View style={styles.modalContainer} >
       <View style={styles.row}>
         <Avatar
           imageUrl={

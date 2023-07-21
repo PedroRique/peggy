@@ -1,7 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -29,7 +30,7 @@ import {
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
-import ConfirmationModal from "../components/ConfirmationModal";
+const coin = require("../../assets/images/coin.png");
 
 const SectionHeader = ({
   title,
@@ -96,9 +97,6 @@ export default function ProfileScreen() {
     );
   };
 
-
-
-
   return (
     <SafeAreaView style={styles.container}>
       <Header title={userData?.name} hasBorder hasMore />
@@ -129,6 +127,20 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
+
+        <View style={styles.peggiesContainer}>
+          <BoldText size={20} style={styles.peggiesText}>
+            Você possui:
+          </BoldText>
+          <BoldText size={16} style={styles.peggiesText}>
+            <Image source={coin} style={styles.coinIcon} />
+            <Text size={36} weight="900">
+              {userData?.balance}
+            </Text>{" "}
+            Peggies
+          </BoldText>
+        </View>
+
         <View style={styles.myContainer}>
           <SectionHeader
             title="Seus produtos"
@@ -182,9 +194,6 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
-        <View style={styles.container}>
-
-    </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -211,6 +220,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     overflow: "hidden",
     width: "240px",
+  },
+  peggiesContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: PColors.LightOrange,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 7,
+    marginBottom: 32,
+    marginHorizontal: 16,
+  },
+  peggiesText: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+  },
+  peggiesTextBig: {
+    lineHeight: 24,
+  },
+  coinIcon: {
+    width: 40,
+    height: 40,
   },
   myContainer: {
     marginBottom: 32,

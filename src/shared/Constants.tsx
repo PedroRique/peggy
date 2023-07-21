@@ -58,3 +58,6 @@ export const FIREBASE_ERROR_MESSAGES = {
   [FirebaseError.USER_NOT_FOUND]: "Usuário não encontrado.",
   [FirebaseError.WRONG_PASSWORD]: "Senha incorreta.",
 };
+
+export const REGISTRATION_BONUS = 100;
+export const ADD_PRODUCT_BONUS = 50;

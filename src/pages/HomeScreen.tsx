@@ -1,7 +1,7 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
@@ -18,6 +18,8 @@ import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
 
 const NearbyTitle = () => {
+  const navigation = useNavigation<StackTypes>();
+
   return (
     <View style={styles.titleContainer}>
       <View style={styles.titleView}>
@@ -25,7 +27,9 @@ const NearbyTitle = () => {
         <Text style={styles.title}>Por perto</Text>
       </View>
 
-      <FontAwesome5 name="arrow-right" size={32} color={PColors.Orange} />
+      <TouchableOpacity onPress={() => navigation.navigate("Nearby")}>
+        <FontAwesome5 name="arrow-right" size={32} color={PColors.Orange} />
+      </TouchableOpacity>
     </View>
   );
 };
