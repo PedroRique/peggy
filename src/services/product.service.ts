@@ -10,6 +10,8 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import { Product } from "../models/Product";
+import { ADD_PRODUCT_BONUS } from "../shared/Constants";
+import { addBalance } from "./balance.service";
 import { commonFetch } from "./utils.service";
 
 export const fetchProducts = async () => {
@@ -60,6 +62,8 @@ export const addProduct = async (product: Omit<Product, "userId">) => {
       collection(FIREBASE_DB, "products"),
       finalProduct
     );
+
+    await addBalance(FIREBASE_AUTH.currentUser?.uid, ADD_PRODUCT_BONUS);
 
     return docRef.id;
   } catch (error) {

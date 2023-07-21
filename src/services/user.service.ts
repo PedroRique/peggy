@@ -15,6 +15,7 @@ import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import { Address } from "../models/Address";
 import { UserData } from "../models/UserData";
 import { getRate } from "./rating.service";
+import { REGISTRATION_BONUS } from "../shared/Constants";
 
 interface CreateUserRequest {
   name: string;
@@ -47,6 +48,7 @@ export const createUser = async ({
       name,
       email,
       photoURL: null,
+      balance: REGISTRATION_BONUS,
     });
 
     return result;

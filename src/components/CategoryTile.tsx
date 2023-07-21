@@ -9,7 +9,6 @@ import {
 import { Category } from "../models/Category";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
-const tech = require("../../assets/images/categories/tech.jpg");
 
 type CategoryTileProps = TouchableOpacityProps & { category: Category };
 
