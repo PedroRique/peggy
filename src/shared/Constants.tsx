@@ -60,3 +60,4 @@ export const FIREBASE_ERROR_MESSAGES = {
 };
 
 export const REGISTRATION_BONUS = 100;
+export const ADD_PRODUCT_BONUS = 50;
