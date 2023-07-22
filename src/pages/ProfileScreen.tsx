@@ -135,8 +135,8 @@ export default function ProfileScreen() {
           <BoldText size={16} style={styles.peggiesText}>
             <Image source={coin} style={styles.coinIcon} />
             <Text size={36} weight="900">
-              {userData?.balance}
-            </Text>{" "}
+              {userData?.balance || 0}
+            </Text>
             Peggies
           </BoldText>
         </View>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     color: PColors.Grey,
     fontSize: 16,
     overflow: "hidden",
-    width: "240px",
+    width: 240,
   },
   peggiesContainer: {
     display: "flex",
