@@ -5,14 +5,13 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import * as Device from "expo-device";
 import { useFonts } from "expo-font";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import { User } from "firebase/auth";
 import * as React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Platform, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { View } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { ToastProvider } from "react-native-toast-notifications";
 import { Provider, useDispatch } from "react-redux";
@@ -32,6 +31,8 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
+import { registerForPushNotificationsAsync } from "./src/services/notifications.service";
+import { updateUserPushToken } from "./src/services/user.service";
 import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
@@ -64,42 +65,6 @@ async function sendPushNotification(expoPushToken: any) {
     },
     body: JSON.stringify(message),
   });
-}
-
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      Alert.alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync({
-      projectId: 'peggy-app'
-    })).data;
-    console.log(token);
-  } else {
-    Alert.alert("Must use physical device for Push Notifications");
-  }
-
-  return token;
 }
 
 const Tab = createBottomTabNavigator();
@@ -177,6 +142,10 @@ const Navigation = () => {
 
       if (userData) {
         dispatch(userSlice.actions.setUserData(userData));
+
+        registerForPushNotificationsAsync().then((token) =>
+          updateUserPushToken(token)
+        );
       }
 
       if (initializing) setInitializing(false);
@@ -227,34 +196,6 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     RedHatDisplay: require("./assets/fonts/RedHatDisplay.ttf"),
   });
-
-  const [expoPushToken, setExpoPushToken] = useState<any>("2");
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef<any>();
-  const responseListener = useRef<any>();
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification: any) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {

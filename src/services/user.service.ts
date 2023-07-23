@@ -69,6 +69,17 @@ export const updateUserPhotoURL = async (photoURL: string | null) => {
   }
 };
 
+export const updateUserPushToken = async (pushToken?: string) => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      await updateDoc(doc(FIREBASE_DB, "users", user.uid), { pushToken });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const addAddress = async (address: Address) => {
   try {
     const user = FIREBASE_AUTH.currentUser;
