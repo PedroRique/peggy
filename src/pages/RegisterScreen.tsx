@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import { StackTypes } from "../../App";
@@ -50,7 +55,6 @@ export default function RegisterScreen() {
           rate: 0,
         })
       );
-      navigation.navigate("Main");
     } else {
       console.log("Credenciais inválidas");
     }
@@ -97,7 +101,7 @@ export default function RegisterScreen() {
           </BoldText>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Login");
+              navigation.goBack();
             }}
           >
             <BoldText
