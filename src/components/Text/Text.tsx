@@ -1,3 +1,4 @@
+import React from "react";
 import { Text as ReactText, TextProps } from "react-native";
 
 export const Text = ({
