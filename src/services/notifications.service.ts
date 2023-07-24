@@ -1,40 +1,48 @@
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
-import { Alert, Platform } from "react-native";
+import { isDevice } from "expo-device";
+import { openSettings } from "expo-linking";
+import {
+  getExpoPushTokenAsync,
+  getPermissionsAsync,
+  requestPermissionsAsync,
+} from "expo-notifications";
+import { Alert } from "react-native";
 
-export async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
+export const generatePushNotificationsToken = async (): Promise<
+  string | undefined
+> => {
+  if (!isDevice) {
+    throw new Error(
+      "Sorry, Push Notifications are only supported on physical devices."
+    );
   }
 
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+  const { status: existingStatus } = await getPermissionsAsync();
 
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      Alert.alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId: "5fc36bf2-88dc-4b0b-8b77-6868a4f2e60a",
-      })
-    ).data;
-  } else {
-    Alert.alert("Must use physical device for Push Notifications");
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== "granted") {
+    const { status } = await requestPermissionsAsync();
+    finalStatus = status;
   }
 
-  return token;
-}
+  if (finalStatus !== "granted") {
+    Alert.alert(
+      "Error",
+      "Sorry, we need your permission to enable Push Notifications. Please enable it in your privacy settings.",
+      [
+        {
+          text: "OK",
+        },
+        {
+          text: "Open Settings",
+          onPress: async () => openSettings(),
+        },
+      ]
+    );
+    return undefined;
+  }
+
+  const { data } = await getExpoPushTokenAsync();
+
+  return data;
+};

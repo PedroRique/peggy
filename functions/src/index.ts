@@ -1,30 +1,40 @@
 import functions = require("firebase-functions");
 import admin = require("firebase-admin");
-import sgMail = require("@sendgrid/mail");
+import sendPushNotification from "./sendPushNotification";
+
 admin.initializeApp();
 
-// Configure SendGrid with your API key
-sgMail.setApiKey("YOUR_SENDGRID_API_KEY");
+exports.sendLoanRequestNotification = functions.firestore
+  .document("loans/{loanId}")
+  .onCreate(async (snapshot) => {
+    const loanData = snapshot.data();
 
-exports.sendNotificationEmail = functions.firestore
-  .document("users")
-  .onCreate(async (snapshot, context) => {
-    const userId = snapshot.data().userId;
+    const {lenderUserId} = loanData;
 
-    // Retrieve user's email from Firestore
-    const userSnapshot = await admin
+    const doc = await admin
       .firestore()
       .collection("users")
-      .doc(userId)
+      .doc(loanData.lenderUserId)
       .get();
-    const userEmail = userSnapshot.data()?.email;
 
-    const msg = {
-      to: userEmail,
-      from: "your_sender_email@example.com",
-      subject: "Notification Subject",
-      text: "Notification Body",
-    };
+    if (!doc.exists) {
+      console.log(`No profile found for ${lenderUserId}.`);
+      return;
+    }
 
-    await sgMail.send(msg);
+    console.log(`Found user profile for ${lenderUserId}...`);
+
+    const data = doc.data();
+
+    if (typeof data?.pushToken !== "string") {
+      console.log(`No push token found for ${lenderUserId}.`);
+      return;
+    }
+
+    console.log(`Sending push notification to ${lenderUserId}...`);
+
+    await sendPushNotification({
+      pushToken: data.pushToken,
+      message: "Nova solicitação de empréstimo!",
+    });
   });

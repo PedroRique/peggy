@@ -31,7 +31,7 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
-import { registerForPushNotificationsAsync } from "./src/services/notifications.service";
+import { generatePushNotificationsToken } from "./src/services/notifications.service";
 import { updateUserPushToken } from "./src/services/user.service";
 import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
@@ -143,7 +143,7 @@ const Navigation = () => {
       if (userData) {
         dispatch(userSlice.actions.setUserData(userData));
 
-        registerForPushNotificationsAsync().then((token) =>
+        generatePushNotificationsToken().then((token) =>
           updateUserPushToken(token)
         );
       }
