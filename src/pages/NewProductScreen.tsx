@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DropDown from "react-native-paper-dropdown";
