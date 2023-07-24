@@ -1,12 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useToast } from "react-native-toast-notifications";
 import { useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import { Avatar } from "../components/Avatar";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
+import { PriceTag } from "../components/PriceTag";
 import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Chip } from "../components/Text/Chip";
@@ -16,9 +18,9 @@ import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
-import { PriceTag } from "../components/PriceTag";
 
 export default function ProductScreen() {
+  const toast = useToast();
   const navigation = useNavigation<StackTypes>();
   const product = useSelector(
     (state: AppState) => state.product.selectedProduct
@@ -31,11 +33,14 @@ export default function ProductScreen() {
   const [categoryLabel, setCategoryLabel] = useState("");
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [rate, setRate] = useState<number>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getLenderUserData();
+    Promise.all([getLenderUserData(), getProductRate()]).finally(() =>
+      setIsLoading(false)
+    );
+
     getCategoryLabel();
-    getProductRate();
   }, []);
 
   const getProductRate = async () => {
@@ -69,7 +74,10 @@ export default function ProductScreen() {
         </View>
       </ImageBackground>
 
-      <ScrollView style={{backgroundColor: 'white'}} contentContainerStyle={styles.productBody}>
+      <ScrollView
+        style={{ backgroundColor: PColors.White }}
+        contentContainerStyle={styles.productBody}
+      >
         <Text style={styles.productTitle}>{product?.name}</Text>
 
         {!!product?.category && (
@@ -89,14 +97,23 @@ export default function ProductScreen() {
         </View>
       </ScrollView>
 
-      {currentUserData?.uid !== lenderUserData?.uid && (
+      {!isLoading && currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
-          <PriceTag price={product?.price}/>
+          <PriceTag
+            price={Number(product?.price)}
+            balance={currentUserData?.balance}
+          />
           <View style={{ flex: 1 }}>
             <Button
               title="Pegar emprestado"
+              disabled={
+                !!((currentUserData?.balance || 0) < Number(product?.price))
+              }
               onPress={() => {
                 navigation.navigate("NewLoanRequest");
+              }}
+              onTryPress={() => {
+                toast.show("Créditos insuficientes", { type: "danger" });
               }}
             />
           </View>

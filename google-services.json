@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "971958831382",
+    "project_id": "peggy-app",
+    "storage_bucket": "peggy-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971958831382:android:187edd58ca80d113c3e837",
+        "android_client_info": {
+          "package_name": "com.peggy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971958831382-6l15qhehtos3j9rousk3nisais993pkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuMeEB6UbIIpGlDlBJFLcPdTSmZAr_oqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971958831382-6l15qhehtos3j9rousk3nisais993pkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

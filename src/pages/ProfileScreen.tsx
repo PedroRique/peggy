@@ -133,13 +133,13 @@ export default function ProfileScreen() {
           <BoldText size={20} style={styles.peggiesText}>
             Você possui:
           </BoldText>
-          <BoldText size={16} style={styles.peggiesText}>
+          <View style={styles.row}>
             <Image source={coin} style={styles.coinIcon} />
             <Text size={36} weight="900">
-              {userData?.balance}
-            </Text>{" "}
-            Peggies
-          </BoldText>
+              {userData?.balance || 0}
+            </Text>
+            <BoldText size={16}>Peggies</BoldText>
+          </View>
         </View>
 
         <View style={styles.myContainer}>
@@ -148,24 +148,24 @@ export default function ProfileScreen() {
             route="NewProduct"
             onAdd={getProfileInfo}
           />
-          {products?.length ? (
-            <ProductHorizontalList products={products} hasTrash/>
-          ) : (
-            <Text>
-              <Text style={{ paddingLeft: 16 }}>
-                Você não possui nenhum item.
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("NewProduct", {
-                    onAdd: () => getProfileInfo(),
-                  });
-                }}
-              >
-                <Text color={PColors.Blue}> Adicione.</Text>
-              </TouchableOpacity>
-            </Text>
-          )}
+          <View style={[!products?.length && styles.products]}>
+            {products?.length ? (
+              <ProductHorizontalList products={products} hasTrash />
+            ) : (
+              <View style={styles.row}>
+                <Text>Você não possui nenhum item.</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("NewProduct", {
+                      onAdd: () => getProfileInfo(),
+                    });
+                  }}
+                >
+                  <Text color={PColors.Blue}> Adicione.</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
 
         <View style={styles.myContainer}>
@@ -180,7 +180,7 @@ export default function ProfileScreen() {
                 <AddressTile key={i} address={address} />
               ))
             ) : (
-              <Text>
+              <View style={styles.row}>
                 <Text>Você não possui nenhum endereço.</Text>
                 <TouchableOpacity
                   onPress={() => {
@@ -191,7 +191,7 @@ export default function ProfileScreen() {
                 >
                   <Text color={PColors.Blue}> Adicione.</Text>
                 </TouchableOpacity>
-              </Text>
+              </View>
             )}
           </View>
         </View>
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     color: PColors.Grey,
     fontSize: 16,
     overflow: "hidden",
-    width: "240px",
+    width: 240,
   },
   peggiesContainer: {
     display: "flex",
@@ -269,13 +269,19 @@ const styles = StyleSheet.create({
   },
   products: {
     display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
+    justifyContent: "center",
+    paddingHorizontal: 16,
     gap: 12,
   },
   addresses: {
     display: "flex",
     paddingHorizontal: 16,
     gap: 12,
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: 'center',
+    gap: 4,
   },
 });

@@ -1,6 +1,6 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,9 +13,11 @@ import { Text } from "../components/Text/Text";
 import { Product } from "../models/Product";
 import { fetchCategories } from "../services/category.service";
 import { fetchProducts } from "../services/product.service";
+import { fetchCurrentUserData } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
+import { userSlice } from "../store/slices/user.slice";
 
 const NearbyTitle = () => {
   const navigation = useNavigation<StackTypes>();
@@ -58,6 +60,12 @@ export default function HomeScreen() {
   const init = async () => {
     getCategories();
     getProducts();
+    getUserData();
+  };
+
+  const getUserData = async () => {
+    const result = await fetchCurrentUserData();
+    dispatch(userSlice.actions.setUserData(result || null));
   };
 
   const getCategories = async () => {

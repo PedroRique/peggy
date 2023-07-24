@@ -1,6 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
 import { useDispatch } from "react-redux";
@@ -60,63 +66,70 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.center}>
-        <Image source={Login} style={styles.logo} resizeMode="contain" />
-      </View>
-      <View style={styles.loginContainer}>
-        <View>
-          <TextInput
-            label="E-mail"
-            style={styles.input}
-            placeholder="Insira seu e-mail"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            label="Senha"
-            showEyeIcon={true}
-            style={styles.input}
-            placeholder="Insira sua senha"
-            value={password}
-            onChangeText={setPassword}
-          />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.center}>
+          <Image source={Login} style={styles.logo} resizeMode="contain" />
+        </View>
+        <View style={styles.loginContainer}>
+          <View>
+            <TextInput
+              label="E-mail"
+              style={styles.input}
+              placeholder="Insira seu e-mail"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              label="Senha"
+              showEyeIcon={true}
+              style={styles.input}
+              placeholder="Insira sua senha"
+              value={password}
+              onChangeText={setPassword}
+            />
 
-          <BoldText
-            style={[styles.forgotPassword, styles.forgotText]}
-            onPress={handleForgotPassword}
-          >
-            Esqueceu a senha?
-          </BoldText>
+            <BoldText
+              style={[styles.forgotPassword, styles.forgotText]}
+              onPress={handleForgotPassword}
+            >
+              Esqueceu a senha?
+            </BoldText>
+          </View>
         </View>
-      </View>
-      <View>
         <View>
-          <Button title="Login" onPress={() => loginUser()} />
-        </View>
-        <BoldText style={[styles.forgotText, styles.center]}>
-          Não possui uma conta?
-        </BoldText>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Register");
-          }}
-        >
-          <BoldText
-            style={[styles.underlineText, styles.center, styles.forgotText]}
-          >
-            Cadastre-se
+          <View>
+            <Button title="Login" onPress={() => loginUser()} />
+          </View>
+          <BoldText style={[styles.forgotText, styles.center]}>
+            Não possui uma conta?
           </BoldText>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Register");
+            }}
+          >
+            <BoldText
+              style={[styles.underlineText, styles.center, styles.forgotText]}
+            >
+              Cadastre-se
+            </BoldText>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: PColors.White,
-    height: "100%",
+    flex: 1
+  },
+  scrollContainer: {
+    display: 'flex',
+    padding: 16,
+    height: '100%',
+    minHeight: 600,
   },
   center: {
     alignItems: "center",

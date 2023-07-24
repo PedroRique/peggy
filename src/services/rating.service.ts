@@ -57,17 +57,21 @@ export const checkBorrowerRate = async (loanId?: string) => {
 
 export const getRate = async (ratingIds?: string[]) => {
   try {
-    const q = query(
-      collection(FIREBASE_DB, "ratings"),
-      where(documentId(), "in", ratingIds)
-    );
-    const ratings = await commonFetch<Rating>(q);
-
-    const rate = ratings
-      ? ratings.reduce((acc, r) => acc + (r.rate || 0), 0) / ratings.length
-      : 0;
-
-    return rate;
+    if(ratingIds && ratingIds.length) {
+      const q = query(
+        collection(FIREBASE_DB, "ratings"),
+        where(documentId(), "in", ratingIds)
+      );
+      const ratings = await commonFetch<Rating>(q);
+  
+      const rate = ratings
+        ? ratings.reduce((acc, r) => acc + (r.rate || 0), 0) / ratings.length
+        : 0;
+  
+      return rate;
+    } else {
+      return 0;
+    }
   } catch (error) {
     console.error(error);
   }
