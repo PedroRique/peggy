@@ -33,11 +33,14 @@ export default function ProductScreen() {
   const [categoryLabel, setCategoryLabel] = useState("");
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [rate, setRate] = useState<number>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getLenderUserData();
+    Promise.all([getLenderUserData(), getProductRate()]).finally(() =>
+      setIsLoading(false)
+    );
+
     getCategoryLabel();
-    getProductRate();
   }, []);
 
   const getProductRate = async () => {
@@ -94,7 +97,7 @@ export default function ProductScreen() {
         </View>
       </ScrollView>
 
-      {currentUserData?.uid !== lenderUserData?.uid && (
+      {!isLoading && currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
           <PriceTag
             price={Number(product?.price)}
