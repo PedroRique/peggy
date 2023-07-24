@@ -1,8 +1,9 @@
-import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View } from "react-native";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
-import { LoanWithInfo } from "../models/Loan";
+import { LoanWithInfo, LoanStatus } from "../models/Loan";
 import { PColors } from "../shared/Colors";
 import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";

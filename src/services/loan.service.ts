@@ -33,9 +33,15 @@ export const createLoan = async (loanRequest: LoanRequest) => {
   }
 };
 
-export const updateLoanStatus = async (loanId: string, status: LoanStatus) => {
+export const updateLoanStatus = async (loanId: string, status: LoanStatus, productId:string) => {
   try {
     await updateDoc(doc(FIREBASE_DB, "loans", loanId), { status });
+    if(status === LoanStatus.ACCEPTED){
+      updateDoc(doc(FIREBASE_DB, "products", productId), { locked:true } )
+    }
+    if(status === LoanStatus.RETURNED){
+      updateDoc(doc(FIREBASE_DB, "products", productId), { locked:false } )
+    }
   } catch (error) {
     console.error(error);
   }

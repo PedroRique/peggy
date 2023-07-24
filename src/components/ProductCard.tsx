@@ -13,9 +13,11 @@ import { Text } from "./Text/Text";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
 import ConfirmationModal from "./ConfirmationModal";
-
+import React from "react";
+import { LoanStatus } from "../models/Loan"; 
 interface ProductCardProps extends TouchableOpacityProps {
-  product: Product ;
+  product: Product;
+  loanStatus?: LoanStatus; 
   showDistance?: boolean;
   hasShadow?: boolean;
   hasName?: boolean;
@@ -27,6 +29,7 @@ export const ProductCard = ({
   style,
   product,
   onPress,
+  loanStatus, 
   size = 150,
   showDistance = false,
   hasShadow = true,
@@ -40,7 +43,7 @@ export const ProductCard = ({
   const handleDeleteConfirm = () => {
     setIsConfirmationVisible(false);
     setIsRemoved(true);
-    removeProduct(product.id)
+    removeProduct(product.userId)
       .then(() => {
         console.log("Produto excluído com sucesso!");
       })
@@ -57,13 +60,16 @@ export const ProductCard = ({
     setIsConfirmationVisible(true);
   };
 
+
   return (
     <>
-      {!isRemoved && (
-        <TouchableOpacity 
-        style={[styles.productContainer, style, { width: size }]} {...rest} 
-        disabled={!onPress}
-        onPress={onPress}>
+        {!isRemoved && (
+        <TouchableOpacity
+          style={[styles.productContainer, style, { width: size }]}
+          {...rest}
+          disabled={!onPress}
+          onPress={onPress}
+        >
           <ImageBackground
             style={[
               styles.product,
@@ -84,11 +90,16 @@ export const ProductCard = ({
             {hasName && (
               <BoldText style={{ marginTop: 16 }}>{product.name}</BoldText>
             )}
-            {hasTrash && (
+            {hasTrash && !product.locked &&(
               <TouchableOpacity onPress={remove}>
-                <Feather name="trash-2" color={PColors.Orange} size={24}  style={{ marginTop: 12 }}/>
+                <Feather
+                  name="trash-2"
+                  color={PColors.Orange}
+                  size={24}
+                  style={{ marginTop: 12 }}
+                />
               </TouchableOpacity>
-            )}
+            ) }
           </View>
         </TouchableOpacity>
       )}
@@ -104,6 +115,7 @@ export const ProductCard = ({
     </>
   );
 };
+
 
 const styles = StyleSheet.create({
   distanceContainer: {

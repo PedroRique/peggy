@@ -1,9 +1,9 @@
 import {
   addDoc,
   and,
-  arrayRemove, // Adicionada para remover um item de um array
+  arrayRemove,
   collection,
-  deleteDoc, doc, // Adicionada para excluir um documento
+  deleteDoc, doc, 
   endAt,
   orderBy,
   query,
@@ -72,6 +72,8 @@ export const addProduct = async (product: Omit<Product, "userId">) => {
     throw error;
   }
 };
+
+
 
 export const removeProduct = async (userId: string) => {
   try {

@@ -30,6 +30,7 @@ import {
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import { LoanStatus } from "../models/Loan";
 const coin = require("../../assets/images/coin.png");
 
 const SectionHeader = ({
