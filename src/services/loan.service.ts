@@ -4,6 +4,7 @@ import {
   doc,
   documentId,
   query,
+  runTransaction,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -17,9 +18,13 @@ import {
 } from "../models/Loan";
 import { Product } from "../models/Product";
 import { UserData } from "../models/UserData";
+import { addBalance } from "./balance.service";
 import { commonFetch } from "./utils.service";
 
-export const createLoan = async (loanRequest: LoanRequest) => {
+export const createLoan = async (
+  loanRequest: LoanRequest,
+  product?: Product
+) => {
   try {
     const loan: Loan = {
       ...loanRequest,
@@ -27,7 +32,18 @@ export const createLoan = async (loanRequest: LoanRequest) => {
       hasLenderRate: false,
       hasBorrowerRate: false,
     };
-    return await addDoc(collection(FIREBASE_DB, "loans"), loan);
+    const productCost = Number(product?.price);
+
+    await runTransaction(FIREBASE_DB, async () => {
+      try {
+        const loanDoc = await addDoc(collection(FIREBASE_DB, "loans"), loan);
+        if (!loanDoc.id) return null;
+
+        await addBalance(loan.borrowerUserId, -productCost);
+      } catch (error) {
+        return null;
+      }
+    });
   } catch (error) {
     console.error(error);
   }

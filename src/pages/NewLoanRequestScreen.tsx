@@ -124,7 +124,7 @@ export default function NewLoanRequestScreen() {
       startDate,
     };
 
-    createLoan(req)
+    createLoan(req, product)
       .then(() => {
         navigation.navigate("Loans", { initialTab: "borrow" });
         toast.show("Solicitação feita com sucesso!", { type: "success" });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { PColors } from "../shared/Colors";
@@ -6,6 +6,7 @@ import { Text } from "./Text/Text";
 
 export interface ButtonProps {
   onPress: () => void;
+  onTryPress?: () => void;
   title: string;
   disabled?: boolean;
   outlined?: boolean;
@@ -16,6 +17,7 @@ export interface ButtonProps {
 
 export default function Button({
   onPress,
+  onTryPress,
   title = "Save",
   loadingText = "Enviando",
   outlined,
@@ -31,14 +33,11 @@ export default function Button({
         outlined && styles.outlinedButton,
         disabled && styles.disabledButton,
       ]}
-      onPress={() => (disabled ? null : onPress())}
+      onPress={() =>
+        disabled ? (onTryPress ? onTryPress() : null) : onPress()
+      }
     >
-      <Text
-        style={[
-          styles.text,
-          outlined && styles.outlinedText,
-        ]}
-      >
+      <Text style={[styles.text, outlined && styles.outlinedText]}>
         {loading ? loadingText : title}
       </Text>
 
@@ -49,7 +48,7 @@ export default function Button({
 
 const styles = StyleSheet.create({
   defaultButton: {
-    height: 48
+    height: 48,
   },
   button: {
     display: "flex",
