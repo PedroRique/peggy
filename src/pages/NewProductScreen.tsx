@@ -1,13 +1,18 @@
 import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
 import { useSelector } from "react-redux";
-import { StackNavigation } from "../../App";
+import { StackNavigation, StackTypes } from "../../App";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
@@ -20,7 +25,7 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 
 export default function NewProductScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackTypes>();
   const route = useRoute<RouteProp<StackNavigation, "NewProduct">>();
   const toast = useToast();
   const [showDropDown, setShowDropDown] = useState(false);
@@ -29,9 +34,17 @@ export default function NewProductScreen() {
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
   const [price, setPrice] = useState<any>(null);
+  const [formValid, setFormValid] = useState(false);
+
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
+
+  useEffect(() => {
+    setFormValid(
+      !!name && !!description && !!imageUrl && !!category && !!price
+    );
+  }, [name, description, imageUrl, category, price]);
 
   const createProduct = async () => {
     addProduct({
@@ -112,7 +125,14 @@ export default function NewProductScreen() {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Button title="Cadastrar" onPress={() => createProduct()} />
+        <Button
+          title="Cadastrar"
+          onPress={() => createProduct()}
+          onTryPress={() => {
+            toast.show("Preencha todas as informações do produto.");
+          }}
+          disabled={!formValid}
+        />
       </View>
     </SafeAreaView>
   );

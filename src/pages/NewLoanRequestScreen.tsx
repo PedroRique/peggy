@@ -256,7 +256,7 @@ export default function NewLoanRequestScreen() {
     <SafeAreaView style={styles.container}>
       <Header title="Detalhes" hasBack hasBorder />
 
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {sentence}
 
         {product && (

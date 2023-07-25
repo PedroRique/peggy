@@ -152,6 +152,5 @@ const styles = StyleSheet.create({
   tabInner: {
     backgroundColor: PColors.White,
     padding: 16,
-    flex: 1,
   },
 });
