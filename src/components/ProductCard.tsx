@@ -43,7 +43,7 @@ export const ProductCard = ({
   const handleDeleteConfirm = () => {
     setIsConfirmationVisible(false);
     setIsRemoved(true);
-    removeProduct(product.userId)
+    removeProduct(product.uid)
       .then(() => {
         console.log("Produto excluído com sucesso!");
       })

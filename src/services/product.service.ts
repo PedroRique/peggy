@@ -75,11 +75,11 @@ export const addProduct = async (product: Omit<Product, "userId">) => {
 
 
 
-export const removeProduct = async (userId: string) => {
+export const removeProduct = async (productId: string | undefined) => {
   try {
     const user = FIREBASE_AUTH.currentUser;
-    if (user) {
-      const productRef = doc(FIREBASE_DB, "products", userId);
+    if (user && productId) {
+      const productRef = doc(FIREBASE_DB, "products", productId);
       await deleteDoc(productRef);
     } 
   } catch (error) {
