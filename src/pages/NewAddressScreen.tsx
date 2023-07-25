@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
+import { StackNavigation } from "../../App";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
 import { PColors } from "../shared/Colors";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { StackNavigation } from "../../App";
 
 export default function NewAddressScreen() {
   const toast = useToast();
@@ -17,6 +17,11 @@ export default function NewAddressScreen() {
   const [number, setNumber] = useState("");
   const [complement, setComplement] = useState("");
   const [street, setStreet] = useState("");
+  const [formValid, setFormValid] = useState(false);
+
+  useEffect(() => {
+    setFormValid(!!street && !!number);
+  }, [street, number]);
 
   const createAddress = async () => {
     addAddress({
@@ -26,15 +31,15 @@ export default function NewAddressScreen() {
       city: "Rio de Janeiro",
       latitude: null,
       longitude: null,
-    }).then(() => {
-      toast.show("Item adicionado com sucesso!", { type: "success" });
-      navigation.goBack();
-      route.params.onAdd();
-    }).catch((e) => {
-      
-      toast.show("Falha ao criar o endereço.");
-
     })
+      .then(() => {
+        toast.show("Item adicionado com sucesso!", { type: "success" });
+        navigation.goBack();
+        route.params.onAdd();
+      })
+      .catch((e) => {
+        toast.show("Falha ao criar o endereço.");
+      });
   };
 
   return (
@@ -67,7 +72,14 @@ export default function NewAddressScreen() {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Button title="Cadastrar" onPress={() => createAddress()} />
+        <Button
+          title="Cadastrar"
+          onPress={() => createAddress()}
+          onTryPress={() => {
+            toast.show("Preencha todos os campos");
+          }}
+          disabled={!formValid}
+        />
       </View>
     </SafeAreaView>
   );

@@ -190,7 +190,7 @@ export default function App() {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <PaperProvider>
-              <ToastProvider duration={2000}>
+              <ToastProvider duration={2000} offsetBottom={75}>
                 <Navigation></Navigation>
               </ToastProvider>
             </PaperProvider>

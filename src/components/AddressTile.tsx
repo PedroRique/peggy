@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -10,20 +10,29 @@ import {
 import { Address } from "../models/Address";
 import { removeAddress } from "../services/user.service";
 import { PColors } from "../shared/Colors";
+import ConfirmationModal from "./ConfirmationModal";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
-import ConfirmationModal from "./ConfirmationModal";
 
-type AddressTileProps = TouchableOpacityProps & { address: Address };
+type AddressTileProps = TouchableOpacityProps & {
+  address: Address;
+  hasTrash?: boolean;
+  onDelete?: () => void;
+};
 
-export default function AddressTile({ address, ...rest }: AddressTileProps) {
-  const [isRemoved, setIsRemoved] = useState(false);
+export default function AddressTile({
+  address,
+  hasTrash = true,
+  onDelete = () => {},
+  ...rest
+}: AddressTileProps) {
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
 
   const handleDeleteConfirm = () => {
     setIsConfirmationVisible(false);
-    setIsRemoved(true);
-    removeAddress(address);
+    removeAddress(address).then(() => {
+      onDelete();
+    });
   };
 
   const handleDeleteCancel = () => {
@@ -31,29 +40,29 @@ export default function AddressTile({ address, ...rest }: AddressTileProps) {
   };
 
   const remove = () => {
-    setIsConfirmationVisible(true); 
+    setIsConfirmationVisible(true);
   };
 
   return (
     <>
-      {!isRemoved && (
-        <TouchableOpacity style={styles.addressContainer} {...rest}>
-          <Feather name="map-pin" color={PColors.Blue} size={32}></Feather>
-          <View style={styles.addressText}>
-            <BoldText size={18}>
-              {address.street} {address.number}
-            </BoldText>
-            <Text size={14}>
-              {address.complement && `${address.complement} - `}
-              {address.city}
-            </Text>
-          </View>
+      <TouchableOpacity style={styles.addressContainer} {...rest}>
+        <Feather name="map-pin" color={PColors.Blue} size={32}></Feather>
+        <View style={styles.addressText}>
+          <BoldText size={18}>
+            {address.street} {address.number}
+          </BoldText>
+          <Text size={14}>
+            {address.complement && `${address.complement} - `}
+            {address.city}
+          </Text>
+        </View>
 
+        {hasTrash && (
           <Pressable onPress={remove}>
             <Feather name="trash-2" color={PColors.Orange} size={24}></Feather>
           </Pressable>
-        </TouchableOpacity>
-      )}
+        )}
+      </TouchableOpacity>
       <ConfirmationModal
         visible={isConfirmationVisible}
         question="Tem certeza que deseja excluir esse endereço?"

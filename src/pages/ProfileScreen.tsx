@@ -97,6 +97,10 @@ export default function ProfileScreen() {
     );
   };
 
+  const hasAddress = !!userData?.addresses?.length;
+  const hasMoreThanOneAddress =
+    hasAddress && (userData?.addresses?.length || 0) > 1;
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title={userData?.name} hasBorder hasMore />
@@ -141,31 +145,33 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <View style={styles.myContainer}>
-          <SectionHeader
-            title="Seus produtos"
-            route="NewProduct"
-            onAdd={getProfileInfo}
-          />
-          <View style={[!products?.length && styles.products]}>
-            {products?.length ? (
-              <ProductHorizontalList products={products} hasTrash />
-            ) : (
-              <View style={styles.row}>
-                <Text>Você não possui nenhum item.</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("NewProduct", {
-                      onAdd: () => getProfileInfo(),
-                    });
-                  }}
-                >
-                  <Text color={PColors.Blue}> Adicione.</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+        {hasAddress && (
+          <View style={styles.myContainer}>
+            <SectionHeader
+              title="Seus produtos"
+              route="NewProduct"
+              onAdd={getProfileInfo}
+            />
+            <View style={[!products?.length && styles.products]}>
+              {products?.length ? (
+                <ProductHorizontalList products={products} hasTrash />
+              ) : (
+                <View style={styles.row}>
+                  <Text>Você não possui nenhum item.</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("NewProduct", {
+                        onAdd: () => getProfileInfo(),
+                      });
+                    }}
+                  >
+                    <Text color={PColors.Blue}> Adicione.</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
+        )}
 
         <View style={styles.myContainer}>
           <SectionHeader
@@ -176,7 +182,12 @@ export default function ProfileScreen() {
           <View style={styles.addresses}>
             {userData?.addresses?.length ? (
               userData.addresses.map((address, i) => (
-                <AddressTile key={i} address={address} />
+                <AddressTile
+                  key={i}
+                  address={address}
+                  hasTrash={hasMoreThanOneAddress}
+                  onDelete={() => getProfileInfo()}
+                />
               ))
             ) : (
               <View>
@@ -194,10 +205,11 @@ export default function ProfileScreen() {
                 </View>
 
                 <View style={styles.noAddressWarn}>
-                  <BoldText size={20}>Atenção</BoldText>
                   <Text>
-                    Enquanto não houver um endereço cadastrado seus itens não será
-                    exibido para empréstimo.
+                    Para que você possa adicionar items, primeiro adicione um
+                    endereço. Seus endereços serão seus{" "}
+                    <BoldText>pontos de encontro</BoldText> com quem desejar
+                    pegar emprestado algum item seu.
                   </Text>
                 </View>
               </View>
