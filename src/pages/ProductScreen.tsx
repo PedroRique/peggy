@@ -18,8 +18,6 @@ import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
-import { PriceTag } from "../components/PriceTag";
-import React from "react";
 
 export default function ProductScreen() {
   const toast = useToast();

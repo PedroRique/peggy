@@ -30,7 +30,6 @@ import {
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
-import { LoanStatus } from "../models/Loan";
 const coin = require("../../assets/images/coin.png");
 
 const SectionHeader = ({
@@ -180,17 +179,27 @@ export default function ProfileScreen() {
                 <AddressTile key={i} address={address} />
               ))
             ) : (
-              <View style={styles.row}>
-                <Text>Você não possui nenhum endereço.</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("NewAddress", {
-                      onAdd: () => getProfileInfo(),
-                    });
-                  }}
-                >
-                  <Text color={PColors.Blue}> Adicione.</Text>
-                </TouchableOpacity>
+              <View>
+                <View style={styles.row}>
+                  <Text>Você não possui nenhum endereço.</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("NewAddress", {
+                        onAdd: () => getProfileInfo(),
+                      });
+                    }}
+                  >
+                    <Text color={PColors.Blue}> Adicione.</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.noAddressWarn}>
+                  <BoldText size={20}>Atenção</BoldText>
+                  <Text>
+                    Enquanto não houver um endereço cadastrado seus itens não será
+                    exibido para empréstimo.
+                  </Text>
+                </View>
               </View>
             )}
           </View>
@@ -281,7 +290,14 @@ const styles = StyleSheet.create({
   row: {
     display: "flex",
     flexDirection: "row",
-    alignItems: 'center',
+    alignItems: "center",
     gap: 4,
+  },
+  noAddressWarn: {
+    backgroundColor: PColors.LightBlue,
+    borderRadius: 7,
+    padding: 16,
+    marginTop: 16,
+    gap: 6,
   },
 });
