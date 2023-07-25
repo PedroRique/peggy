@@ -6,6 +6,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
+import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import { User } from "firebase/auth";
 import * as React from "react";
@@ -30,10 +31,20 @@ import ProductScreen from "./src/pages/ProductScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
+import { generatePushNotificationsToken } from "./src/services/notifications.service";
+import { updateUserPushToken } from "./src/services/user.service";
 import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -110,6 +121,10 @@ const Navigation = () => {
 
       if (userData) {
         dispatch(userSlice.actions.setUserData(userData));
+
+        generatePushNotificationsToken().then((token) =>
+          updateUserPushToken(token)
+        );
       }
 
       if (initializing) setInitializing(false);

@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import { StackTypes } from "../../App";
@@ -50,7 +55,6 @@ export default function RegisterScreen() {
           rate: 0,
         })
       );
-      navigation.navigate("Main");
     } else {
       console.log("Credenciais inválidas");
     }
@@ -58,63 +62,70 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.center}>
-        <Image source={Login} style={styles.logo} resizeMode="contain" />
-      </View>
-      <View style={styles.loginContainer}>
-        <View>
-          <TextInput
-            label="Nome"
-            style={styles.input}
-            placeholder="Insira seu nome"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            label="E-mail"
-            style={styles.input}
-            placeholder="Insira seu e-mail"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            label="Senha"
-            style={styles.input}
-            placeholder="Insira sua senha"
-            showEyeIcon={true}
-            value={password}
-            onChangeText={setPassword}
-          />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.center}>
+          <Image source={Login} style={styles.logo} resizeMode="contain" />
         </View>
-      </View>
-      <View>
-        <View>
-          <Button title="Cadastrar" onPress={registerUser} />
+        <View style={styles.loginContainer}>
+          <View>
+            <TextInput
+              label="Nome"
+              style={styles.input}
+              placeholder="Insira seu nome"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              label="E-mail"
+              style={styles.input}
+              placeholder="Insira seu e-mail"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              label="Senha"
+              style={styles.input}
+              placeholder="Insira sua senha"
+              showEyeIcon={true}
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
         </View>
-        <BoldText style={[styles.forgotText, styles.center]}>
-          Já possui uma conta?
-        </BoldText>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Login");
-          }}
-        >
-          <BoldText
-            style={[styles.underlineText, styles.center, styles.forgotText]}
-          >
-            Fazer login
+        <View>
+          <View>
+            <Button title="Cadastrar" onPress={registerUser} />
+          </View>
+          <BoldText style={[styles.forgotText, styles.center]}>
+            Já possui uma conta?
           </BoldText>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <BoldText
+              style={[styles.underlineText, styles.center, styles.forgotText]}
+            >
+              Fazer login
+            </BoldText>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: PColors.White,
+    flex: 1,
+  },
+  scrollContainer: {
+    display: "flex",
+    padding: 16,
     height: "100%",
+    minHeight: 600,
   },
   center: {
     alignItems: "center",
