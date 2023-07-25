@@ -33,7 +33,7 @@ export default function NewAddressScreen() {
       longitude: null,
     })
       .then(() => {
-        toast.show("Item adicionado com sucesso!", { type: "success" });
+        toast.show("Endereço adicionado com sucesso!", { type: "success" });
         navigation.goBack();
         route.params.onAdd();
       })

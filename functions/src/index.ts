@@ -12,31 +12,23 @@ exports.sendLoanRequestNotification = functions.firestore
 
     const {lenderUserId} = loanData;
 
-    const doc = await admin
-      .firestore()
-      .collection("users")
-      .doc(loanData.lenderUserId)
-      .get();
+    await sendPushNotification({
+      userId: lenderUserId,
+      message: "Nova solicitação de empréstimo!",
+    });
+  });
 
-    if (!doc.exists) {
-      console.log(`No profile found for ${lenderUserId}.`);
-      return;
-    }
+exports.sendAddProductNotification = functions.firestore
+  .document("products/{productId}")
+  .onCreate(async (snapshot) => {
+    const productData = snapshot.data();
 
-    console.log(`Found user profile for ${lenderUserId}...`);
-
-    const data = doc.data();
-
-    if (typeof data?.pushToken !== "string") {
-      console.log(`No push token found for ${lenderUserId}.`);
-      return;
-    }
-
-    console.log(`Sending push notification to ${lenderUserId}...`);
+    const {userId} = productData;
 
     await sendPushNotification({
-      pushToken: data.pushToken,
-      message: "Nova solicitação de empréstimo!",
+      userId,
+      message:
+        "Obrigado por adicionar mais um produto. Mais 50 peggies para você! 💰",
     });
   });
 
