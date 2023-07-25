@@ -51,6 +51,8 @@ export const createUser = async ({
       balance: REGISTRATION_BONUS,
     });
 
+    await signInUser({ email, password });
+
     return result;
   } catch (error) {
     console.error(error);
