@@ -1,7 +1,9 @@
 import {
   addDoc,
   and,
+  arrayRemove,
   collection,
+  deleteDoc, doc, 
   endAt,
   orderBy,
   query,
@@ -68,5 +70,19 @@ export const addProduct = async (product: Omit<Product, "userId">) => {
     return docRef.id;
   } catch (error) {
     throw error;
+  }
+};
+
+
+
+export const removeProduct = async (productId: string | undefined) => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user && productId) {
+      const productRef = doc(FIREBASE_DB, "products", productId);
+      await deleteDoc(productRef);
+    } 
+  } catch (error) {
+    console.error(error);
   }
 };

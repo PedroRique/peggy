@@ -30,6 +30,7 @@ import {
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import { LoanStatus } from "../models/Loan";
 const coin = require("../../assets/images/coin.png");
 
 const SectionHeader = ({
@@ -149,7 +150,7 @@ export default function ProfileScreen() {
           />
           <View style={[!products?.length && styles.products]}>
             {products?.length ? (
-              <ProductHorizontalList products={products} />
+              <ProductHorizontalList products={products} hasTrash />
             ) : (
               <View style={styles.row}>
                 <Text>Você não possui nenhum item.</Text>

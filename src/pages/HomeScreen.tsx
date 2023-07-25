@@ -143,5 +143,6 @@ const styles = StyleSheet.create({
     display: "flex",
     gap: 16,
     paddingHorizontal: 16,
+    
   },
 });

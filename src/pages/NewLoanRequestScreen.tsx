@@ -101,7 +101,7 @@ export default function NewLoanRequestScreen() {
   };
 
   const onUpdateStatus = async (status: LoanStatus) => {
-    return await updateLoanStatus(loan?.uid || "", status);
+    return await updateLoanStatus(loan?.uid || "", status, product?.uid!);
   };
 
   const onPickUp = () => {

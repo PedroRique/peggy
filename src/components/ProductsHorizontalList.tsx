@@ -6,16 +6,21 @@ import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
 import { useNavigation } from "@react-navigation/native";
 import { StackTypes } from "../../App";
+import React from "react";
+
 
 export const ProductHorizontalList = ({
   products,
   showDistance = false,
+  hasTrash = false,
 }: {
   products?: Product[];
   showDistance?: boolean;
+  hasTrash?: boolean;
 }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>();
+
   return (
     <ScrollView contentContainerStyle={styles.nearbyProducts} horizontal>
       {products &&
@@ -29,6 +34,7 @@ export const ProductHorizontalList = ({
               navigation.navigate("Product");
             }}
             showDistance={showDistance}
+            hasTrash={hasTrash && !product.locked}
             style={{
               marginRight: 12,
             }}

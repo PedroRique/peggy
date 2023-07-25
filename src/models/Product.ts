@@ -7,4 +7,5 @@ export interface Product {
   userId: string;
   price: number;
   ratings?: string[];
+  locked?: boolean;
 }
