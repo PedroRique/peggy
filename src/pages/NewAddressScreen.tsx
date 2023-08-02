@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
 import { StackNavigation } from "../../App";
@@ -9,6 +9,7 @@ import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
 import { PColors } from "../shared/Colors";
+import { CheckBox } from "react-native";
 
 export default function NewAddressScreen() {
   const toast = useToast();
@@ -16,36 +17,50 @@ export default function NewAddressScreen() {
   const route = useRoute<RouteProp<StackNavigation, "NewAddress">>();
   const [number, setNumber] = useState("");
   const [complement, setComplement] = useState("");
+  const [referencePoint, setreferencePoint] = useState ("");
+  const [addReferencePoint, setAddReferencePoint] = useState(false);
   const [street, setStreet] = useState("");
   const [formValid, setFormValid] = useState(false);
 
   useEffect(() => {
-    setFormValid(!!street && !!number);
-  }, [street, number]);
+    setFormValid(!!street && !!number && (!addReferencePoint || !!referencePoint));
+  }, [street, number, addReferencePoint, referencePoint]);
 
+  const handleReferencePointToggle = () => {
+    setAddReferencePoint(!addReferencePoint);
+  };
+    
   const createAddress = async () => {
-    addAddress({
+    const addressData = {
       street,
       complement,
       number,
+      referencePoint,
       city: "Rio de Janeiro",
       latitude: null,
       longitude: null,
-    })
+    };
+  
+    if (addReferencePoint) {
+      addressData.referencePoint = referencePoint;
+    }
+  
+    addAddress(addressData)
       .then(() => {
         toast.show("Endereço adicionado com sucesso!", { type: "success" });
         navigation.goBack();
         route.params.onAdd();
       })
-      .catch((e) => {
+      .catch(() => {
         toast.show("Falha ao criar o endereço.");
       });
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Novo endereço" hasBack hasBorder />
-
+  
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.newProductForm}>
           <TextInput
@@ -53,22 +68,39 @@ export default function NewAddressScreen() {
             placeholder="Digite o endereço"
             value={street}
             onChangeText={setStreet}
-          ></TextInput>
-
+          />
+  
           <View style={styles.row}>
             <TextInput
               label="Número"
               placeholder="Digite o número"
               value={number}
               onChangeText={setNumber}
-            ></TextInput>
+            />
             <TextInput
               label="Complemento"
               placeholder="Digite o complemento"
               value={complement}
               onChangeText={setComplement}
-            ></TextInput>
+            />
           </View>
+  
+          <View style={styles.checkboxContainer}>
+            <Text>Deseja adicionar ponto de referência?</Text>
+            <CheckBox
+              value={addReferencePoint}
+              onValueChange={handleReferencePointToggle}
+            />
+          </View>
+  
+          {addReferencePoint && (
+            <TextInput
+              label="Ponto de referência"
+              placeholder="Digite um ponto de referência"
+              value={referencePoint}
+              onChangeText={setreferencePoint}
+            />
+          )}
         </View>
       </ScrollView>
       <View style={styles.footer}>
@@ -96,6 +128,12 @@ const styles = StyleSheet.create({
   },
   newProductForm: {
     flex: 1,
+  },
+  checkboxContainer:{
+    flexDirection:"row",
+    alignItems:"center",
+    gap:8,
+    marginBottom: 24,
   },
   addImageBtn: {
     width: 150,

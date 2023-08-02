@@ -10,8 +10,23 @@ export const commonFetch = async <T>(q: Query) => {
 };
 
 export const formatAddressLabel = (address: Address): string => {
-  return `${address.street} ${address.number}, ${address.complement} - ${address.city}`;
+  let addressLabel = `${address.street} ${address.number}`;
+
+  if (address.complement) {
+    addressLabel += `, ${address.complement}`;
+  }
+
+  if (address.referencePoint) {
+    addressLabel += ` - ${address.referencePoint}`;
+  }
+
+  if (address.city) {
+    addressLabel += ` - ${address.city}`;
+  }
+
+  return addressLabel;
 };
+
 
 export const convertUserToUserData = (user: User | null): UserData | null => {
   if (!user) return null;

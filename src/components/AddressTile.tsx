@@ -49,11 +49,13 @@ export default function AddressTile({
         <Feather name="map-pin" color={PColors.Blue} size={32}></Feather>
         <View style={styles.addressText}>
           <BoldText size={18}>
-            {address.street} {address.number}
+            {address.street } {address.number}
           </BoldText>
           <Text size={14}>
-            {address.complement && `${address.complement} - `}
-            {address.city}
+          {address.complement && `${address.complement} - `}
+          {address.referencePoint && address.city
+          ? `${address.referencePoint}, ${address.city}`
+          : address.referencePoint || address.city || ''}
           </Text>
         </View>
 
