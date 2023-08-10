@@ -14,6 +14,7 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
+import React from "react";
 
 export default function CategoryScreen() {
   const dispatch = useDispatch();
