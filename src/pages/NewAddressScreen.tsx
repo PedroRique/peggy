@@ -12,6 +12,7 @@ import { PColors } from "../shared/Colors";
 import { CheckBox } from "react-native";
 import axios from "axios";
 import { Address } from "../models/Address";
+import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 
 export default function NewAddressScreen() {
   const toast = useToast();
@@ -48,21 +49,16 @@ export default function NewAddressScreen() {
         addressData.referencePoint = referencePoint;
       }
 
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-          addressData.number + ' ' + addressData.street + ', ' + addressData.city
-        )}&key=AIzaSyBadXr4D0wLV8t40rEmzAj5PLKsB-Oqago`
+      const coordinates = await fetchCoordinatesFromAddress(
+        addressData.number + " " + addressData.street + ", " + addressData.city
       );
-
-      if (response.data.results.length > 0) {
-        const latitude = response.data.results[0].geometry.location.lat;
-        const longitude = response.data.results[0].geometry.location.lng;
-
-        const updatedAddress = { ...addressData, latitude, longitude };
-
+  
+      if (coordinates) {
+        const updatedAddress = { ...addressData, ...coordinates };
+  
         await addAddress(updatedAddress);
       } else {
-        console.log('Endereço não encontrado.');
+        console.log("Endereço não encontrado.");
       }
 
       toast.show("Endereço adicionado com sucesso!", { type: "success" });
@@ -73,6 +69,7 @@ export default function NewAddressScreen() {
       toast.show("Falha ao criar o endereço.");
     }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
