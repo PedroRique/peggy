@@ -12,8 +12,8 @@ import { productSlice } from "../store/slices/product.slice";
 import React, { useEffect, useState } from "react";
 import DropDown from "react-native-paper-dropdown";
 import { formatAddressLabel } from "../services/utils.service";
-import { fetchProducts } from "../services/product.service"; // Import your fetch function here
-import { Product } from "../models/Product"; // Make sure this import is correct
+import { fetchProducts } from "../services/product.service"; 
+import { Product } from "../models/Product"; 
 import { PColors } from "../shared/Colors";
 
 export const NearbyScreen = () => {

@@ -5,6 +5,8 @@ export interface Product {
   category: string;
   imageUrl: string;
   userId: string;
+  selectedAddress:string;
+  coordinates: number | null; 
   price: number;
   ratings?: string[];
   locked?: boolean;

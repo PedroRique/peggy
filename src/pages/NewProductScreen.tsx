@@ -23,6 +23,11 @@ import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
+import { formatAddressLabel } from "../services/utils.service";
+import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
+
+
+
 
 export default function NewProductScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -47,12 +52,16 @@ export default function NewProductScreen() {
   }, [name, description, imageUrl, category, price]);
 
   const createProduct = async () => {
+    const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
+
     addProduct({
       name,
       description,
       imageUrl,
       category,
+      selectedAddress,
       price,
+      coordinates,
     })
       .then(() => {
         toast.show("Endereço adicionado com sucesso!", { type: "success" });
@@ -68,6 +77,11 @@ export default function NewProductScreen() {
     const result = await pickImage(ImageFolder.PRODUCTS);
     setImageUrl(result);
   };
+
+  const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState("");
+
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -115,13 +129,35 @@ export default function NewProductScreen() {
               }))}
             />
           </View>
-
+          <View style={{ marginBottom: 32 }}>
+            <BoldText>Endereço do produto</BoldText>
+            <DropDown
+              label={"Selecione um endereço"}
+              mode={"outlined"}
+              visible={showMyAddressesDropDown}
+              showDropDown={() => setShowMyAddressesDropDown(true)}
+              onDismiss={() => setShowMyAddressesDropDown(false)}
+              value={selectedAddress}
+              setValue={(addressLabel) => {
+                setSelectedAddress(addressLabel);
+              }}
+              list={
+                currentUserData && currentUserData.addresses
+                  ? currentUserData.addresses.map((address) => ({
+                      label: formatAddressLabel(address),
+                      value: formatAddressLabel(address),
+                    }))
+                  : []
+              }
+            />
+          </View>
           <TextInput
             label="Preço diário"
             placeholder="Preço diário"
             value={price}
             onChangeText={setPrice}
           ></TextInput>
+
         </View>
       </ScrollView>
       <View style={styles.footer}>
