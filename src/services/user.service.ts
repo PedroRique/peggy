@@ -87,13 +87,12 @@ export const addAddress = async (address: Address) => {
     const user = FIREBASE_AUTH.currentUser;
     if (user) {
       const ref = doc(FIREBASE_DB, "users", user.uid);
-      updateDoc(ref, { addresses: arrayUnion(address) });
+      await updateDoc(ref, { addresses: arrayUnion(address) });
     }
   } catch (error) {
     console.error(error);
   }
 };
-
 export const removeAddress = async (address: Address) => {
   try {
     const user = FIREBASE_AUTH.currentUser;
