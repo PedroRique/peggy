@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import MaskInput, { MaskInputProps } from "react-native-mask-input";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
-import { Text } from "./Text/Text";
+import { Text } from "./Text/Text"
 
 export const TextInput = ({
   style,
