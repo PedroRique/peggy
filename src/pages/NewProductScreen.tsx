@@ -102,15 +102,15 @@ export default function NewProductScreen() {
 
           <View>
             <DropdownButton
-            label="Categoria do produto"
-            placeholder="Categoria do produto"
-            options={categories.map((categ: Category) => ({
-            label: categ.name,
-            onPress: () => {
-            setCategory(categ.id);
-          }
-            }))}
-/>
+              label="Categoria do produto"
+              placeholder="Categoria do produto"
+              searchable={true}
+              options={categories.map((categ: Category) => ({
+                label: categ.name,
+                onPress: () => {
+                  setCategory(categ.id);
+                }
+              }))} />
           </View>
 
           <TextInput

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { PColors } from '../shared/Colors';
-import { TextInput } from './Input';
+import { Feather } from '@expo/vector-icons';
+import CustomTextInput from './CustomTextInput';
+import Button from './Button';
 
 interface Option {
   label: string;
@@ -14,13 +16,26 @@ interface BottomSheetContentProps {
   onSelect: (option: Option) => void;
   selectedOptions: Option[];
   searchable?: boolean;
+  title: string;
+  onApply: string[];
 }
 
-const BottomSheetContent: React.FC<BottomSheetContentProps> = ({ onClose, options, onSelect, selectedOptions, searchable = false }) => {
+const BottomSheetContent: React.FC<BottomSheetContentProps> = ({ onClose, options, onSelect, selectedOptions, searchable = false, title, onApply }) => {
   const [searchText, setSearchText] = useState('');
 
   const handleOptionPress = (selectedOption: Option) => {
     onSelect(selectedOption);
+  };
+
+  const handleApplyButtonPress = () => {
+    onClose();
+  };
+
+  const handleCustomTextInputApply = () => {
+    if (searchText !== '') {
+      const newOption: Option = { label: searchText, onPress: () => {} };
+      onSelect(newOption);
+    }
   };
 
   const filteredOptions = searchable
@@ -29,13 +44,19 @@ const BottomSheetContent: React.FC<BottomSheetContentProps> = ({ onClose, option
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>{title}</Text>
+        <TouchableOpacity onPress={onClose}>
+          <Feather name="x" size={30} color={PColors.Black} />
+        </TouchableOpacity>
+      </View>
       {searchable && (
         <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Pesquisar..."
+          <CustomTextInput
+            placeholder="Buscar"
             value={searchText}
             onChangeText={setSearchText}
-            style={styles.searchInput}
+            onApply={handleCustomTextInputApply} 
           />
         </View>
       )}
@@ -51,23 +72,46 @@ const BottomSheetContent: React.FC<BottomSheetContentProps> = ({ onClose, option
           >
             <View style={styles.optionLine} />
             <Text style={styles.optionText}>{option.label}</Text>
+            {selectedOptions.some(selectedOption => selectedOption.label === option.label) && (
+              <Feather name="check" size={24} color={PColors.Orange} style={styles.checkIcon} />
+            )}
           </TouchableOpacity>
         ))}
       </ScrollView>
+      {selectedOptions && (
+        <View style={styles.footer}>
+          <footer>
+          <Button onPress={handleApplyButtonPress} title='Aplicar' />
+          </footer>
+      </View>
+      )}
     </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     position: 'absolute',
     bottom: '-20.7px',
     left: '-20.7px',
     right: '-20.7px',
-    maxHeight: '300px',
+    maxHeight: '600px',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal:16,
+    paddingVertical:26,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: PColors.Black,
   },
   scrollContent: {
     paddingHorizontal: 0,
@@ -75,31 +119,51 @@ const styles = StyleSheet.create({
   },
   optionButton: {
     flexDirection: 'row', 
-    alignItems: 'center',
-    textAlign:'center',
     paddingVertical: 20,
     paddingHorizontal: 20,
     marginBottom: 0,
+    
   },
   selectedOptionButton: {
-    backgroundColor: PColors.LightGrey,
     alignItems: 'center',
   },
   optionLine: {
     height: 0.2, 
     width: '80%', 
-    backgroundColor: 'gray', 
+    backgroundColor: PColors.LightGrey,
     position: 'absolute',
-    top: '0%', 
+    top: '100%', 
   },
   optionText: {
-    fontSize: 16,
-    alignItems: 'center',
+    fontSize: 24,
+    color: PColors.Black,
+    fontWeight: '500',
+    flex: 1,
+  },
+  checkIcon: {
+    marginLeft: 10,
   },
   searchContainer: {
     marginBottom: 10,
+    width: '100%',
+    alignItems:'center',
+    
   },
   searchInput: {
+    width: '90%'
+  },
+  applyButton: {
+    backgroundColor: PColors.Orange,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  applyButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  footer: {
+    padding: 16,
   },
 });
 

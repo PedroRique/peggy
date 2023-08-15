@@ -1,10 +1,18 @@
-import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import { StyleSheet, TouchableOpacity, View, ViewStyle} from "react-native";
 import MaskInput, { MaskInputProps } from "react-native-mask-input";
+import { Feather } from "@expo/vector-icons";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
-import { Text } from "./Text/Text"
+import { Text } from "./Text/Text";
+
+interface TextInputProps extends MaskInputProps {
+  label?: string;
+  showEyeIcon?: boolean;
+  showSearchIcon?: boolean;
+  containerStyle?: ViewStyle;
+  fly?: boolean; // Nova propriedade para ativar o estilo "fly"
+}
 
 export const TextInput = ({
   style,
@@ -13,14 +21,10 @@ export const TextInput = ({
   multiline,
   label,
   showEyeIcon = false,
+  showSearchIcon = false,
+  fly = false, // Defina um valor padrão para a propriedade "fly"
   ...rest
-}: React.PropsWithChildren<
-  MaskInputProps & {
-    label?: string;
-    showEyeIcon?: boolean;
-    containerStyle?: ViewStyle;
-  }
->) => {
+}: React.PropsWithChildren<TextInputProps>) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const toggleSecureTextEntry = () => {
@@ -28,7 +32,7 @@ export const TextInput = ({
   };
 
   return (
-    <View style={containerStyle}>
+    <View style={[containerStyle, fly && styles.flyContainer]}> {/* Use o estilo "fly" se a propriedade "fly" for verdadeira */}
       {label && <BoldText style={styles.label}>{label}</BoldText>}
       <View>
         <MaskInput
@@ -36,7 +40,12 @@ export const TextInput = ({
           multiline={multiline}
           placeholderTextColor={PColors.Grey}
           secureTextEntry={showEyeIcon ? secureTextEntry : false}
-          style={[styles.input, showEyeIcon && styles.inputWithIcon, style]}
+          style={[
+            styles.input,
+            showEyeIcon && styles.inputWithIcon,
+            fly && styles.flyInput, // Use o estilo "fly" se a propriedade "fly" for verdadeira
+            style,
+          ]}
           {...rest}
         />
         {showEyeIcon && (
@@ -50,6 +59,11 @@ export const TextInput = ({
               color="gray"
               style={styles.icon}
             />
+          </TouchableOpacity>
+        )}
+        {showSearchIcon && (
+          <TouchableOpacity style={styles.searchIconContainer}>
+            <Feather name="search" size={24} color="gray" style={styles.searchIcon} />
           </TouchableOpacity>
         )}
       </View>
@@ -89,5 +103,25 @@ const styles = StyleSheet.create({
   },
   icon: {
     opacity: 0.6,
+  },
+  searchIconContainer: {
+    position: "absolute",
+    top: 16,
+    right: 64,
+  },
+  searchIcon: {
+    opacity: 0.6,
+  },
+  flyContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "gray",
+    paddingBottom: 0,
+    marginBottom: 0,
+  },
+  flyInput: {
+    flex: 1,
+    fontSize: 18,
   },
 });

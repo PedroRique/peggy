@@ -19,6 +19,7 @@ interface DropdownButtonProps {
   multiSelect?: boolean;
   searchable?: boolean;
   placeholder?: string;
+  editable?: boolean;
 }
 
 export const DropdownButton: React.FC<DropdownButtonProps> = ({
@@ -27,6 +28,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
   options,
   multiSelect = false,
   searchable = false,
+  editable= true,
   placeholder = "Selecionar opção(s)",
 }) => {
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -52,21 +54,28 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
       }
     }
   };
+  const placeholderColor = selectedOptions.length > 0 ? PColors.Black : PColors.Grey; 
+  const selectedTextColor = PColors.Black;
 
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <BoldText style={styles.label}>{label}</BoldText>}
-      <TouchableOpacity style={[styles.input, multiSelect && styles.inputWithIcon]} onPress={toggleBottomSheet}>
-        <Text style={styles.selectedOptionsText}>
+      <TouchableOpacity
+        style={[
+          styles.input,
+          multiSelect && styles.inputWithIcon,
+
+        ]}
+        onPress={editable ? toggleBottomSheet : undefined} // Desativa onPress se não for editável
+      >
+        <Text style={[styles.selectedOptionsText, { color: placeholderColor }]}>
           {multiSelect && selectedOptions.length > 0
             ? selectedOptions.map(option => option.label).join(", ")
             : selectedOptions.length > 0
             ? selectedOptions[0].label
             : placeholder}
-            
         </Text>
-          
-        <Feather name="chevron-down" size={20} style={styles.icon}></Feather>
+        <Feather name="chevron-down" size={20} style={styles.icon} />
       </TouchableOpacity>
       <Modal isVisible={isBottomSheetVisible} onBackdropPress={toggleBottomSheet}>
         <BottomSheetContent
@@ -75,11 +84,14 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
           onSelect={handleOptionPress}
           selectedOptions={selectedOptions}
           searchable={searchable}
-        />
+          title={label || ""} 
+          onApply={[]}        
+          />
       </Modal>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -106,8 +118,6 @@ const styles = StyleSheet.create({
   },
   selectedOptionsText: {
     flex: 1,
-    color: PColors.Grey,
-    fontSize: 18,
   },
   icon: {
     position: "absolute",
