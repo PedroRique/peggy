@@ -5,6 +5,7 @@ export enum PColors {
   Orange = "#FF9900",
   LightOrange = "#FF990033",
   Grey = "#777777",
+  LightGrey = "#d3d3d3",
   White = "#FFFFFF",
   Red = "#FF3D00",
   RedTransparent = "#FF3D0033",

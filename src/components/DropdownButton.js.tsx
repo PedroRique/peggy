@@ -1,39 +1,81 @@
 import React, { useState } from "react";
-import { TouchableOpacity, View, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { TouchableOpacity, View, StyleSheet, ViewStyle } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import Modal from 'react-native-modal';
-
-import { PColors } from "../shared/Colors";
-import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
 import BottomSheetContent from "./BottomSheetContent.js";
+import { BoldText } from "./Text/BoldText";
+import { PColors } from "../shared/Colors";
+
+interface Option {
+  label: string;
+  onPress: () => void;
+}
 
 interface DropdownButtonProps {
   label?: string;
   containerStyle?: ViewStyle;
-  options: { label: string; onPress: () => void }[]
+  options: Option[];
+  multiSelect?: boolean;
+  searchable?: boolean;
+  placeholder?: string;
 }
 
 export const DropdownButton: React.FC<DropdownButtonProps> = ({
   label,
   containerStyle,
-  options, 
+  options,
+  multiSelect = false,
+  searchable = false,
+  placeholder = "Selecionar opção(s)",
 }) => {
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
 
   const toggleBottomSheet = () => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
 
+  const handleOptionPress = (selectedOption: Option) => {
+    if (multiSelect) {
+      const isSelected = selectedOptions.some(option => option.label === selectedOption.label);
+      if (isSelected) {
+        setSelectedOptions(selectedOptions.filter(option => option.label !== selectedOption.label));
+      } else {
+        setSelectedOptions([...selectedOptions, selectedOption]);
+      }
+    } else {
+      setSelectedOptions([selectedOption]);
+      selectedOption.onPress();
+      if (!multiSelect) {
+        toggleBottomSheet();
+      }
+    }
+  };
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <BoldText style={styles.label}>{label}</BoldText>}
-      <TouchableOpacity style={styles.input} onPress={toggleBottomSheet}>
-        <Text>Selecionar opção</Text>
-        <Feather name="chevron-down" size={20} style={styles.icon} />
+      <TouchableOpacity style={[styles.input, multiSelect && styles.inputWithIcon]} onPress={toggleBottomSheet}>
+        <Text style={styles.selectedOptionsText}>
+          {multiSelect && selectedOptions.length > 0
+            ? selectedOptions.map(option => option.label).join(", ")
+            : selectedOptions.length > 0
+            ? selectedOptions[0].label
+            : placeholder}
+            
+        </Text>
+          
+        <Feather name="chevron-down" size={20} style={styles.icon}></Feather>
       </TouchableOpacity>
       <Modal isVisible={isBottomSheetVisible} onBackdropPress={toggleBottomSheet}>
-        <BottomSheetContent onClose={toggleBottomSheet} options={options} />
+        <BottomSheetContent
+          onClose={toggleBottomSheet}
+          options={options}
+          onSelect={handleOptionPress}
+          selectedOptions={selectedOptions}
+          searchable={searchable}
+        />
       </Modal>
     </View>
   );
@@ -42,6 +84,9 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 32,
+  },
+  inputWithIcon: {
+    paddingRight: 48,
   },
   input: {
     flexDirection: 'row',
@@ -57,11 +102,18 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 4,
+    fontSize: 16,
+  },
+  selectedOptionsText: {
+    flex: 1,
+    color: PColors.Grey,
+    fontSize: 18,
   },
   icon: {
     position: "absolute",
     top: 16,
-    right: 16
+    right: 16,
+    marginLeft: 48,
   },
 });
 
