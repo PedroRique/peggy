@@ -1,37 +1,40 @@
 import React, { useState } from "react";
 import { TouchableOpacity, View, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import Modal from 'react-native-modal';
+
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
+import BottomSheetContent from "./BottomSheetContent.js";
 
 interface DropdownButtonProps {
   label?: string;
   containerStyle?: ViewStyle;
-  onPress: () => void;
-  showArrowDownIcon?: boolean;
+  options: { label: string; onPress: () => void }[]
 }
 
 export const DropdownButton: React.FC<DropdownButtonProps> = ({
   label,
   containerStyle,
-  onPress,
-  showArrowDownIcon = false,
+  options, 
 }) => {
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!isBottomSheetVisible);
+  };
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <BoldText style={styles.label}>{label}</BoldText>}
-      <TouchableOpacity style={styles.input} onPress={onPress}>
+      <TouchableOpacity style={styles.input} onPress={toggleBottomSheet}>
         <Text>Selecionar opção</Text>
-        {showArrowDownIcon && (
-          <Feather
-            name="arrow-down"
-            size={24}
-            color="gray"
-            style={styles.icon}
-          />
-        )}
+        <Feather name="chevron-down" size={20} style={styles.icon} />
       </TouchableOpacity>
+      <Modal isVisible={isBottomSheetVisible} onBackdropPress={toggleBottomSheet}>
+        <BottomSheetContent onClose={toggleBottomSheet} options={options} />
+      </Modal>
     </View>
   );
 };
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
   icon: {
     position: "absolute",
     top: 16,
-    right: 16,
+    right: 16
   },
 });
 

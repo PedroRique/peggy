@@ -79,11 +79,19 @@ export default function EditProfileScreen() {
         <Button title="Salvar" onPress={handleSaveProfile} />
         <DropdownButton
         label="Escolha uma opção:"
-        onPress={() => {
-    
-         }}
-        showArrowDownIcon={true}
+        options={[
+        { label: 'Opção 1', onPress: () => console.log('Opção 1 selecionada') },
+        { label: 'Opção 2', onPress: () => console.log('Opção 2 selecionada') },
+        { label: 'Opção 1', onPress: () => console.log('Opção 1 selecionada') },
+        { label: 'Opção 2', onPress: () => console.log('Opção 2 selecionada') },
+        { label: 'Opção 1', onPress: () => console.log('Opção 1 selecionada') },
+        { label: 'Opção 2', onPress: () => console.log('Opção 2 selecionada') },
+        { label: 'Opção 1', onPress: () => console.log('Opção 1 selecionada') },
+        { label: 'Opção 2', onPress: () => console.log('Opção 2 selecionada') },
+
+        ]}
         />
+
 
       </View>
     </SafeAreaView>
