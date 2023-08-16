@@ -6,7 +6,8 @@ export interface Product {
   imageUrl: string;
   userId: string;
   selectedAddress:string;
-  coordinates: number | null; 
+  latitude: number | null; 
+  longitude: number | null; 
   price: number;
   ratings?: string[];
   locked?: boolean;

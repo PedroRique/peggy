@@ -15,6 +15,7 @@ import { formatAddressLabel } from "../services/utils.service";
 import { fetchProducts } from "../services/product.service"; 
 import { Product } from "../models/Product"; 
 import { PColors } from "../shared/Colors";
+import DropdownButton from "../components/DropdownButton.js";
 
 export const NearbyScreen = () => {
   const dispatch = useDispatch();
@@ -41,31 +42,22 @@ export const NearbyScreen = () => {
       <Header title={"Por perto"} hasBack />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <BoldText size={24}>Onde você está?</BoldText>
 
         <View style={styles.dropdownContainer}>
-          <DropDown
-            label={"Selecione um endereço"}
-            mode={"outlined"}
-            visible={showMyAddressesDropDown}
-            showDropDown={() => setShowMyAddressesDropDown(true)}
-            onDismiss={() => setShowMyAddressesDropDown(false)}
-            value={selectedAddress}
-            setValue={(addressLabel) => {
-              setSelectedAddress(addressLabel);
-            }}
-            list={
+        <DropdownButton
+            label={"Onde você está?"}
+            options={
               currentUserData && currentUserData.addresses
                 ? currentUserData.addresses.map((address) => ({
                     label: formatAddressLabel(address),
-                    value: formatAddressLabel(address),
+                    onPress: () => {
+                      setSelectedAddress(formatAddressLabel(address));
+                    },
                   }))
                 : []
             }
+            placeholder={"Selecione um endereço"}
           />
-          <View style={styles.icon} pointerEvents="none"> 
-          <Feather name="chevron-down" size={20}  />
-        </View>
       </View>
       <View style={styles.center}>
         <View style={styles.products}>
@@ -97,13 +89,6 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     marginTop: 10,
     marginBottom: 16
-  },
-  icon: {
-    position: 'absolute',
-    top: '50%',
-    right: 10,
-    transform: [{ translateY: -10 }],
-    color: 'gray',
   },
   center: {
 

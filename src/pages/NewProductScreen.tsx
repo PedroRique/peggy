@@ -28,8 +28,6 @@ import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 import DropdownButton from "../components/DropdownButton.js";
 
 
-
-
 export default function NewProductScreen() {
   const navigation = useNavigation<StackTypes>();
   const route = useRoute<RouteProp<StackNavigation, "NewProduct">>();
@@ -126,28 +124,23 @@ export default function NewProductScreen() {
                 }
               }))} />
           </View>
-          <View style={{ marginBottom: 32 }}>
-            <BoldText>Endereço do produto</BoldText>
-            <DropDown
-              label={"Selecione um endereço"}
-              mode={"outlined"}
-              visible={showMyAddressesDropDown}
-              showDropDown={() => setShowMyAddressesDropDown(true)}
-              onDismiss={() => setShowMyAddressesDropDown(false)}
-              value={selectedAddress}
-              setValue={(addressLabel) => {
-                setSelectedAddress(addressLabel);
-              }}
-              list={
+
+            <DropdownButton
+              label={"Endereço do Produto"}
+              options={
                 currentUserData && currentUserData.addresses
                   ? currentUserData.addresses.map((address) => ({
                       label: formatAddressLabel(address),
-                      value: formatAddressLabel(address),
+                      onPress: () => {
+                        setSelectedAddress(formatAddressLabel(address));
+                      },
                     }))
                   : []
               }
+  
+              placeholder={"Selecione um endereço"}
             />
-          </View>
+
           <TextInput
             label="Preço diário"
             placeholder="Preço diário"
