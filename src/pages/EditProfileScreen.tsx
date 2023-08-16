@@ -12,6 +12,8 @@ import { updateEditProfile } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import DropdownButton from "../components/DropdownButton.js";
+
 
 export default function EditProfileScreen() {
   const dispatch = useDispatch();
@@ -75,6 +77,7 @@ export default function EditProfileScreen() {
           </View>
         </View>
         <Button title="Salvar" onPress={handleSaveProfile} />
+
       </View>
     </SafeAreaView>
   );
