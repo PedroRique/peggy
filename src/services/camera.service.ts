@@ -3,22 +3,40 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import uuid from "react-native-uuid";
 import { FIREBASE_STORAGE } from "../../firebaseConfig";
 
-export const pickImage = async (folder: string): Promise<string | null> => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [1, 1],
-    quality: 1,
-  });
+export const pickImage = async (
+  folder: string,
+  source: "gallery" | "camera"
+): Promise<string | null> => {
+  let result;
 
-  if (!result.canceled) {
-    const imageUrl = await uploadImage(result.assets[0].uri, folder);
+  if (source === "gallery") {
+    result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+  } else if (source === "camera") {
+    result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+  }
+
+  if (result?.canceled) {
+    return null;
+  }
+
+  const assets = result?.assets;
+
+  if (Array.isArray(assets) && assets.length > 0) {
+    const imageUrl = await uploadImage(assets[0].uri, folder);
     return imageUrl;
   }
 
   return null;
 };
-
 
 export const uploadImage = async (uri: string, folder: string) => {
   const blob: Blob = await new Promise((resolve, reject) => {

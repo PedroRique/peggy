@@ -64,7 +64,7 @@ export default function ProductScreen() {
     <SafeAreaView style={styles.container}>
       <ImageBackground
         style={styles.product}
-        source={{ uri: product?.imageUrl }}
+        source={{ uri: product?.mainImageUrl }}
         resizeMode="cover"
       >
         <View style={styles.productInner}>

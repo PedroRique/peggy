@@ -3,7 +3,8 @@ export interface Product {
   name: string;
   description: string;
   category: string;
-  imageUrl: string;
+  imageUrls: string[];
+  mainImageUrl:string;
   userId: string;
   price: number;
   ratings?: string[];
