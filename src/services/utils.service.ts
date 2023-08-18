@@ -3,6 +3,7 @@ import { Query, getDocs } from "firebase/firestore";
 import { Address } from "../models/Address";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
+import { fetchProductCoordinates } from "./product.service";
 
 export const commonFetch = async <T>(q: Query) => {
   const snap = await getDocs(q);
@@ -35,6 +36,28 @@ export const formatAddressCoordenadas = (address: Address): string => {
 
   return `${latitude} ${longitude}`;
 };
+
+
+const calculateDistanceBetweenAddressAndProduct = async (address: Address, productId: string) => {
+  try {
+    const productCoordinates = await fetchProductCoordinates(productId); 
+
+    if (productCoordinates && address.latitude !== null && address.longitude !== null) {
+      const { latitude: lat1, longitude: lon1 } = address;
+      const { latitude: lat2, longitude: lon2 } = productCoordinates;
+
+      const distance = calculateDistance(lat1, lon1, lat2, lon2);
+      return distance;
+    } else {
+      console.error("Unable to calculate distance.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error calculating distance:", error);
+    return null;
+  }
+};
+export const distance = calculateDistanceBetweenAddressAndProduct
 
 
 export const convertUserToUserData = (user: User | null): UserData | null => {

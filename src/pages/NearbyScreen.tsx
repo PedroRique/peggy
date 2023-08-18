@@ -12,7 +12,7 @@ import { productSlice } from "../store/slices/product.slice";
 import React, { useEffect, useState } from "react";
 import DropDown from "react-native-paper-dropdown";
 import { formatAddressLabel } from "../services/utils.service";
-import { fetchProducts } from "../services/product.service"; 
+import { fetchProductCoordinates, fetchProducts } from "../services/product.service"; 
 import { Product } from "../models/Product"; 
 import { PColors } from "../shared/Colors";
 import DropdownButton from "../components/DropdownButton.js";
@@ -65,11 +65,16 @@ export const NearbyScreen = () => {
             <ProductCard
               key={i}
               product={product}
-              onPress={() => {
+              address={selectedAddress}
+              onPress={async () => {
                 dispatch(loanSlice.actions.setSelectedLoan(null));
                 dispatch(productSlice.actions.setSelectedProduct(product));
                 navigation.navigate("Product");
+
+                const coordinates = await fetchProductCoordinates(product.uid);
+                console.log("Coordinates for product:", coordinates);
               }}
+              
             ></ProductCard>
           ))}
         </View>

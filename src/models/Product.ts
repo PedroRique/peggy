@@ -1,4 +1,5 @@
 export interface Product {
+  coordinates:{  latitude: number | null;  longitude: number | null; }
   uid?: string;
   name: string;
   description: string;
@@ -6,8 +7,6 @@ export interface Product {
   imageUrl: string;
   userId: string;
   selectedAddress:string;
-  latitude: number | null; 
-  longitude: number | null; 
   price: number;
   ratings?: string[];
   locked?: boolean;
