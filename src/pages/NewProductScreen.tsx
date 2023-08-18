@@ -89,7 +89,7 @@ export default function NewProductScreen() {
         <View style={styles.newProductForm}>
           <BoldText style={{ marginBottom: 4 }}>Fotos do produto</BoldText>
           <ScrollView horizontal style={styles.imageCarousel}>
-            <TouchableOpacity style={styles.addImageBtn} onPress={() => getPhoto("camera")}>
+            <TouchableOpacity style={styles.addImageBtn} onPress={() => getPhoto("gallery")}>
               <Feather name="plus-square" color={PColors.Blue} size={32} />
             </TouchableOpacity>
             {imageUrls.map((url, index) => (
