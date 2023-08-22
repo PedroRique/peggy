@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
-import { StackNavigation } from "../../App";
+import App, { StackNavigation } from "../../App";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
@@ -13,6 +13,7 @@ import { CheckBox } from "react-native";
 import axios from "axios";
 import { Address } from "../models/Address";
 import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
+import CalendarDropDown from "../components/Calendar";
 
 export default function NewAddressScreen() {
   const toast = useToast();
@@ -97,6 +98,7 @@ export default function NewAddressScreen() {
               value={complement}
               onChangeText={setComplement}
             />
+
           </View>
 
           <View style={styles.checkboxContainer}>

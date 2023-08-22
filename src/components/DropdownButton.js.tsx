@@ -66,7 +66,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
           multiSelect && styles.inputWithIcon,
 
         ]}
-        onPress={editable ? toggleBottomSheet : undefined} // Desativa onPress se não for editável
+        onPress={editable ? toggleBottomSheet : undefined} 
       >
         <Text style={[styles.selectedOptionsText, { color: placeholderColor }]}>
           {multiSelect && selectedOptions.length > 0
