@@ -16,7 +16,8 @@ import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
-import DropDown from "react-native-paper-dropdown";
+import DropdownButton from "../components/DropdownButton.js";
+
 
 export default function NewProductScreen() {
   const navigation = useNavigation<StackTypes>();
@@ -125,21 +126,17 @@ export default function NewProductScreen() {
             onChangeText={setDescription}
           ></TextInput>
 
-          <View style={{ marginBottom: 32 }}>
-            <BoldText>Categoria do produto</BoldText>
-            <DropDown
-              label={"Categoria do produto"}
-              mode={"outlined"}
-              visible={showDropDown}
-              showDropDown={() => setShowDropDown(true)}
-              onDismiss={() => setShowDropDown(false)}
-              value={category}
-              setValue={setCategory}
-              list={categories.map((categ: Category) => ({
+          <View>
+            <DropdownButton
+              label="Categoria do produto"
+              placeholder="Categoria do produto"
+              searchable={true}
+              options={categories.map((categ: Category) => ({
                 label: categ.name,
-                value: categ.id,
-              }))}
-            />
+                onPress: () => {
+                  setCategory(categ.id);
+                }
+              }))} />
           </View>
 
           <TextInput

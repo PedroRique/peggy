@@ -25,6 +25,7 @@ import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel, getDateObject } from "../services/utils.service";
 import { AppState } from "../store";
 import React from "react";
+import DropdownButton from "../components/DropdownButton.js";
 
 export default function NewLoanRequestScreen() {
   const toast = useToast();
@@ -270,28 +271,22 @@ export default function NewLoanRequestScreen() {
         )}
 
         <View style={styles.loanForm}>
-          <View style={{ marginBottom: 32 }}>
-            <BoldText>Buscar e devolver em</BoldText>
-            <DropDown
-              label={"Selecione um endereço"}
-              mode={"outlined"}
-              visible={!loan && showDropDown}
-              showDropDown={() => setShowDropDown(true)}
-              onDismiss={() => setShowDropDown(false)}
-              value={address}
-              setValue={(addressLabel) => {
-                setAddress(addressLabel);
-              }}
-              list={
-                lenderUserData && lenderUserData.addresses
-                  ? lenderUserData.addresses.map((address: Address) => ({
-                      label: formatAddressLabel(address),
-                      value: formatAddressLabel(address),
-                    }))
+            <DropdownButton
+            label={"Buscar e devolver em"}
+            placeholder={"Selecione um endereço"}
+            options={
+            lenderUserData && lenderUserData.addresses
+              ? lenderUserData.addresses.map((address: Address) => ({
+                  label: formatAddressLabel(address),
+                  onPress: () => {
+                    setAddress(formatAddressLabel(address)); 
+                  },
+                }))
                   : []
               }
-            />
-          </View>
+              editable={!loan}
+              />
+
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
               <TextInput
