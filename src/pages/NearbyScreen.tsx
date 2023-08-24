@@ -15,6 +15,7 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
+import { Address } from "../models/Address";
 
 export const NearbyScreen = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export const NearbyScreen = () => {
   const products = useSelector((state: AppState) => state.product.nearProducts);
 
   const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState<Address>();
 
   const currentUserData = useSelector((state: AppState) => state.user.userData);
 
@@ -49,7 +50,7 @@ export const NearbyScreen = () => {
                 ? currentUserData.addresses.map((address) => ({
                     label: formatAddressLabel(address),
                     onPress: () => {
-                      setSelectedAddress(formatAddressLabel(address));
+                      setSelectedAddress(address);
                     },
                   }))
                 : []
@@ -67,6 +68,8 @@ export const NearbyScreen = () => {
               <ProductCard
                 key={item.uid}
                 product={item}
+                address={selectedAddress}
+                showDistance
                 onPress={async () => {
                   dispatch(loanSlice.actions.setSelectedLoan(null));
                   dispatch(productSlice.actions.setSelectedProduct(item));

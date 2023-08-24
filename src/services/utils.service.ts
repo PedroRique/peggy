@@ -3,7 +3,6 @@ import { Query, getDocs } from "firebase/firestore";
 import { Address } from "../models/Address";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
-import { fetchProductCoordinates } from "./product.service";
 
 export const commonFetch = async <T>(q: Query) => {
   const snap = await getDocs(q);
@@ -24,8 +23,6 @@ export const formatAddressLabel = (address: Address): string => {
   if (address.city) {
     addressLabel += ` - ${address.city}`;
   }
- 
-
 
   return addressLabel;
 };
@@ -36,28 +33,6 @@ export const formatAddressCoordenadas = (address: Address): string => {
 
   return `${latitude} ${longitude}`;
 };
-
-
-const calculateDistanceBetweenAddressAndProduct = async (address: Address, productId: string) => {
-  try {
-    const productCoordinates = await fetchProductCoordinates(productId); 
-
-    if (productCoordinates && address.latitude !== null && address.longitude !== null) {
-      const { latitude: lat1, longitude: lon1 } = address;
-      const { latitude: lat2, longitude: lon2 } = productCoordinates;
-
-      const distance = calculateDistance(lat1, lon1, lat2, lon2);
-      return distance;
-    } else {
-      console.error("Unable to calculate distance.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error calculating distance:", error);
-    return null;
-  }
-};
-export const distance = calculateDistanceBetweenAddressAndProduct
 
 
 export const convertUserToUserData = (user: User | null): UserData | null => {
@@ -140,4 +115,13 @@ export const calculateDistance = (
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c;
   return distance;
+};
+
+export const convertFloatToDistance = (floatNumber: number): string => {
+  const number = floatNumber * 1000;
+  if (number >= 1000) {
+    return (number / 1000).toFixed(1) + "km";
+  } else {
+    return number.toFixed(0) + "m";
+  }
 };
