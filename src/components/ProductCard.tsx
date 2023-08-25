@@ -76,7 +76,7 @@ export const ProductCard = ({
               hasShadow && styles.shadowStyle,
               { width: size, height: size },
             ]}
-            source={{ uri: product.imageUrl }}
+            source={{ uri: product.mainImageUrl }}
             resizeMode="cover"
           >
             {showDistance && (
