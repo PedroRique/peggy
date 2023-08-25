@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -14,6 +14,7 @@ import { LOAN_TILE_STATUS_MESSAGES } from "../shared/Constants";
 import { AppState } from "../store";
 import { ProductCard } from "./ProductCard";
 import { Text } from "./Text/Text";
+import { format } from "date-fns";
 
 type LoanTileProps = TouchableOpacityProps & {
   loan: LoanWithInfo;
@@ -33,27 +34,39 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
 
   const getSentence = () => {
     const { startDate, endDate, borrower, lender } = loan;
-    const acceptedOrDenied = loan.status === LoanStatus.ACCEPTED || loan.status === LoanStatus.DENIED;
-    const name = loan.type === "lend"
-      ? acceptedOrDenied ? "Você" : borrower?.name || ""
-      : acceptedOrDenied ? lender?.name || "" : "Você";
-  
+    const acceptedOrDenied =
+      loan.status === LoanStatus.ACCEPTED || loan.status === LoanStatus.DENIED;
+    const name =
+      loan.type === "lend"
+        ? acceptedOrDenied
+          ? "Você"
+          : borrower?.name || ""
+        : acceptedOrDenied
+        ? lender?.name || ""
+        : "Você";
+
     const productName = loan.product?.name || "";
-  
+
     const getMessage = LOAN_TILE_STATUS_MESSAGES[loan.status];
     const firstSentence = getMessage
       ? getMessage({ borrowerName: name, productName })
       : null;
-  
+
+    
+    const startDateFormatted = format(new Date(startDate), 'dd/MM/yyyy');
+    const endDateFormatted = format(new Date(endDate), 'dd/MM/yyyy');
+
     const secondSentence =
       loan.status !== LoanStatus.PENDING &&
       loan.status !== LoanStatus.RETURNED &&
-      loan.status !== LoanStatus.PROGRESS
-        ? <>em "Z"</>
-        : <>
-            de {startDate} até {endDate}
-          </>;
-  
+      loan.status !== LoanStatus.PROGRESS ? (
+        <>em "Z"</>
+      ) : (
+        <>
+          de {startDateFormatted} até {endDateFormatted}
+        </>
+      );
+
     setFirstSentence(firstSentence);
     setSecondSentence(secondSentence);
   };
