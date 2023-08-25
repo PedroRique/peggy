@@ -26,6 +26,7 @@ import { formatAddressLabel, getDateObject } from "../services/utils.service";
 import { AppState } from "../store";
 import React from "react";
 import DropdownButton from "../components/DropdownButton.js";
+import CalendarDrop from "../components/Calendar";
 
 export default function NewLoanRequestScreen() {
   const toast = useToast();
@@ -253,6 +254,15 @@ export default function NewLoanRequestScreen() {
 
   const hourMask = [/\d/, /\d/, ":", /\d/, /\d/];
 
+  const handleStartDateChange = (date: string) => {
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date: string) => {
+    setEndDate(date);
+  };
+
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Detalhes" hasBack hasBorder />
@@ -289,7 +299,20 @@ export default function NewLoanRequestScreen() {
 
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
-              <TextInput
+            <CalendarDrop
+            label="Pegar no dia" 
+            placeholder="DD/MM/YYYY"              
+            isVisible={false} 
+            editable={!loan}
+            value={startDate} 
+            onClose={function (): void {
+              throw new Error("Function not implemented.");
+            } } 
+            onSelectDate={function (date: string): void {
+              throw new Error("Function not implemented.");
+            }} 
+          />         
+                        <TextInput
                 label="Buscar no dia"
                 placeholder="DD/MM/YYYY"
                 value={startDate}
@@ -297,7 +320,7 @@ export default function NewLoanRequestScreen() {
                 selectTextOnFocus={!loan}
                 onChangeText={setStartDate}
                 mask={Masks.DATE_DDMMYYYY}
-              ></TextInput>
+              ></TextInput>   
             </View>
             <View style={{ flex: 1 }}>
               <TextInput
@@ -314,8 +337,22 @@ export default function NewLoanRequestScreen() {
 
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
-              <TextInput
-                label="Devolver no dia"
+            <CalendarDrop
+              
+              label="Devolver no dia" 
+              placeholder="DD/MM/YYYY"              
+              isVisible={false} 
+              editable={!loan}
+              value={endDate}
+              onChangeText={setEndDate}
+              
+              onClose={function (): void {
+                throw new Error("Function not implemented.");
+              } } onSelectDate={function (date: string): void {
+                throw new Error("Function not implemented.");
+              } }              ></CalendarDrop>
+                            <TextInput
+                label="Buscar no dia"
                 placeholder="DD/MM/YYYY"
                 value={endDate}
                 editable={!loan}

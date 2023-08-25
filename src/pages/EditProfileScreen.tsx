@@ -78,11 +78,6 @@ export default function EditProfileScreen() {
           </View>
         </View>
         <Button title="Salvar" onPress={handleSaveProfile} />
-        <CalendarDrop isVisible={false} onClose={function (): void {
-          throw new Error("Function not implemented.");
-        } } onSelectDate={function (date: string): void {
-          throw new Error("Function not implemented.");
-        } }></CalendarDrop>
       </View>
     </SafeAreaView>
   );
