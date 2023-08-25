@@ -20,6 +20,7 @@ interface DropdownButtonProps {
   searchable?: boolean;
   placeholder?: string;
   editable?: boolean;
+  value: string;
 }
 
 export const DropdownButton: React.FC<DropdownButtonProps> = ({
@@ -30,6 +31,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
   searchable = false,
   editable= true,
   placeholder = "Selecionar opção(s)",
+  value,
 }) => {
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
@@ -54,8 +56,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
       }
     }
   };
-  const placeholderColor = selectedOptions.length > 0 ? PColors.Black : PColors.Grey; 
-  const selectedTextColor = PColors.Black;
+  const placeholderColor = selectedOptions.length > 0 || value ? PColors.Black : PColors.Grey; 
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -73,7 +74,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
             ? selectedOptions.map(option => option.label).join(", ")
             : selectedOptions.length > 0
             ? selectedOptions[0].label
-            : placeholder}
+            : value || placeholder}
         </Text>
         <Feather name="chevron-down" size={20} style={styles.icon} />
       </TouchableOpacity>

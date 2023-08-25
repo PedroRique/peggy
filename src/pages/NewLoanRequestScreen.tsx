@@ -75,8 +75,8 @@ export default function NewLoanRequestScreen() {
 
   useEffect(() => {
     if (loan) {
-      // setStartDate(loan.startDate);
-      // setEndDate(loan.endDate);
+      setStartDate(new Date(loan.startDate));
+      setEndDate(new Date(loan.endDate));
       setPickUpTime(loan.pickUpTime);
       setGiveBackTime(loan.giveBackTime);
       setAddress(loan.address);
@@ -276,6 +276,7 @@ export default function NewLoanRequestScreen() {
                 : []
             }
             editable={!loan}
+            value={address}
           />
 
           <View style={styles.row}>
