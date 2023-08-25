@@ -311,16 +311,7 @@ export default function NewLoanRequestScreen() {
             onSelectDate={function (date: string): void {
               throw new Error("Function not implemented.");
             }} 
-          />         
-                        <TextInput
-                label="Buscar no dia"
-                placeholder="DD/MM/YYYY"
-                value={startDate}
-                editable={!loan}
-                selectTextOnFocus={!loan}
-                onChangeText={setStartDate}
-                mask={Masks.DATE_DDMMYYYY}
-              ></TextInput>   
+          />          
             </View>
             <View style={{ flex: 1 }}>
               <TextInput
@@ -334,11 +325,9 @@ export default function NewLoanRequestScreen() {
               ></TextInput>
             </View>
           </View>
-
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
-            <CalendarDrop
-              
+            <CalendarDrop        
               label="Devolver no dia" 
               placeholder="DD/MM/YYYY"              
               isVisible={false} 
@@ -351,15 +340,7 @@ export default function NewLoanRequestScreen() {
               } } onSelectDate={function (date: string): void {
                 throw new Error("Function not implemented.");
               } }              ></CalendarDrop>
-                            <TextInput
-                label="Buscar no dia"
-                placeholder="DD/MM/YYYY"
-                value={endDate}
-                editable={!loan}
-                selectTextOnFocus={!loan}
-                onChangeText={setEndDate}
-                mask={Masks.DATE_DDMMYYYY}
-              ></TextInput>
+
             </View>
             <View style={{ flex: 1 }}>
               <TextInput
