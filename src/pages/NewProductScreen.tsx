@@ -16,6 +16,8 @@ import { pickImage } from "../services/camera.service";
 import { addProduct } from "../services/product.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
+import { formatAddressLabel } from "../services/utils.service";
+import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 import DropdownButton from "../components/DropdownButton.js";
 
 
@@ -39,20 +41,25 @@ export default function NewProductScreen() {
   }, [name, description, category, price]);
 
   const createProduct = async () => {
+
+    const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
+
     let finalImageUrls = imageUrls;
     if (imageUrls.length === 1 && !mainImageUrl) {
       setMainImageUrl(imageUrls[0]);
     } else if (imageUrls.length === 0 && mainImageUrl) {
       finalImageUrls = [mainImageUrl];
     }
-    
+
     addProduct({
       name,
       description,
       imageUrls: finalImageUrls, 
       mainImageUrl,
       category,
+      selectedAddress,
       price,
+      coordinates,
     })
       .then(() => {
         toast.show("Produto adicionado com sucesso!", { type: "success" });
@@ -81,6 +88,11 @@ export default function NewProductScreen() {
       setImageUrls([...imageUrls, result]);
     }
   };
+
+  const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState("");
+
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -139,12 +151,29 @@ export default function NewProductScreen() {
               }))} />
           </View>
 
+            <DropdownButton
+              label={"Endereço do Produto"}
+              options={
+                currentUserData && currentUserData.addresses
+                  ? currentUserData.addresses.map((address) => ({
+                      label: formatAddressLabel(address),
+                      onPress: () => {
+                        setSelectedAddress(formatAddressLabel(address));
+                      },
+                    }))
+                  : []
+              }
+  
+              placeholder={"Selecione um endereço"}
+            />
+
           <TextInput
             label="Preço diário"
             placeholder="Preço diário"
             value={price}
             onChangeText={setPrice}
           ></TextInput>
+
         </View>
       </ScrollView>
 
