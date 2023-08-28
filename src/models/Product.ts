@@ -4,7 +4,8 @@ export interface Product {
   name: string;
   description: string;
   category: string;
-  imageUrl: string;
+  imageUrls: string[];
+  mainImageUrl:string;
   userId: string;
   selectedAddress:string;
   price: number;
