@@ -1,3 +1,4 @@
+import React from "react";
 import { BoldText } from "../components/Text/BoldText";
 import Emoji from "../components/Text/Emoji";
 import { FirebaseError } from "../models/FirebaseError";
@@ -61,3 +62,45 @@ export const FIREBASE_ERROR_MESSAGES = {
 
 export const REGISTRATION_BONUS = 100;
 export const ADD_PRODUCT_BONUS = 50;
+
+export const CALENDAR_LOCALE_CONFIG = {
+  monthNames: [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+  ],
+  monthNamesShort: [
+    "Jan.",
+    "Fev.",
+    "Mar",
+    "Abril",
+    "Maio",
+    "Jun",
+    "Jul.",
+    "Ago",
+    "Set.",
+    "Out.",
+    "Nov.",
+    "Dez.",
+  ],
+  dayNames: [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ],
+  dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sab."],
+  today: "Todos os Dias",
+};

@@ -1,15 +1,14 @@
 import { Feather } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars";
 import Modal from "react-native-modal";
-import { format } from "date-fns";
-import { LoanWithInfo } from "../models/Loan";
 import { PColors } from "../shared/Colors";
+import { CALENDAR_LOCALE_CONFIG } from "../shared/Constants";
 import Button from "./Button";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
-import { fetchAcceptedLoanDatesForProduct } from "../services/loan.service";
 
 interface CalendarDropProps {
   onClose: () => void;
@@ -18,6 +17,7 @@ interface CalendarDropProps {
   placeholder?: string;
   editable?: boolean;
   value?: Date | null;
+  unavailableDates?: { startDate: Date; endDate: Date }[];
 }
 
 const CalendarDrop: React.FC<CalendarDropProps> = ({
@@ -27,11 +27,11 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
   label = "Select a Date",
   placeholder = "Select a date",
   value,
+  unavailableDates = [],
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateData | null>();
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-  const [loanDates, setLoanDates] = useState<{ startDate: Date; endDate: Date; }[]>([]);
 
   const toggleCalendar = () => {
     setIsCalendarVisible(!isCalendarVisible);
@@ -50,58 +50,8 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
     setSelectedDate(date);
   };
 
-  LocaleConfig.locales["fr"] = {
-    monthNames: [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro",
-    ],
-    monthNamesShort: [
-      "Jan.",
-      "Fev.",
-      "Mar",
-      "Abril",
-      "Maio",
-      "Jun",
-      "Jul.",
-      "Ago",
-      "Set.",
-      "Out.",
-      "Nov.",
-      "Dez.",
-    ],
-    dayNames: [
-      "Domingo",
-      "Segunda",
-      "Terça",
-      "Quarta",
-      "Quinta",
-      "Sexta",
-      "Sábado",
-    ],
-    dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sab."],
-    today: "Todos os Dias",
-  };
-
-  LocaleConfig.defaultLocale = "fr";
-
-  const fetchLoanDates = async (productId: string) => {
-    const dates = await fetchAcceptedLoanDatesForProduct(productId);
-    setLoanDates(dates);
-  };
-
-  useEffect(() => {
-    fetchLoanDates("");
-  }, []);
+  LocaleConfig.locales["br"] = CALENDAR_LOCALE_CONFIG;
+  LocaleConfig.defaultLocale = "br";
 
   const getMarkedDates = () => {
     const markedDates: { [date: string]: any } = {};
@@ -127,14 +77,18 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
       };
     }
 
-    loanDates.forEach(({ startDate, endDate }) => {
+    unavailableDates.forEach(({ startDate, endDate }) => {
       const orangeDays = [];
-  
-      for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
-        const formattedDate = currentDate.toISOString().split('T')[0];
+
+      for (
+        let currentDate = new Date(startDate);
+        currentDate <= endDate;
+        currentDate.setDate(currentDate.getDate() + 1)
+      ) {
+        const formattedDate = currentDate.toISOString().split("T")[0];
         orangeDays.push(formattedDate);
       }
-  
+
       orangeDays.forEach((date) => {
         markedDates[date] = {
           disabled: true,
@@ -152,7 +106,6 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
       });
     });
 
-  
     return markedDates;
   };
 

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { isBefore, startOfDay, format } from "date-fns";
+import { isBefore, startOfDay } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,7 +19,11 @@ import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
 import { LoanRequest, LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
-import { createLoan, updateLoanStatus } from "../services/loan.service";
+import {
+  createLoan,
+  fetchAcceptedLoanDatesForProduct,
+  updateLoanStatus,
+} from "../services/loan.service";
 import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
 import { formatAddressLabel } from "../services/utils.service";
@@ -38,7 +42,6 @@ export default function NewLoanRequestScreen() {
   );
   const currentUserData = useSelector((state: AppState) => state.user.userData);
 
-  const [showDropDown, setShowDropDown] = useState(false);
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>();
@@ -58,6 +61,16 @@ export default function NewLoanRequestScreen() {
     const rate = await getRate(product?.ratings);
     setRate(rate);
   };
+
+  const fetchLoanDates = async (productId: string) => {
+    const dates = await fetchAcceptedLoanDatesForProduct(productId);
+    // setLoanDates(dates);
+    console.log(dates);
+  };
+
+  useEffect(() => {
+    fetchLoanDates("");
+  }, []);
 
   useEffect(() => {
     setFormValid(
