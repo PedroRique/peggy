@@ -1,11 +1,18 @@
 import { Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars";
+import { MarkedDates } from "react-native-calendars/src/types";
 import Modal from "react-native-modal";
+import { LoanDate } from "../models/Loan";
+import { getDatesBetween } from "../services/utils.service";
 import { PColors } from "../shared/Colors";
-import { CALENDAR_LOCALE_CONFIG } from "../shared/Constants";
+import {
+  CALENDAR_LOCALE_CONFIG,
+  SELECTED_DATE_CALENDAR_STYLE,
+  UNAVAILABLE_DATE_CALENDAR_STYLE,
+} from "../shared/Constants";
 import Button from "./Button";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
@@ -17,7 +24,7 @@ interface CalendarDropProps {
   placeholder?: string;
   editable?: boolean;
   value?: Date | null;
-  unavailableDates?: { startDate: Date; endDate: Date }[];
+  unavailableDates?: LoanDate[];
 }
 
 const CalendarDrop: React.FC<CalendarDropProps> = ({
@@ -54,60 +61,26 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
   LocaleConfig.defaultLocale = "br";
 
   const getMarkedDates = () => {
-    const markedDates: { [date: string]: any } = {};
+    const markedDates: MarkedDates = {};
 
     if (selectedDate) {
-      markedDates[selectedDate.dateString] = {
-        selected: true,
-        selectedColor: PColors.Orange,
-      };
-    }
-
-    const today = new Date();
-
-    for (let i = 1; i < 9999; i++) {
-      const pastDay = new Date();
-      pastDay.setDate(today.getDate() - i);
-      const pastDayString = pastDay.toISOString().split("T")[0];
-      markedDates[pastDayString] = {
-        disabled: true,
-        disableTouchEvent: true,
-        dotColor: "gray",
-        disabledOpacity: 0.5,
-      };
+      markedDates[selectedDate.dateString] = SELECTED_DATE_CALENDAR_STYLE;
     }
 
     unavailableDates.forEach(({ startDate, endDate }) => {
-      const orangeDays = [];
-
-      for (
-        let currentDate = new Date(startDate);
-        currentDate <= endDate;
-        currentDate.setDate(currentDate.getDate() + 1)
-      ) {
-        const formattedDate = currentDate.toISOString().split("T")[0];
-        orangeDays.push(formattedDate);
-      }
+      const orangeDays = getDatesBetween(startDate, endDate);
 
       orangeDays.forEach((date) => {
-        markedDates[date] = {
-          disabled: true,
-          disableTouchEvent: true,
-          customStyles: {
-            container: {
-              backgroundColor: PColors.Orange,
-              opacity: 0.5,
-            },
-            text: {
-              color: PColors.Black,
-            },
-          },
-        };
+        markedDates[date] = UNAVAILABLE_DATE_CALENDAR_STYLE;
       });
     });
 
     return markedDates;
   };
+
+  const markedDates = useMemo(() => {
+    return getMarkedDates();
+  }, [unavailableDates, selectedDate]);
 
   const handleApplyButtonPress = () => {
     if (selectedDate) {
@@ -146,14 +119,9 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
               theme={{
                 todayTextColor: PColors.Blue,
               }}
+              minDate={format(new Date(), "yyyy-MM-dd")}
               markingType="custom"
-              markedDates={{
-                ...getMarkedDates(),
-                [selectedDate?.dateString || ""]: {
-                  selected: true,
-                  selectedColor: PColors.Blue,
-                },
-              }}
+              markedDates={markedDates}
               renderArrow={(direction) => (
                 <View style={styles.arrowContainer}>
                   {direction === "left" ? (

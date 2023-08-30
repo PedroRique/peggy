@@ -3,6 +3,7 @@ import { BoldText } from "../components/Text/BoldText";
 import Emoji from "../components/Text/Emoji";
 import { FirebaseError } from "../models/FirebaseError";
 import { LoanStatus } from "../models/Loan";
+import { PColors } from "./Colors";
 
 interface StatusMessagesProps {
   borrowerName: string;
@@ -103,4 +104,23 @@ export const CALENDAR_LOCALE_CONFIG = {
   ],
   dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sab."],
   today: "Todos os Dias",
+};
+
+export const UNAVAILABLE_DATE_CALENDAR_STYLE = {
+  disabled: true,
+  disableTouchEvent: true,
+  customStyles: {
+    container: {
+      backgroundColor: PColors.Orange,
+      opacity: 0.5,
+    },
+    text: {
+      color: PColors.Black,
+    },
+  },
+};
+
+export const SELECTED_DATE_CALENDAR_STYLE = {
+  selected: true,
+  selectedColor: PColors.Blue,
 };

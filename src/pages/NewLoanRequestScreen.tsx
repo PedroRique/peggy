@@ -17,7 +17,12 @@ import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
-import { LoanRequest, LoanStatus, LoanWithInfo } from "../models/Loan";
+import {
+  LoanDate,
+  LoanRequest,
+  LoanStatus,
+  LoanWithInfo,
+} from "../models/Loan";
 import { UserData } from "../models/UserData";
 import {
   createLoan,
@@ -51,6 +56,7 @@ export default function NewLoanRequestScreen() {
   const [sentence, setSentence] = useState(<></>);
   const [formValid, setFormValid] = useState(false);
   const [rate, setRate] = useState<number>();
+  const [unavailableDates, setUnavailableDates] = useState<LoanDate[]>([]);
 
   useEffect(() => {
     getLenderUserData();
@@ -64,12 +70,11 @@ export default function NewLoanRequestScreen() {
 
   const fetchLoanDates = async (productId: string) => {
     const dates = await fetchAcceptedLoanDatesForProduct(productId);
-    // setLoanDates(dates);
-    console.log(dates);
+    setUnavailableDates(dates);
   };
 
   useEffect(() => {
-    fetchLoanDates("");
+    fetchLoanDates(product?.uid!);
   }, []);
 
   useEffect(() => {
@@ -299,6 +304,7 @@ export default function NewLoanRequestScreen() {
                 placeholder="DD/MM/YYYY"
                 editable={!loan}
                 value={startDate}
+                unavailableDates={unavailableDates}
                 onClose={function (): void {
                   throw new Error("Function not implemented.");
                 }}
