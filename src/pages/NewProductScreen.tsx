@@ -110,7 +110,7 @@ export default function NewProductScreen() {
                 onPress: () => {
                   setCategory(categ.id);
                 }
-              }))} />
+              }))} value={""} />
           </View>
 
           <TextInput

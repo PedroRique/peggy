@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   documentId,
+  getDocs,
   query,
   runTransaction,
   updateDoc,
@@ -142,4 +143,25 @@ export const fetchLoansWithProductInfo = async (
   );
 
   return dataWithProductBorrowerLenderType;
+};
+
+
+export const fetchAcceptedLoanDatesForProduct = async (productId: string) => {
+  const q = query(
+    collection(FIREBASE_DB, "loans"),
+    where("status", "==", LoanStatus.ACCEPTED), 
+    where("productId", "==", productId)
+  );
+
+  const querySnapshot = await getDocs(q);
+  const loanDates: { startDate: Date; endDate: Date; }[] = [];
+  querySnapshot.forEach((doc) => {
+    const loanData = doc.data();
+    loanDates.push({
+      startDate: loanData.startDate,
+      endDate: loanData.endDate,
+    });
+  });
+
+  return loanDates;
 };

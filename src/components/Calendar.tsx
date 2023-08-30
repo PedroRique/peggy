@@ -1,45 +1,40 @@
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Calendar, DateData, LocaleConfig } from "react-native-calendars";
 import Modal from "react-native-modal";
-
 import { format } from "date-fns";
 import { LoanWithInfo } from "../models/Loan";
 import { PColors } from "../shared/Colors";
 import Button from "./Button";
 import { BoldText } from "./Text/BoldText";
 import { Text } from "./Text/Text";
+import { fetchAcceptedLoanDatesForProduct } from "../services/loan.service";
 
 interface CalendarDropProps {
-  isVisible: boolean;
   onClose: () => void;
   onSelectDate: (date: Date | null) => void;
   label?: string;
   placeholder?: string;
   editable?: boolean;
-  onChangeText?: (text: string) => void;
-  mask?: string;
   value?: Date | null;
 }
 
 const CalendarDrop: React.FC<CalendarDropProps> = ({
-  isVisible,
   onClose,
   onSelectDate,
   editable = true,
   label = "Select a Date",
   placeholder = "Select a date",
-  onChangeText,
-  mask,
   value,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateData | null>();
-  const [isCalendarVisible, setisCalendarVisible] = useState(false);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const [loanDates, setLoanDates] = useState<{ startDate: Date; endDate: Date; }[]>([]);
 
   const toggleCalendar = () => {
-    setisCalendarVisible(!isCalendarVisible);
+    setIsCalendarVisible(!isCalendarVisible);
   };
 
   const openModal = () => {
@@ -99,24 +94,16 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
 
   LocaleConfig.defaultLocale = "fr";
 
-  const activeLoans = [
-    { startDate: "2023-08-25", endDate: "2023-08-27" },
-    { startDate: "2023-08-30", endDate: "2023-09-02" },
-  ];
+  const fetchLoanDates = async (productId: string) => {
+    const dates = await fetchAcceptedLoanDatesForProduct(productId);
+    setLoanDates(dates);
+  };
 
-  const unavailableDates = activeLoans.map((loan) => {
-    const start = new Date(loan.startDate);
-    const end = new Date(loan.endDate);
-    const dates = [];
+  useEffect(() => {
+    fetchLoanDates("");
+  }, []);
 
-    for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
-      dates.push(date.toISOString().split("T")[0]);
-    }
-
-    return dates;
-  });
-
-  const getMarkedDates = (activeLoans: LoanWithInfo[]) => {
+  const getMarkedDates = () => {
     const markedDates: { [date: string]: any } = {};
 
     if (selectedDate) {
@@ -140,33 +127,32 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
       };
     }
 
-    activeLoans.forEach((loan) => {
-      if (loan.productId) {
-        const start = new Date(loan.startDate);
-        const end = new Date(loan.endDate);
-        const dates = [];
-
-        for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
-          const dateString = date.toISOString().split("T")[0];
-          dates.push(dateString);
-
-          markedDates[dateString] = {
-            disabled: true,
-            disableTouchEvent: true,
-            customStyles: {
-              container: {
-                backgroundColor: PColors.Orange,
-                opacity: 0.5,
-              },
-              text: {
-                color: PColors.Black,
-              },
-            },
-          };
-        }
+    loanDates.forEach(({ startDate, endDate }) => {
+      const orangeDays = [];
+  
+      for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+        const formattedDate = currentDate.toISOString().split('T')[0];
+        orangeDays.push(formattedDate);
       }
+  
+      orangeDays.forEach((date) => {
+        markedDates[date] = {
+          disabled: true,
+          disableTouchEvent: true,
+          customStyles: {
+            container: {
+              backgroundColor: PColors.Orange,
+              opacity: 0.5,
+            },
+            text: {
+              color: PColors.Black,
+            },
+          },
+        };
+      });
     });
 
+  
     return markedDates;
   };
 
@@ -209,7 +195,7 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
               }}
               markingType="custom"
               markedDates={{
-                ...getMarkedDates([]),
+                ...getMarkedDates(),
                 [selectedDate?.dateString || ""]: {
                   selected: true,
                   selectedColor: PColors.Blue,
@@ -260,7 +246,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     padding: 16,
   },
-
   buttonText: {
     color: PColors.White,
     fontSize: 16,

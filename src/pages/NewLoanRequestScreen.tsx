@@ -284,7 +284,6 @@ export default function NewLoanRequestScreen() {
               <CalendarDrop
                 label="Pegar no dia"
                 placeholder="DD/MM/YYYY"
-                isVisible={false}
                 editable={!loan}
                 value={startDate}
                 onClose={function (): void {
