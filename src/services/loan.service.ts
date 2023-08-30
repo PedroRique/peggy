@@ -153,7 +153,7 @@ export const fetchLoansWithProductInfo = async (
 export const fetchAcceptedLoanDatesForProduct = async (productId: string) => {
   const q = query(
     collection(FIREBASE_DB, "loans"),
-    where("status", "==", LoanStatus.ACCEPTED),
+    where("status", "==", LoanStatus.ACCEPTED && LoanStatus.PROGRESS),
     where("productId", "==", productId)
   );
 

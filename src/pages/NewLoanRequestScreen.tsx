@@ -330,9 +330,9 @@ export default function NewLoanRequestScreen() {
               <CalendarDrop
                 label="Devolver no dia"
                 placeholder="DD/MM/YYYY"
-                isVisible={false}
                 editable={!loan}
                 value={endDate}
+                unavailableDates={unavailableDates}
                 onClose={function (): void {
                   throw new Error("Function not implemented.");
                 }}
