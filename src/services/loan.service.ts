@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   documentId,
+  getDocs,
   query,
   runTransaction,
   updateDoc,
@@ -11,6 +12,7 @@ import {
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
 import {
   Loan,
+  LoanDate,
   LoanRequest,
   LoanStatus,
   LoanType,
@@ -49,14 +51,18 @@ export const createLoan = async (
   }
 };
 
-export const updateLoanStatus = async (loanId: string, status: LoanStatus, productId:string) => {
+export const updateLoanStatus = async (
+  loanId: string,
+  status: LoanStatus,
+  productId: string
+) => {
   try {
     await updateDoc(doc(FIREBASE_DB, "loans", loanId), { status });
-    if(status === LoanStatus.ACCEPTED){
-      updateDoc(doc(FIREBASE_DB, "products", productId), { locked:true } )
+    if (status === LoanStatus.ACCEPTED) {
+      updateDoc(doc(FIREBASE_DB, "products", productId), { locked: true });
     }
-    if(status === LoanStatus.RETURNED){
-      updateDoc(doc(FIREBASE_DB, "products", productId), { locked:false } )
+    if (status === LoanStatus.RETURNED) {
+      updateDoc(doc(FIREBASE_DB, "products", productId), { locked: false });
     }
   } catch (error) {
     console.error(error);
@@ -142,4 +148,24 @@ export const fetchLoansWithProductInfo = async (
   );
 
   return dataWithProductBorrowerLenderType;
+};
+
+export const fetchAcceptedLoanDatesForProduct = async (productId: string) => {
+  const q = query(
+    collection(FIREBASE_DB, "loans"),
+    where("status", "==", LoanStatus.ACCEPTED && LoanStatus.PROGRESS),
+    where("productId", "==", productId)
+  );
+
+  const querySnapshot = await getDocs(q);
+  const loanDates: LoanDate[] = [];
+  querySnapshot.forEach((doc) => {
+    const loanData = doc.data();
+    loanDates.push({
+      startDate: loanData.startDate,
+      endDate: loanData.endDate,
+    });
+  });
+
+  return loanDates;
 };

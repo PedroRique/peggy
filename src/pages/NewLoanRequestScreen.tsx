@@ -1,15 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { isBefore, startOfDay } from "date-fns";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Masks } from "react-native-mask-input";
-import DropDown from "react-native-paper-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
 import { useSelector } from "react-redux";
 import { StackTypes } from "../../App";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import Button from "../components/Button";
+import CalendarDrop from "../components/Calendar";
+import DropdownButton from "../components/DropdownButton.js";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { ProductCard } from "../components/ProductCard";
@@ -17,15 +17,22 @@ import { Rate } from "../components/Rate";
 import { BoldText } from "../components/Text/BoldText";
 import { Text } from "../components/Text/Text";
 import { Address } from "../models/Address";
-import { LoanRequest, LoanStatus, LoanWithInfo } from "../models/Loan";
+import {
+  LoanDate,
+  LoanRequest,
+  LoanStatus,
+  LoanWithInfo,
+} from "../models/Loan";
 import { UserData } from "../models/UserData";
-import { createLoan, updateLoanStatus } from "../services/loan.service";
+import {
+  createLoan,
+  fetchAcceptedLoanDatesForProduct,
+  updateLoanStatus,
+} from "../services/loan.service";
 import { getRate } from "../services/rating.service";
 import { fetchUserData } from "../services/user.service";
-import { formatAddressLabel, getDateObject } from "../services/utils.service";
+import { formatAddressLabel } from "../services/utils.service";
 import { AppState } from "../store";
-import React from "react";
-import DropdownButton from "../components/DropdownButton.js";
 
 export default function NewLoanRequestScreen() {
   const toast = useToast();
@@ -40,16 +47,16 @@ export default function NewLoanRequestScreen() {
   );
   const currentUserData = useSelector((state: AppState) => state.user.userData);
 
-  const [showDropDown, setShowDropDown] = useState(false);
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>();
+  const [endDate, setEndDate] = useState<Date | null>();
   const [pickUpTime, setPickUpTime] = useState("");
   const [giveBackTime, setGiveBackTime] = useState("");
   const [sentence, setSentence] = useState(<></>);
   const [formValid, setFormValid] = useState(false);
   const [rate, setRate] = useState<number>();
+  const [unavailableDates, setUnavailableDates] = useState<LoanDate[]>([]);
 
   useEffect(() => {
     getLenderUserData();
@@ -61,31 +68,33 @@ export default function NewLoanRequestScreen() {
     setRate(rate);
   };
 
-  useEffect(() => {
-    const startDateObject = getDateObject(startDate);
-    const endDateObject = getDateObject(endDate);
+  const fetchLoanDates = async (productId: string) => {
+    const dates = await fetchAcceptedLoanDatesForProduct(productId);
+    setUnavailableDates(dates);
+  };
 
+  useEffect(() => {
+    fetchLoanDates(product?.uid!);
+  }, []);
+
+  useEffect(() => {
     setFormValid(
       !!address &&
         !!startDate &&
         !!endDate &&
         !!pickUpTime &&
         !!giveBackTime &&
-        !!startDateObject &&
-        !!endDateObject &&
-        startDate.length == 10 &&
-        endDate.length == 10 &&
         pickUpTime.length == 5 &&
         giveBackTime.length == 5 &&
-        !isBefore(startDateObject, startOfDay(new Date())) &&
-        !isBefore(endDateObject, startDateObject)
+        !isBefore(startDate, startOfDay(new Date())) &&
+        !isBefore(endDate, startDate)
     );
   }, [address, startDate, endDate, pickUpTime, giveBackTime]);
 
   useEffect(() => {
     if (loan) {
-      setStartDate(loan.startDate);
-      setEndDate(loan.endDate);
+      setStartDate(new Date(loan.startDate));
+      setEndDate(new Date(loan.endDate));
       setPickUpTime(loan.pickUpTime);
       setGiveBackTime(loan.giveBackTime);
       setAddress(loan.address);
@@ -116,13 +125,13 @@ export default function NewLoanRequestScreen() {
   const onCreate = () => {
     const req: LoanRequest = {
       address,
-      endDate,
+      endDate: endDate!.toISOString(),
       giveBackTime,
       pickUpTime,
       borrowerUserId: FIREBASE_AUTH.currentUser?.uid || "",
       lenderUserId: product?.userId || "",
       productId: product?.uid || "",
-      startDate,
+      startDate: startDate!.toISOString(),
     };
 
     createLoan(req, product)
@@ -271,33 +280,38 @@ export default function NewLoanRequestScreen() {
         )}
 
         <View style={styles.loanForm}>
-            <DropdownButton
+          <DropdownButton
             label={"Buscar e devolver em"}
             placeholder={"Selecione um endereço"}
             options={
-            lenderUserData && lenderUserData.addresses
-              ? lenderUserData.addresses.map((address: Address) => ({
-                  label: formatAddressLabel(address),
-                  onPress: () => {
-                    setAddress(formatAddressLabel(address)); 
-                  },
-                }))
-                  : []
-              }
-              editable={!loan}
-              />
+              lenderUserData && lenderUserData.addresses
+                ? lenderUserData.addresses.map((address: Address) => ({
+                    label: formatAddressLabel(address),
+                    onPress: () => {
+                      setAddress(formatAddressLabel(address));
+                    },
+                  }))
+                : []
+            }
+            editable={!loan}
+            value={address}
+          />
 
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
-              <TextInput
-                label="Buscar no dia"
+              <CalendarDrop
+                label="Pegar no dia"
                 placeholder="DD/MM/YYYY"
-                value={startDate}
                 editable={!loan}
-                selectTextOnFocus={!loan}
-                onChangeText={setStartDate}
-                mask={Masks.DATE_DDMMYYYY}
-              ></TextInput>
+                value={startDate}
+                unavailableDates={unavailableDates}
+                onClose={function (): void {
+                  throw new Error("Function not implemented.");
+                }}
+                onSelectDate={function (date: Date | null): void {
+                  setStartDate(date);
+                }}
+              />
             </View>
             <View style={{ flex: 1 }}>
               <TextInput
@@ -311,18 +325,21 @@ export default function NewLoanRequestScreen() {
               ></TextInput>
             </View>
           </View>
-
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
-              <TextInput
+              <CalendarDrop
                 label="Devolver no dia"
                 placeholder="DD/MM/YYYY"
-                value={endDate}
                 editable={!loan}
-                selectTextOnFocus={!loan}
-                onChangeText={setEndDate}
-                mask={Masks.DATE_DDMMYYYY}
-              ></TextInput>
+                value={endDate}
+                unavailableDates={unavailableDates}
+                onClose={function (): void {
+                  throw new Error("Function not implemented.");
+                }}
+                onSelectDate={function (date: Date | null): void {
+                  setEndDate(date);
+                }}
+              ></CalendarDrop>
             </View>
             <View style={{ flex: 1 }}>
               <TextInput

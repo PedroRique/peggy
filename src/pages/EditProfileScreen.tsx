@@ -13,6 +13,7 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
 import DropdownButton from "../components/DropdownButton.js";
+import CalendarDrop from "../components/Calendar";
 
 
 export default function EditProfileScreen() {
@@ -77,7 +78,6 @@ export default function EditProfileScreen() {
           </View>
         </View>
         <Button title="Salvar" onPress={handleSaveProfile} />
-
       </View>
     </SafeAreaView>
   );

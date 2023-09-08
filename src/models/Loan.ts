@@ -1,9 +1,12 @@
 import { Product } from "./Product";
 import { UserData } from "./UserData";
 
-export interface LoanRequest {
+export interface LoanDate {
   startDate: string;
   endDate: string;
+}
+
+export interface LoanRequest extends LoanDate {
   pickUpTime: string;
   giveBackTime: string;
   address: string;

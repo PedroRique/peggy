@@ -97,6 +97,17 @@ export const getDateObject = (date: string): Date | null => {
   return dateObject;
 };
 
+
+export const getDatesBetween = (startDate: string, endDate: string) => {
+  let daysBetween: string[] = [];
+  for (let currentDate = new Date(startDate); currentDate <= new Date(endDate); currentDate.setDate(currentDate.getDate() + 1)) {
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    daysBetween.push(formattedDate);
+  }
+
+  return daysBetween;
+}
+
 export const calculateDistance = (
   lat1: number,
   lon1: number,
