@@ -9,8 +9,8 @@ export const fetchCoordinatesFromAddress = async (address: string | number | boo
     );
 
     if (response.data.results.length > 0) {
-      const latitude = response.data.results[0].geometry.location.lat;
-      const longitude = response.data.results[0].geometry.location.lng;
+      const latitude = response.data.results[0].geometry.location.lat as number;
+      const longitude = response.data.results[0].geometry.location.lng as number;
 
       return { latitude, longitude };
     } else {
