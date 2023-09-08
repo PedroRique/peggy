@@ -5,6 +5,7 @@ import {
   collection,
   deleteDoc, doc, 
   endAt,
+  getDoc,
   orderBy,
   query,
   startAt,
@@ -84,5 +85,30 @@ export const removeProduct = async (productId: string | undefined) => {
     } 
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const fetchProductCoordinates = async (productId: string) => {
+  try {
+    const productRef = doc(FIREBASE_DB, "products", productId);
+    const productSnapshot = await getDoc(productRef);
+
+    if (productSnapshot.exists()) {
+      const productData = productSnapshot.data() as Product;
+
+      if (productData.coordinates.latitude && productData.coordinates.longitude) {
+        const { latitude, longitude } = productData.coordinates;
+        return { latitude, longitude };
+      } else {
+        console.error("Product does not have valid coordinates.");
+        return null;
+      }
+    } else {
+      console.error("Product not found.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching product coordinates:", error);
+    return null;
   }
 };

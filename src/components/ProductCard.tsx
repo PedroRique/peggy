@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -7,38 +7,65 @@ import {
   TouchableOpacityProps,
   View,
 } from "react-native";
+import { Address } from "../models/Address";
+import { LoanStatus } from "../models/Loan";
 import { Product } from "../models/Product";
 import { removeProduct } from "../services/product.service";
-import { Text } from "./Text/Text";
+import {
+  calculateDistance,
+  convertFloatToDistance,
+} from "../services/utils.service";
 import { PColors } from "../shared/Colors";
-import { BoldText } from "./Text/BoldText";
 import ConfirmationModal from "./ConfirmationModal";
-import React from "react";
-import { LoanStatus } from "../models/Loan"; 
+import { BoldText } from "./Text/BoldText";
+import { Text } from "./Text/Text";
 interface ProductCardProps extends TouchableOpacityProps {
   product: Product;
-  loanStatus?: LoanStatus; 
+  loanStatus?: LoanStatus;
   showDistance?: boolean;
   hasShadow?: boolean;
   hasName?: boolean;
   hasTrash?: boolean;
   size?: number;
+  address?: Address;
 }
 
 export const ProductCard = ({
   style,
   product,
   onPress,
-  loanStatus, 
+  loanStatus,
   size = 150,
   showDistance = false,
   hasShadow = true,
   hasName = true,
   hasTrash = false,
+  address,
   ...rest
 }: ProductCardProps) => {
   const [isRemoved, setIsRemoved] = useState(false);
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+
+  const distance = useMemo(() => {
+    if (address && product) {
+      const { latitude, longitude } = address;
+      const { coordinates } = product;
+      if (
+        latitude &&
+        longitude &&
+        coordinates?.latitude &&
+        coordinates?.longitude
+      ) {
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          coordinates.latitude,
+          coordinates.longitude
+        );
+        return convertFloatToDistance(distance);
+      }
+    }
+  }, [address, product]);
 
   const handleDeleteConfirm = () => {
     setIsConfirmationVisible(false);
@@ -60,10 +87,9 @@ export const ProductCard = ({
     setIsConfirmationVisible(true);
   };
 
-
   return (
     <>
-        {!isRemoved && (
+      {!isRemoved && (
         <TouchableOpacity
           style={[styles.productContainer, style, { width: size }]}
           {...rest}
@@ -76,13 +102,13 @@ export const ProductCard = ({
               hasShadow && styles.shadowStyle,
               { width: size, height: size },
             ]}
-            source={{ uri: product.imageUrl }}
+            source={{ uri: product.mainImageUrl }}
             resizeMode="cover"
           >
             {showDistance && (
               <View style={styles.distanceContainer}>
                 <Feather name="map-pin" size={16} color={PColors.Blue} />
-                <Text style={styles.distance}>650m</Text>
+                <Text style={styles.distance}>{distance}</Text>
               </View>
             )}
           </ImageBackground>
@@ -90,7 +116,7 @@ export const ProductCard = ({
             {hasName && (
               <BoldText style={{ marginTop: 16 }}>{product.name}</BoldText>
             )}
-            {hasTrash && !product.locked &&(
+            {hasTrash && !product.locked && (
               <TouchableOpacity onPress={remove}>
                 <Feather
                   name="trash-2"
@@ -99,7 +125,7 @@ export const ProductCard = ({
                   style={{ marginTop: 12 }}
                 />
               </TouchableOpacity>
-            ) }
+            )}
           </View>
         </TouchableOpacity>
       )}
@@ -115,7 +141,6 @@ export const ProductCard = ({
     </>
   );
 };
-
 
 const styles = StyleSheet.create({
   distanceContainer: {
@@ -140,7 +165,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   productContainer: {
-    backgroundColor: PColors.White
+    backgroundColor: PColors.White,
   },
   shadowStyle: {
     shadowOffset: { width: 0, height: 5 },
@@ -150,6 +175,6 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: "row",
-    justifyContent:"space-between"
+    justifyContent: "space-between",
   },
 });
