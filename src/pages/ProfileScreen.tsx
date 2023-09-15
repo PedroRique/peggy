@@ -98,8 +98,8 @@ export default function ProfileScreen() {
       };
 
       loadUserProfile();
-    }
-  }, [route.params, currentUserData]);
+    }} , [route.params, currentUserData]);
+  
 
   const noBio = isOwnProfile
     ? "Você não possui uma biografia."
@@ -115,6 +115,9 @@ export default function ProfileScreen() {
 
   const navigation = useNavigation<StackTypes>();
 
+  useEffect(() => {isOwnProfile &&
+    getProfileInfo()})
+  
   const getProfileInfo = async () => {
     await getUserProducts();
     await getUserData();
