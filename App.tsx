@@ -53,7 +53,7 @@ export type StackNavigation = {
   Loans?: {
     initialTab: LoanType;
   };
-  Profile: undefined;
+  Profile: {uid:string};
   Main: undefined;
   Product: undefined;
   Login: undefined;

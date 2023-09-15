@@ -32,8 +32,6 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
 import { fetchUserDataById } from "../services/utils.service";
-import { FIREBASE_AUTH } from "../../firebaseConfig";
-import is from "date-fns/esm/locale/is/index.js";
 const coin = require("../../assets/images/coin.png");
 
 
@@ -115,8 +113,10 @@ export default function ProfileScreen() {
 
   const navigation = useNavigation<StackTypes>();
 
-  useEffect(() => {isOwnProfile &&
-    getProfileInfo()})
+  useEffect(() => {
+    isOwnProfile &&
+    getProfileInfo()
+  },[])
   
   const getProfileInfo = async () => {
     await getUserProducts();
@@ -212,11 +212,11 @@ export default function ProfileScreen() {
           </View>
         </View>}
         {!isOwnProfile && (
-          <View style={styles.mensagem}>
+          <View>
             <TouchableOpacity style={styles.mensagem2}>
               <Feather name="message-square" color={PColors.Black} size={32}></Feather>
               <View style={{ alignItems: "center" }}>
-                <BoldText>Enviar Mensagem</BoldText>
+                <BoldText size={24}>Enviar Mensagem</BoldText>
               </View>
             </TouchableOpacity>
           </View>
@@ -258,7 +258,7 @@ export default function ProfileScreen() {
                 <AddressTile
                   key={i}
                   address={address}
-                  hasTrash={isOwnProfile}
+                  hasTrash={isOwnProfile && hasMoreThanOneAddress}
                   onDelete={() => getProfileInfo()}
                 />
               ))
@@ -321,12 +321,14 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     overflow: "visible",
   },
-  mensagem: { alignItems: "center", marginBottom: 28 },
   mensagem2: {
     backgroundColor: "#F3F3F3",
     marginHorizontal: 12,
+    marginBottom:20,
     paddingVertical: 20,
     flexDirection: "row",
+    paddingHorizontal:20,
+    justifyContent: "space-between",
   },
   myHeader: {
     display: "flex",
