@@ -42,7 +42,7 @@ export default function NewProductScreen() {
 
   const createProduct = async () => {
 
-    const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
+    // const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
 
     let finalImageUrls = imageUrls;
     if (imageUrls.length === 1 && !mainImageUrl) {
@@ -59,7 +59,7 @@ export default function NewProductScreen() {
       category,
       selectedAddress,
       price,
-      coordinates,
+      // coordinates,
     })
       .then(() => {
         toast.show("Produto adicionado com sucesso!", { type: "success" });

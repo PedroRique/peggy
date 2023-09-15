@@ -50,17 +50,17 @@ export default function NewAddressScreen() {
         addressData.referencePoint = referencePoint;
       }
 
-      const coordinates = await fetchCoordinatesFromAddress(
-        addressData.number + " " + addressData.street + ", " + addressData.city
-      );
+      // const coordinates = await fetchCoordinatesFromAddress(
+      //   addressData.number + " " + addressData.street + ", " + addressData.city
+      // );
   
-      if (coordinates) {
-        const updatedAddress = { ...addressData, ...coordinates };
+      // if (coordinates) {
+      //   const updatedAddress = { ...addressData, ...coordinates };
   
-        await addAddress(updatedAddress);
-      } else {
-        console.log("Endereço não encontrado.");
-      }
+      //   await addAddress(updatedAddress);
+      // } else {
+      //   console.log("Endereço não encontrado.");
+      // }
 
       toast.show("Endereço adicionado com sucesso!", { type: "success" });
       navigation.goBack();
