@@ -213,7 +213,7 @@ export default function ProfileScreen() {
         </View>}
         {!isOwnProfile && (
           <View>
-            <TouchableOpacity style={styles.mensagem2}>
+            <TouchableOpacity style={styles.chat}>
               <Feather name="message-square" color={PColors.Black} size={32}></Feather>
               <View style={{ alignItems: "center" }}>
                 <BoldText size={24}>Enviar Mensagem</BoldText>
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     overflow: "visible",
   },
-  mensagem2: {
+  chat: {
     backgroundColor: "#F3F3F3",
     marginHorizontal: 12,
     marginBottom:20,
