@@ -211,14 +211,22 @@ export default function ProfileScreen() {
             <BoldText size={16}>Peggies</BoldText>
           </View>
         </View>}
-        {!isOwnProfile && (
+                {!isOwnProfile && (
           <View>
-            <TouchableOpacity style={styles.chat}>
-              <Feather name="message-square" color={PColors.Black} size={32}></Feather>
-              <View style={{ alignItems: "center" }}>
-                <BoldText size={24}>Enviar Mensagem</BoldText>
-              </View>
-            </TouchableOpacity>
+       <TouchableOpacity
+          style={styles.chat}
+          onPress={() => {
+            navigation.navigate('Chat', {
+              UID: currentUserData?.name,
+              chatroomId={selectedConversation.id} 
+            });
+          }}
+        >
+          <Feather name="message-square" color={PColors.Black} size={32}></Feather>
+          <View style={{ alignItems: "center" }}>
+            <BoldText size={24}>Enviar Mensagem</BoldText>
+          </View>
+        </TouchableOpacity>
           </View>
         )}
         <View style={styles.myContainer}>
