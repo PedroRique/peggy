@@ -19,17 +19,29 @@ import { AppState } from "../store";
 import { formatAddressLabel } from "../services/utils.service";
 import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 import DropdownButton from "../components/DropdownButton.js";
+import SegmentedButton from "../components/SegmentButton";
 
 
 export default function NewProductScreen() {
+  const segmentButtons = [
+    {
+      value: 'doar',
+      label: 'Doar',
+    },
+    {
+      value: 'emprestar',
+      label: 'Emprestar',
+    },
+  ];
+
   const navigation = useNavigation<StackTypes>();
   const route = useRoute<RouteProp<StackNavigation, "NewProduct">>();
   const toast = useToast();
   const [showDropDown, setShowDropDown] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrls, setImageUrls] = useState<string[]>([]); 
-  const [mainImageUrl, setMainImageUrl] = useState<string | null>(null); 
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
   const [category, setCategory] = useState<any>(null);
   const [price, setPrice] = useState<any>(null);
   const [formValid, setFormValid] = useState(false);
@@ -54,7 +66,7 @@ export default function NewProductScreen() {
     addProduct({
       name,
       description,
-      imageUrls: finalImageUrls, 
+      imageUrls: finalImageUrls,
       mainImageUrl,
       category,
       selectedAddress,
@@ -116,7 +128,7 @@ export default function NewProductScreen() {
                   style={[
                     styles.carouselImage,
                     (mainImageUrl === url && styles.selectedImage),
-                    (imageUrls.length === 1 && styles.singleImage), 
+                    (imageUrls.length === 1 && styles.singleImage),
                   ]}
                 />
               </TouchableOpacity>
@@ -151,21 +163,21 @@ export default function NewProductScreen() {
               }))} value={""} />
           </View>
 
-            <DropdownButton
-              label={"Endereço do Produto"}
-              options={
-                currentUserData && currentUserData.addresses
-                  ? currentUserData.addresses.map((address) => ({
-                      label: formatAddressLabel(address),
-                      onPress: () => {
-                        setSelectedAddress(formatAddressLabel(address));
-                      },
-                    }))
-                  : []
-              }
-  
-              placeholder={"Selecione um endereço"}
-            />
+          <DropdownButton
+            label={"Endereço do Produto"}
+            options={
+              currentUserData && currentUserData.addresses
+                ? currentUserData.addresses.map((address) => ({
+                  label: formatAddressLabel(address),
+                  onPress: () => {
+                    setSelectedAddress(formatAddressLabel(address));
+                  },
+                }))
+                : []
+            }
+
+            placeholder={"Selecione um endereço"}
+          />
 
           <TextInput
             label="Preço diário"
@@ -173,6 +185,7 @@ export default function NewProductScreen() {
             value={price}
             onChangeText={setPrice}
           ></TextInput>
+          <SegmentedButton buttons={segmentButtons} />
 
         </View>
       </ScrollView>
@@ -204,7 +217,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   singleImage: {
-    borderWidth: 0, 
+    borderWidth: 0,
   },
   imageCarousel: {
     flexDirection: "row",
@@ -214,7 +227,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 7,
-    marginHorizontal:8,
+    marginHorizontal: 8,
   },
   selectedImage: {
     borderWidth: 2,
@@ -236,7 +249,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    marginRight:8,
+    marginRight: 8,
   },
   footer: {
     padding: 16,
