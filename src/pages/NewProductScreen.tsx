@@ -23,17 +23,6 @@ import SegmentedButton from "../components/SegmentButton";
 
 
 export default function NewProductScreen() {
-  const segmentButtons = [
-    {
-      value: 'doar',
-      label: 'Doar',
-    },
-    {
-      value: 'emprestar',
-      label: 'Emprestar',
-    },
-  ];
-
   const navigation = useNavigation<StackTypes>();
   const route = useRoute<RouteProp<StackNavigation, "NewProduct">>();
   const toast = useToast();
@@ -45,13 +34,25 @@ export default function NewProductScreen() {
   const [category, setCategory] = useState<any>(null);
   const [price, setPrice] = useState<any>(null);
   const [formValid, setFormValid] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
 
   const categories = useSelector((state: AppState) => state.category.categories);
 
   useEffect(() => {
-    setFormValid(!!name && !!description && !!category && !!price);
-  }, [name, description, category, price]);
-
+    let isFormValid = !!name && !!description && !!category;
+  
+    if (selectedOption === "emprestar") {
+      isFormValid = isFormValid && !!price;
+    }
+  
+    setFormValid(isFormValid);
+  
+    if (imageUrls.length === 1 && !mainImageUrl) {
+      setMainImageUrl(imageUrls[0]);
+    }
+  }, [name, description, category, price, selectedOption, imageUrls, mainImageUrl]);
+  
   const createProduct = async () => {
 
     const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
@@ -70,8 +71,9 @@ export default function NewProductScreen() {
       mainImageUrl,
       category,
       selectedAddress,
-      price,
+      price: selectedOption === "emprestar" ? price : null,
       coordinates,
+      transaction,
     })
       .then(() => {
         toast.show("Produto adicionado com sucesso!", { type: "success" });
@@ -101,7 +103,8 @@ export default function NewProductScreen() {
     }
   };
 
-  const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
+  const [transaction, setTransaction] = useState<string | number >("doar");
+  
   const [selectedAddress, setSelectedAddress] = useState("");
 
   const currentUserData = useSelector((state: AppState) => state.user.userData);
@@ -165,27 +168,39 @@ export default function NewProductScreen() {
 
           <DropdownButton
             label={"Endereço do Produto"}
-            options={
-              currentUserData && currentUserData.addresses
-                ? currentUserData.addresses.map((address) => ({
-                  label: formatAddressLabel(address),
-                  onPress: () => {
-                    setSelectedAddress(formatAddressLabel(address));
-                  },
-                }))
-                : []
-            }
+            options={currentUserData && currentUserData.addresses
+              ? currentUserData.addresses.map((address) => ({
+                label: formatAddressLabel(address),
+                onPress: () => {
+                  setSelectedAddress(formatAddressLabel(address));
+                },
+              }))
+              : []}
 
-            placeholder={"Selecione um endereço"}
-          />
+            placeholder={"Selecione um endereço"} value={""}          />
+          <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
+            <SegmentedButton
+              options={[
+                { name: "Doar", value: "doar" },
+                { name: "Emprestar", value: "emprestar" },
+              ]}
+              value={transaction}
+              onValueChange={(selectedValue) => {
+                setSelectedOption(selectedValue);
+                setTransaction(selectedValue);
+              }}
+            />
+          </View>
 
-          <TextInput
-            label="Preço diário"
-            placeholder="Preço diário"
-            value={price}
-            onChangeText={setPrice}
-          ></TextInput>
-          <SegmentedButton buttons={segmentButtons} />
+          {selectedOption === "emprestar" && (
+
+            <TextInput
+              label="Preço diário"
+              placeholder="Preço diário"
+              value={price}
+              onChangeText={setPrice}
+            />
+          )}
 
         </View>
       </ScrollView>
