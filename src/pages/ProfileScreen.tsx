@@ -1,7 +1,8 @@
 import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -22,58 +23,104 @@ import { Text } from "../components/Text/Text";
 import { ImageFolder } from "../models/ImageFolder.enum";
 import { Product } from "../models/Product";
 import { pickImage } from "../services/camera.service";
-import { fetchProductsById } from "../services/product.service";
 import {
   fetchCurrentUserData,
   updateUserPhotoURL,
 } from "../services/user.service";
+import { fetchProductsById } from "../services/product.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import { fetchUserDataById } from "../services/utils.service";
 const coin = require("../../assets/images/coin.png");
 
-const SectionHeader = ({
-  title,
-  route,
-  onAdd,
-}: {
-  title: string;
-  route: any;
-  onAdd: () => void;
-}) => {
-  const navigation = useNavigation<StackTypes>();
-
-  return (
-    <View style={styles.myHeader}>
-      <BoldText style={styles.myHeaderTitle}>{title}</BoldText>
-      <Pressable
-        style={styles.addButton}
-        onPress={() => {
-          navigation.navigate(route, { onAdd });
-        }}
-      >
-        <Feather name="plus" color={PColors.White} size={32} />
-      </Pressable>
-    </View>
-  );
-};
 
 export default function ProfileScreen() {
+  const SectionHeader = ({
+    title,
+    route,
+    onAdd,
+  }: {
+    title: string;
+    route: any;
+    onAdd: () => void;
+  }) => {
+    const navigation = useNavigation<StackTypes>();
+  
+  
+    return (
+      <View style={styles.myHeader}>
+        <BoldText style={styles.myHeaderTitle}>{title}</BoldText>
+   {isOwnProfile &&
+          <Pressable
+            style={styles.addButton}
+            onPress={() => {
+              navigation.navigate(route, { onAdd });
+            }}
+          >
+            <Feather name="plus" color={PColors.White} size={32} />
+          </Pressable>}
+        
+      </View>
+    );
+  };
+  
   const dispatch = useDispatch();
-  const userData = useSelector((state: AppState) => state.user.userData);
+  const route = useRoute();
+  const currentUserData = useSelector(
+    (state: AppState) => state.user.userData
+  );
+  const [currentUserUid, setCurrentUserUid] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [isOwnProfile, setIsOwnProfile] = useState(true);
 
-  const noBio = "Você não possui uma biografia.";
+
+
+  useEffect(() => {
+    if (route.params) {
+      const { uid } = route.params;
+      const loadUserProfile = async () => {
+        try {
+          const userProfileData = await fetchUserDataById(uid);
+          if (userProfileData) {
+            setIsOwnProfile(currentUserData?.uid === uid);
+            const userProducts = await fetchProductsById(isOwnProfile ? currentUserData?.uid : uid);
+            setProducts(userProducts);
+            dispatch(userSlice.actions.setUserData(userProfileData));
+          } else {
+            console.log('Usuário não encontrado');
+          }
+        } catch (error) {
+          console.error('Erro ao carregar perfil da outra pessoa:', error);
+        }
+      };
+
+      loadUserProfile();
+    }} , [route.params, currentUserData]);
+  
+
+  const noBio = isOwnProfile
+    ? "Você não possui uma biografia."
+    : "Este usuário não possui uma biografia.";
+
+  const noProduct = isOwnProfile
+    ? "Você não possui nenhum item."
+    : "Este usuário não possui nenhum item.";
+
+  const noAddress = isOwnProfile
+    ? "Você não possui nenhum endereço."
+    : "Este usuário não possui nenhum endereço.";
 
   const navigation = useNavigation<StackTypes>();
 
   useEffect(() => {
-    getProfileInfo();
-  }, []);
-
-  const getProfileInfo = () => {
-    getUserProducts();
-    getUserData();
+    isOwnProfile &&
+    getProfileInfo()
+  },[])
+  
+  const getProfileInfo = async () => {
+    await getUserProducts();
+    await getUserData();
   };
 
   const getUserData = async () => {
@@ -86,52 +133,72 @@ export default function ProfileScreen() {
     setProducts(result);
   };
 
-  const getPhotoUrl = async () => {
-    const result = await pickImage(ImageFolder.USERS);
+  const getPhotoUrl =  async (source: "gallery" ) => {
+    const result =  await pickImage(ImageFolder.USERS, source);
     updateUserPhotoURL(result);
     dispatch(
       userSlice.actions.setUserData({
-        ...userData,
+        ...currentUserData,
         photoURL: result,
       })
     );
-  };
+  };  
 
-  const hasAddress = !!userData?.addresses?.length;
+  // const createThreeButtonAlert = () =>
+  //   Alert.alert('Choose a Photo Source', 'Select the source for your photo', [
+  //     {
+  //       text: 'Cancel',
+  //       onPress: () => console.log('Cancel Pressed'),
+  //       style: 'cancel',
+  //     },
+  //     {
+  //       text: 'Gallery',
+  //       onPress: () => getPhotoUrl('gallery'),
+  //     },
+  //     {
+  //       text: 'Camera',
+  //       onPress: () => getPhotoUrl('camera'),
+  //     },
+  //   ]);
+
+  const hasAddress = !!currentUserData?.addresses?.length;
   const hasMoreThanOneAddress =
-    hasAddress && (userData?.addresses?.length || 0) > 1;
+    hasAddress && (currentUserData?.addresses?.length || 0) > 1;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={userData?.name} hasBorder hasMore />
+      <Header title={currentUserData?.name} hasBorder hasMore={isOwnProfile} />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
-          <Avatar
+        <Avatar
             size={100}
-            imageUrl={userData?.photoURL}
-            onPress={getPhotoUrl}
+            imageUrl={currentUserData?.photoURL}
+            onPress={() => getPhotoUrl ("gallery")}
           />
+
           <View>
             <View>
-              <Rate value={userData?.rate} color={PColors.Blue} />
+              <Rate value={currentUserData?.rate} color={PColors.Blue} />
             </View>
-            {userData?.bio ? (
-              <Text style={styles.avatarBio}>{userData?.bio}</Text>
+            {currentUserData?.bio ? (
+              <Text style={styles.avatarBio}>{currentUserData?.bio}</Text>
             ) : (
               <Text style={styles.avatarBio}>
                 {noBio}{" "}
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("EditProfile");
-                  }}
-                >
-                  <Text color={PColors.Blue}>Adicione.</Text>
-                </TouchableOpacity>
+                {!isOwnProfile && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("EditProfile");
+                    }}
+                  >
+                    <Text color={PColors.Blue}>Adicione.</Text>
+                  </TouchableOpacity>
+                )}
               </Text>
             )}
           </View>
         </View>
-
+        {isOwnProfile &&
         <View style={styles.peggiesContainer}>
           <BoldText size={20} style={styles.peggiesText}>
             Você possui:
@@ -139,40 +206,46 @@ export default function ProfileScreen() {
           <View style={styles.row}>
             <Image source={coin} style={styles.coinIcon} />
             <Text size={36} weight="900">
-              {userData?.balance || 0}
+              {currentUserData?.balance || 0}
             </Text>
             <BoldText size={16}>Peggies</BoldText>
           </View>
-        </View>
-
-        {hasAddress && (
-          <View style={styles.myContainer}>
-            <SectionHeader
-              title="Seus produtos"
-              route="NewProduct"
-              onAdd={getProfileInfo}
-            />
-            <View style={[!products?.length && styles.products]}>
-              {products?.length ? (
-                <ProductHorizontalList products={products} hasTrash />
-              ) : (
-                <View style={styles.row}>
-                  <Text>Você não possui nenhum item.</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("NewProduct", {
-                        onAdd: () => getProfileInfo(),
-                      });
-                    }}
-                  >
-                    <Text color={PColors.Blue}> Adicione.</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </View>
+        </View>}
+        {!isOwnProfile && (
+          <View>
+            <TouchableOpacity style={styles.chat}>
+              <Feather name="message-square" color={PColors.Black} size={32}></Feather>
+              <View style={{ alignItems: "center" }}>
+                <BoldText size={24}>Enviar Mensagem</BoldText>
+              </View>
+            </TouchableOpacity>
           </View>
         )}
-
+        <View style={styles.myContainer}>
+          <SectionHeader
+            title="Seus produtos"
+            route="NewProduct"
+            onAdd={getProfileInfo}
+          />
+          <View style={[!products?.length && styles.products]}>
+            {products?.length ? (
+              <ProductHorizontalList products={products} hasTrash={isOwnProfile} />
+            ) : (
+              <View style={styles.row}>
+                <Text> {noProduct}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("NewProduct", {
+                      onAdd: () => getProfileInfo(),
+                    });
+                  }}
+                >
+                  <Text color={PColors.Blue}> Adicione.</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
         <View style={styles.myContainer}>
           <SectionHeader
             title="Seus endereços"
@@ -180,19 +253,19 @@ export default function ProfileScreen() {
             onAdd={getProfileInfo}
           />
           <View style={styles.addresses}>
-            {userData?.addresses?.length ? (
-              userData.addresses.map((address, i) => (
+            {currentUserData?.addresses?.length ? (
+              currentUserData.addresses.map((address, i) => (
                 <AddressTile
                   key={i}
                   address={address}
-                  hasTrash={hasMoreThanOneAddress}
+                  hasTrash={isOwnProfile && hasMoreThanOneAddress}
                   onDelete={() => getProfileInfo()}
                 />
               ))
             ) : (
               <View>
                 <View style={styles.row}>
-                  <Text>Você não possui nenhum endereço.</Text>
+                  <Text> {noAddress}</Text>
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate("NewAddress", {
@@ -206,7 +279,7 @@ export default function ProfileScreen() {
 
                 <View style={styles.noAddressWarn}>
                   <Text>
-                    Para que você possa adicionar items, primeiro adicione um
+                    Para que você possa adicionar itens, primeiro adicione um
                     endereço. Seus endereços serão seus{" "}
                     <BoldText>pontos de encontro</BoldText> com quem desejar
                     pegar emprestado algum item seu.
@@ -216,6 +289,7 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -243,33 +317,18 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: 240,
   },
-  peggiesContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: PColors.LightOrange,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 7,
-    marginBottom: 32,
-    marginHorizontal: 16,
-  },
-  peggiesText: {
-    display: "flex",
-    alignItems: "center",
-    gap: 4,
-  },
-  peggiesTextBig: {
-    lineHeight: 24,
-  },
-  coinIcon: {
-    width: 40,
-    height: 40,
-  },
   myContainer: {
     marginBottom: 32,
     overflow: "visible",
+  },
+  chat: {
+    backgroundColor: "#F3F3F3",
+    marginHorizontal: 12,
+    marginBottom:20,
+    paddingVertical: 20,
+    flexDirection: "row",
+    paddingHorizontal:20,
+    justifyContent: "space-between",
   },
   myHeader: {
     display: "flex",
@@ -311,5 +370,29 @@ const styles = StyleSheet.create({
     padding: 16,
     marginTop: 16,
     gap: 6,
+  },
+  peggiesContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: PColors.LightOrange,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 7,
+    marginBottom: 32,
+    marginHorizontal: 16,
+  },
+  peggiesText: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+  },
+  peggiesTextBig: {
+    lineHeight: 24,
+  },
+  coinIcon: {
+    width: 40,
+    height: 40,
   },
 });

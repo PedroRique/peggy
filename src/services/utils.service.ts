@@ -1,8 +1,9 @@
 import { User } from "firebase/auth";
-import { Query, getDocs } from "firebase/firestore";
+import { Query, doc, getDoc, getDocs } from "firebase/firestore";
 import { Address } from "../models/Address";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
+import { FIREBASE_DB } from "../../firebaseConfig";
 
 export const commonFetch = async <T>(q: Query) => {
   const snap = await getDocs(q);
@@ -136,3 +137,25 @@ export const convertFloatToDistance = (floatNumber: number): string => {
     return number.toFixed(0) + "m";
   }
 };
+
+export const fetchUserDataById = async (
+  userId: string
+): Promise<UserData | null> => {
+  try {
+    const userDocRef = doc(FIREBASE_DB, "users", userId); 
+
+    const userDocSnapshot = await getDoc(userDocRef);
+
+    if (userDocSnapshot.exists()) {
+      return userDocSnapshot.data() as UserData;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Erro ao buscar dados de usuário por ID:", error);
+    throw error;
+  }
+};
+
+
+
