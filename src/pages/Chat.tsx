@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { collection, addDoc, query, orderBy, onSnapshot, where, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat'; // Importe GiftedChat corretamente
+import { collection, addDoc, doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
 import { Header } from '../components/Header';
 import { useSelector } from 'react-redux';
 import { AppState } from '../store';
 
-export function Chat({ route }: { route: any }) {
+export function ChatScreen({ route }: { route: any }) {
   const { chatroomId } = route.params;
   const [messages, setMessages] = useState<IMessage[]>([]);
   const currentUserUid = FIREBASE_AUTH.currentUser?.uid;
@@ -18,9 +18,8 @@ export function Chat({ route }: { route: any }) {
 
   useEffect(() => {
     const messagesRef = collection(FIREBASE_DB, 'conversations', chatroomId, 'messages');
-    const q = query(messagesRef, orderBy('createdAt'));
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(messagesRef, (querySnapshot) => { // Remova o tipo 'any' do onSnapshot
       const loadedMessages: IMessage[] = [];
 
       querySnapshot.forEach((doc) => {
@@ -45,23 +44,18 @@ export function Chat({ route }: { route: any }) {
   }, [chatroomId]);
 
   const onSend = async (newMessages: IMessage[] = []) => {
-    const conversationRef = doc(FIREBASE_DB, 'conversations', chatroomId);
-    const messagesRef = collection(FIREBASE_DB, 'messages');
+    const messagesRef = collection(FIREBASE_DB, 'conversations', chatroomId, 'messages');
 
-    const formattedNewMessages = newMessages.map((message) => {
-      const formattedMessage: IMessage = {
-        _id: Math.random().toString(36).substring(7),
-        text: message.text,
-        createdAt: new Date(),
-        user: {
-          _id: currentUserUid,
-          name: 'Nome do Usuário',
-          avatar: 'URL_da_Foto',
-        },
-      };
-
-      return formattedMessage;
-    });
+    const formattedNewMessages = newMessages.map((message) => ({
+      _id: Math.random().toString(36).substring(7),
+      text: message.text,
+      createdAt: new Date(),
+      user: {
+        _id: currentUserUid,
+        name: currentUserData?.name,
+        avatar: currentUserData?.avatar,
+      },
+    }));
 
     setLocalMessages((previousMessages) =>
       GiftedChat.append(previousMessages, formattedNewMessages)
@@ -77,9 +71,11 @@ export function Chat({ route }: { route: any }) {
       });
     }
 
-    await updateDoc(conversationRef, {
+    // Atualize o campo "lastMessage" na conversa para refletir a última mensagem.
+    const conversaRef = doc(FIREBASE_DB, 'conversations', chatroomId);
+    await updateDoc(conversaRef, {
       lastMessage: {
-        text: newMessages[0].text, 
+        text: newMessages[0].text,
         timestamp: new Date(),
       },
       messages: arrayUnion(...formattedNewMessages.map((message) => message._id)),

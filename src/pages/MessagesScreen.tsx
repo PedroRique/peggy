@@ -2,42 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, FlatList, TouchableOpacity, Image, Text, View } from 'react-native';
 import { Header } from '../components/Header';
 import { Avatar } from '../components/Avatar';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { FIREBASE_DB } from '../../firebaseConfig';
+
+const mockConversation = [
+  {
+    id: '1',
+    name: 'John Doe',
+    lastMessage: 'Hello, how are you?',
+    avatarUrl: 'https://example.com/avatar1.png',
+    chatroomId: 'chatroom1',
+  },
+  {
+    id: '2',
+    name: 'Alice Smith',
+    lastMessage: 'Im doing well, thanks!',
+    avatarUrl: 'https://example.com/avatar2.png',
+    chatroomId: 'chatroom2',
+  },
+  // Adicione mais objetos de conversa conforme necessário
+];
 
 export default function MessagesScreen({ navigation }) {
-  const [conversations, setConversations] = useState([]);
-
-  useEffect(() => {
-    const loadConversations = async () => {
-      const conversationsRef = collection(FIREBASE_DB, 'conversations');
-      const q = query(
-        conversationsRef,
-        orderBy('lastMessage.timestamp', 'desc')
-      );
-
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const loadedConversations: ((prevState: never[]) => never[]) | { id: string; name: any; lastMessage: any; avatarUrl: any; chatroomId: string; }[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          loadedConversations.push({
-            id: doc.id,
-            name: data.name,
-            lastMessage: data.lastMessage.text,
-            avatarUrl: data.avatarUrl,
-            chatroomId: doc.id,
-          });
-        });
-
-        setConversations(loadedConversations);
-      });
-
-      return () => unsubscribe();
-    };
-
-    loadConversations();
-  }, []);
+  const [conversations, setConversations] = useState(mockConversation);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -47,7 +32,7 @@ export default function MessagesScreen({ navigation }) {
       }}
     >
       <View style={styles.avatar}>
-        <Avatar size={50} />
+        <Avatar size={50} imageUrl={item.avatarUrl} />
       </View>
       <View style={styles.content}>
         <Text style={styles.name}>{item.name}</Text>
@@ -58,7 +43,7 @@ export default function MessagesScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Mensagens" hasBorder hasBack />
+      <Header title="Mensagens" hasBorder  />
       <FlatList
         data={conversations}
         renderItem={renderItem}
