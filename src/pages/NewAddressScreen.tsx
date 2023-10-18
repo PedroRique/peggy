@@ -12,7 +12,7 @@ import { PColors } from "../shared/Colors";
 import { CheckBox } from "react-native";
 import axios from "axios";
 import { Address } from "../models/Address";
-import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
+//import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 import CalendarDropDown from "../components/Calendar";
 
 export default function NewAddressScreen() {

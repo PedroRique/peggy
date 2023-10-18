@@ -5,19 +5,27 @@ import { FIREBASE_STORAGE } from "../../firebaseConfig";
 
 export const pickImage = async (
   folder: string,
-  source: "gallery" | "camera"
+  source: 'gallery' | 'camera'
 ): Promise<string | null> => {
   let result;
 
-  if (source === "gallery") {
+  if (source === 'gallery') {
+
     result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
-  } else if (source === "camera") {
+  } else if (source === 'camera') {
+    const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+    if (cameraPermission.granted === false) {
+      console.error('Permissão de câmera negada');
+      return null;
+    }
+
     result = await ImagePicker.launchCameraAsync({
+
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
