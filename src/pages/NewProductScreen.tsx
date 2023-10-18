@@ -19,6 +19,7 @@ import { AppState } from "../store";
 import { formatAddressLabel } from "../services/utils.service";
 //import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 import DropdownButton from "../components/DropdownButton.js";
+import SegmentedButton from "../components/SegmentButton";
 
 
 export default function NewProductScreen() {
@@ -28,18 +29,30 @@ export default function NewProductScreen() {
   const [showDropDown, setShowDropDown] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrls, setImageUrls] = useState<string[]>([]); 
-  const [mainImageUrl, setMainImageUrl] = useState<string | null>(null); 
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
   const [category, setCategory] = useState<any>(null);
   const [price, setPrice] = useState<any>(null);
   const [formValid, setFormValid] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
 
   const categories = useSelector((state: AppState) => state.category.categories);
 
   useEffect(() => {
-    setFormValid(!!name && !!description && !!category && !!price);
-  }, [name, description, category, price]);
-
+    let isFormValid = !!name && !!description && !!category;
+  
+    if (selectedOption === "emprestar") {
+      isFormValid = isFormValid && !!price;
+    }
+  
+    setFormValid(isFormValid);
+  
+    if (imageUrls.length === 1 && !mainImageUrl) {
+      setMainImageUrl(imageUrls[0]);
+    }
+  }, [name, description, category, price, selectedOption, imageUrls, mainImageUrl]);
+  
   const createProduct = async () => {
     
   const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
@@ -54,12 +67,13 @@ export default function NewProductScreen() {
     addProduct({
       name,
       description,
-      imageUrls: finalImageUrls, 
+      imageUrls: finalImageUrls,
       mainImageUrl,
       category,
       selectedAddress,
-      price,
+      price: selectedOption === "emprestar" ? price : null,
       coordinates,
+      transaction,
     })
       .then(() => {
         toast.show("Produto adicionado com sucesso!", { type: "success" });
@@ -109,7 +123,8 @@ export default function NewProductScreen() {
   
 
 
-  const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
+  const [transaction, setTransaction] = useState<string | number >("doar");
+  
   const [selectedAddress, setSelectedAddress] = useState("");
 
   const currentUserData = useSelector((state: AppState) => state.user.userData);
@@ -136,7 +151,7 @@ export default function NewProductScreen() {
                   style={[
                     styles.carouselImage,
                     (mainImageUrl === url && styles.selectedImage),
-                    (imageUrls.length === 1 && styles.singleImage), 
+                    (imageUrls.length === 1 && styles.singleImage),
                   ]}
                 />
               </TouchableOpacity>
@@ -170,8 +185,8 @@ export default function NewProductScreen() {
                 }
               }))} value={""} />
           </View>
-
-            <DropdownButton
+          
+          <DropdownButton
             label={"Endereço do Produto"}
             options={currentUserData && currentUserData.addresses
               ? currentUserData.addresses.map((address) => ({
@@ -181,15 +196,31 @@ export default function NewProductScreen() {
                 },
               }))
               : []}
-
+            placeholder={"Selecione um endereço"} value={""}          />
+          <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
+            <SegmentedButton
+              options={[
+                { name: "Doar", value: "doar" },
+                { name: "Emprestar", value: "emprestar" },
+              ]}
+              value={transaction}
+              onValueChange={(selectedValue) => {
+                setSelectedOption(selectedValue);
+                setTransaction(selectedValue);
+              }}
+            />
+          </View>\
             placeholder={"Selecione um endereço"} value={""}            />
 
-          <TextInput
-            label="Preço diário"
-            placeholder="Preço diário"
-            value={price}
-            onChangeText={setPrice}
-          ></TextInput>
+          {selectedOption === "emprestar" && (
+
+            <TextInput
+              label="Preço diário"
+              placeholder="Preço diário"
+              value={price}
+              onChangeText={setPrice}
+            />
+          )}
 
         </View>
       </ScrollView>
@@ -221,7 +252,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   singleImage: {
-    borderWidth: 0, 
+    borderWidth: 0,
   },
   imageCarousel: {
     flexDirection: "row",
@@ -231,7 +262,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 7,
-    marginHorizontal:8,
+    marginHorizontal: 8,
   },
   selectedImage: {
     borderWidth: 2,
@@ -253,7 +284,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 10,
-    marginRight:8,
+    marginRight: 8,
   },
   footer: {
     padding: 16,
