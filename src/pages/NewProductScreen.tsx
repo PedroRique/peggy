@@ -41,22 +41,22 @@ export default function NewProductScreen() {
 
   useEffect(() => {
     let isFormValid = !!name && !!description && !!category;
-  
+
     if (selectedOption === "emprestar") {
       isFormValid = isFormValid && !!price;
     }
-  
+
     setFormValid(isFormValid);
-  
+
     if (imageUrls.length === 1 && !mainImageUrl) {
       setMainImageUrl(imageUrls[0]);
     }
   }, [name, description, category, price, selectedOption, imageUrls, mainImageUrl]);
-  
+
   const createProduct = async () => {
-    
-  const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
-    
+
+    //const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
+
     let finalImageUrls = imageUrls;
     if (imageUrls.length === 1 && !mainImageUrl) {
       setMainImageUrl(imageUrls[0]);
@@ -72,7 +72,7 @@ export default function NewProductScreen() {
       category,
       selectedAddress,
       price: selectedOption === "emprestar" ? price : null,
-      coordinates,
+      //coordinates,
       transaction,
     })
       .then(() => {
@@ -102,7 +102,7 @@ export default function NewProductScreen() {
       setImageUrls([...imageUrls, result]);
     }
   };
-  
+
   const createThreeButtonAlert = () =>
     Alert.alert('Choose a Photo Source', 'Select the source for your photo', [
       {
@@ -112,19 +112,19 @@ export default function NewProductScreen() {
       },
       {
         text: 'Gallery',
-        onPress: () => getPhoto('gallery'), 
+        onPress: () => getPhoto('gallery'),
       },
       {
         text: 'Camera',
-        onPress: () => getPhoto('camera'), 
+        onPress: () => getPhoto('camera'),
       },
-[]
+      []
     ]);
-  
 
 
-  const [transaction, setTransaction] = useState<string | number >("doar");
-  
+
+  const [transaction, setTransaction] = useState<string | number>("doar");
+
   const [selectedAddress, setSelectedAddress] = useState("");
 
   const currentUserData = useSelector((state: AppState) => state.user.userData);
@@ -137,7 +137,7 @@ export default function NewProductScreen() {
         <View style={styles.newProductForm}>
           <BoldText style={{ marginBottom: 4 }}>Fotos do produto</BoldText>
           <ScrollView horizontal style={styles.imageCarousel}>
-            <TouchableOpacity style={styles.addImageBtn}  onPress={createThreeButtonAlert}>
+            <TouchableOpacity style={styles.addImageBtn} onPress={createThreeButtonAlert}>
               <Feather name="plus-square" color={PColors.Blue} size={32} />
             </TouchableOpacity>
             {imageUrls.map((url, index) => (
@@ -185,7 +185,7 @@ export default function NewProductScreen() {
                 }
               }))} value={""} />
           </View>
-          
+
           <DropdownButton
             label={"Endereço do Produto"}
             options={currentUserData && currentUserData.addresses
@@ -196,7 +196,7 @@ export default function NewProductScreen() {
                 },
               }))
               : []}
-            placeholder={"Selecione um endereço"} value={""}          />
+            placeholder={"Selecione um endereço"} value={""} />
           <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
             <SegmentedButton
               options={[
@@ -210,7 +210,6 @@ export default function NewProductScreen() {
               }}
             />
           </View>\
-            placeholder={"Selecione um endereço"} value={""}            />
 
           {selectedOption === "emprestar" && (
 
