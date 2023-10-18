@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
+import { ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ export default function ProductScreen() {
   const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
-  const [lenderUserData, setLenderUserData] = useState<UserData>();
+  const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); // Alterado para inicializar como null
   const [rate, setRate] = useState<number>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -56,8 +56,10 @@ export default function ProductScreen() {
   };
 
   const getLenderUserData = async () => {
-    const result = await fetchUserData(product?.userId);
-    setLenderUserData(result);
+    if (product?.userId) {
+      const result = await fetchUserData(product.userId);
+      setLenderUserData(result);
+    }
   };
 
   return (
@@ -89,7 +91,18 @@ export default function ProductScreen() {
         <Text style={styles.productDescription}>{product?.description}</Text>
 
         <View style={styles.userContainer}>
-          <Avatar imageUrl={lenderUserData?.photoURL} />
+        <TouchableOpacity
+          onPress={() => {
+            if (product?.userId) {
+              navigation.navigate("Profile", {
+                uid: product.userId,
+              });
+            }
+          }}
+          >
+  <Avatar imageUrl={lenderUserData?.photoURL} />
+</TouchableOpacity>
+
           <View>
             <BoldText>Emprestado por</BoldText>
             <BoldText size={24}>{lenderUserData?.name}</BoldText>
