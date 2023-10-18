@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,7 +17,7 @@ import { addProduct } from "../services/product.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { formatAddressLabel } from "../services/utils.service";
-import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
+//import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
 import DropdownButton from "../components/DropdownButton.js";
 
 
@@ -42,7 +42,7 @@ export default function NewProductScreen() {
 
   const createProduct = async () => {
 
-    const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
+  //  const coordinates = await fetchCoordinatesFromAddress(selectedAddress);
 
     let finalImageUrls = imageUrls;
     if (imageUrls.length === 1 && !mainImageUrl) {
@@ -59,7 +59,7 @@ export default function NewProductScreen() {
       category,
       selectedAddress,
       price,
-      coordinates,
+     // coordinates,
     })
       .then(() => {
         toast.show("Produto adicionado com sucesso!", { type: "success" });
@@ -88,6 +88,26 @@ export default function NewProductScreen() {
       setImageUrls([...imageUrls, result]);
     }
   };
+  
+  const createThreeButtonAlert = () =>
+    Alert.alert('Choose a Photo Source', 'Select the source for your photo', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Gallery',
+        onPress: () => getPhoto('gallery'), 
+      },
+      {
+        text: 'Camera',
+        onPress: () => getPhoto('camera'), 
+      },
+[]
+    ]);
+  
+
 
   const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -102,7 +122,7 @@ export default function NewProductScreen() {
         <View style={styles.newProductForm}>
           <BoldText style={{ marginBottom: 4 }}>Fotos do produto</BoldText>
           <ScrollView horizontal style={styles.imageCarousel}>
-            <TouchableOpacity style={styles.addImageBtn} onPress={() => getPhoto("gallery")}>
+            <TouchableOpacity style={styles.addImageBtn}  onPress={createThreeButtonAlert}>
               <Feather name="plus-square" color={PColors.Blue} size={32} />
             </TouchableOpacity>
             {imageUrls.map((url, index) => (
@@ -152,20 +172,17 @@ export default function NewProductScreen() {
           </View>
 
             <DropdownButton
-              label={"Endereço do Produto"}
-              options={
-                currentUserData && currentUserData.addresses
-                  ? currentUserData.addresses.map((address) => ({
-                      label: formatAddressLabel(address),
-                      onPress: () => {
-                        setSelectedAddress(formatAddressLabel(address));
-                      },
-                    }))
-                  : []
-              }
-  
-              placeholder={"Selecione um endereço"}
-            />
+            label={"Endereço do Produto"}
+            options={currentUserData && currentUserData.addresses
+              ? currentUserData.addresses.map((address) => ({
+                label: formatAddressLabel(address),
+                onPress: () => {
+                  setSelectedAddress(formatAddressLabel(address));
+                },
+              }))
+              : []}
+
+            placeholder={"Selecione um endereço"} value={""}            />
 
           <TextInput
             label="Preço diário"
