@@ -1,25 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat'; // Importe GiftedChat corretamente
-import { collection, addDoc, doc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig';
-import { Header } from '../components/Header';
-import { useSelector } from 'react-redux';
-import { AppState } from '../store';
+import React, { useState, useEffect } from "react";
+import { GiftedChat, IMessage } from "react-native-gifted-chat"; // Importe GiftedChat corretamente
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  arrayUnion,
+  onSnapshot,
+} from "firebase/firestore";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebaseConfig";
+import { Header } from "../components/Header";
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
 
 export function ChatScreen({ route }: { route: any }) {
   const { chatroomId } = route.params;
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const currentUserUid = FIREBASE_AUTH.currentUser?.uid;
-  const currentUserData = useSelector(
-    (state: AppState) => state.user.userData
-  );
+  const currentUserUid = FIREBASE_AUTH.currentUser?.uid || "";
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   const [localMessages, setLocalMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
-    const messagesRef = collection(FIREBASE_DB, 'conversations', chatroomId, 'messages');
+    const messagesRef = collection(
+      FIREBASE_DB,
+      "conversations",
+      chatroomId,
+      "messages"
+    );
 
-    const unsubscribe = onSnapshot(messagesRef, (querySnapshot) => { // Remova o tipo 'any' do onSnapshot
+    const unsubscribe = onSnapshot(messagesRef, (querySnapshot) => {
       const loadedMessages: IMessage[] = [];
 
       querySnapshot.forEach((doc) => {
@@ -36,7 +45,6 @@ export function ChatScreen({ route }: { route: any }) {
         });
       });
 
-      setMessages(loadedMessages);
       setLocalMessages(loadedMessages);
     });
 
@@ -44,7 +52,12 @@ export function ChatScreen({ route }: { route: any }) {
   }, [chatroomId]);
 
   const onSend = async (newMessages: IMessage[] = []) => {
-    const messagesRef = collection(FIREBASE_DB, 'conversations', chatroomId, 'messages');
+    const messagesRef = collection(
+      FIREBASE_DB,
+      "conversations",
+      chatroomId,
+      "messages"
+    );
 
     const formattedNewMessages = newMessages.map((message) => ({
       _id: Math.random().toString(36).substring(7),
@@ -52,8 +65,8 @@ export function ChatScreen({ route }: { route: any }) {
       createdAt: new Date(),
       user: {
         _id: currentUserUid,
-        name: currentUserData?.name,
-        avatar: currentUserData?.avatar,
+        name: currentUserData?.name || "",
+        avatar: currentUserData?.photoURL || "",
       },
     }));
 
@@ -66,19 +79,21 @@ export function ChatScreen({ route }: { route: any }) {
         message: message.text,
         uid: currentUserUid,
         createdAt: message.createdAt,
-        userName: currentUserData?.name,
-        userAvatar: currentUserData?.avatar,
+        userName: currentUserData?.name || "",
+        userAvatar: currentUserData?.photoURL || "",
       });
     }
 
     // Atualize o campo "lastMessage" na conversa para refletir a última mensagem.
-    const conversaRef = doc(FIREBASE_DB, 'conversations', chatroomId);
+    const conversaRef = doc(FIREBASE_DB, "conversations", chatroomId);
     await updateDoc(conversaRef, {
       lastMessage: {
         text: newMessages[0].text,
         timestamp: new Date(),
       },
-      messages: arrayUnion(...formattedNewMessages.map((message) => message._id)),
+      messages: arrayUnion(
+        ...formattedNewMessages.map((message) => message._id)
+      ),
     });
   };
 
