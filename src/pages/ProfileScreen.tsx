@@ -34,7 +34,6 @@ import { userSlice } from "../store/slices/user.slice";
 import { fetchUserDataById } from "../services/utils.service";
 const coin = require("../../assets/images/coin.png");
 
-
 export default function ProfileScreen() {
   const SectionHeader = ({
     title,
@@ -46,12 +45,11 @@ export default function ProfileScreen() {
     onAdd: () => void;
   }) => {
     const navigation = useNavigation<StackTypes>();
-  
-  
+
     return (
       <View style={styles.myHeader}>
         <BoldText style={styles.myHeaderTitle}>{title}</BoldText>
-   {isOwnProfile &&
+        {isOwnProfile && (
           <Pressable
             style={styles.addButton}
             onPress={() => {
@@ -59,45 +57,42 @@ export default function ProfileScreen() {
             }}
           >
             <Feather name="plus" color={PColors.White} size={32} />
-          </Pressable>}
-        
+          </Pressable>
+        )}
       </View>
     );
   };
-  
+
   const dispatch = useDispatch();
   const route = useRoute();
-  const currentUserData = useSelector(
-    (state: AppState) => state.user.userData
-  );
-  const [currentUserUid, setCurrentUserUid] = useState<string | null>(null);
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
   const [products, setProducts] = useState<Product[]>([]);
   const [isOwnProfile, setIsOwnProfile] = useState(true);
 
-
-
   useEffect(() => {
     if (route.params) {
-      const { uid } = route.params;
+      const { uid } = route.params as any;
       const loadUserProfile = async () => {
         try {
           const userProfileData = await fetchUserDataById(uid);
           if (userProfileData) {
             setIsOwnProfile(currentUserData?.uid === uid);
-            const userProducts = await fetchProductsById(isOwnProfile ? currentUserData?.uid : uid);
+            const userProducts = await fetchProductsById(
+              isOwnProfile ? currentUserData?.uid : uid
+            );
             setProducts(userProducts);
             dispatch(userSlice.actions.setUserData(userProfileData));
           } else {
-            console.log('Usuário não encontrado');
+            console.log("Usuário não encontrado");
           }
         } catch (error) {
-          console.error('Erro ao carregar perfil da outra pessoa:', error);
+          console.error("Erro ao carregar perfil da outra pessoa:", error);
         }
       };
 
       loadUserProfile();
-    }} , [route.params, currentUserData]);
-  
+    }
+  }, [route.params, currentUserData]);
 
   const noBio = isOwnProfile
     ? "Você não possui uma biografia."
@@ -114,10 +109,9 @@ export default function ProfileScreen() {
   const navigation = useNavigation<StackTypes>();
 
   useEffect(() => {
-    isOwnProfile &&
-    getProfileInfo()
-  },[])
-  
+    isOwnProfile && getProfileInfo();
+  }, []);
+
   const getProfileInfo = async () => {
     await getUserProducts();
     await getUserData();
@@ -133,8 +127,8 @@ export default function ProfileScreen() {
     setProducts(result);
   };
 
-  const getPhotoUrl =  async (source: "gallery" ) => {
-    const result =  await pickImage(ImageFolder.USERS, source);
+  const getPhotoUrl = async (source: "gallery") => {
+    const result = await pickImage(ImageFolder.USERS, source);
     updateUserPhotoURL(result);
     dispatch(
       userSlice.actions.setUserData({
@@ -142,7 +136,7 @@ export default function ProfileScreen() {
         photoURL: result,
       })
     );
-  };  
+  };
 
   // const createThreeButtonAlert = () =>
   //   Alert.alert('Choose a Photo Source', 'Select the source for your photo', [
@@ -170,10 +164,10 @@ export default function ProfileScreen() {
       <Header title={currentUserData?.name} hasBorder hasMore={isOwnProfile} />
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
-        <Avatar
+          <Avatar
             size={100}
             imageUrl={currentUserData?.photoURL}
-            onPress={() => getPhotoUrl ("gallery")}
+            onPress={() => getPhotoUrl("gallery")}
           />
 
           <View>
@@ -198,23 +192,35 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
-        {isOwnProfile &&
-        <View style={styles.peggiesContainer}>
-          <BoldText size={20} style={styles.peggiesText}>
-            Você possui:
-          </BoldText>
-          <View style={styles.row}>
-            <Image source={coin} style={styles.coinIcon} />
-            <Text size={36} weight="900">
-              {currentUserData?.balance || 0}
-            </Text>
-            <BoldText size={16}>Peggies</BoldText>
+        {isOwnProfile && (
+          <View style={styles.peggiesContainer}>
+            <BoldText size={20} style={styles.peggiesText}>
+              Você possui:
+            </BoldText>
+            <View style={styles.row}>
+              <Image source={coin} style={styles.coinIcon} />
+              <Text size={36} weight="900">
+                {currentUserData?.balance || 0}
+              </Text>
+              <BoldText size={16}>Peggies</BoldText>
+            </View>
           </View>
-        </View>}
+        )}
         {!isOwnProfile && (
           <View>
-            <TouchableOpacity style={styles.chat}>
-              <Feather name="message-square" color={PColors.Black} size={32}></Feather>
+            <TouchableOpacity
+              style={styles.chat}
+              onPress={() => {
+                navigation.navigate("Chat", {
+                  chatroomId: (currentUserData?.uid || ""),
+                });
+              }}
+            >
+              <Feather
+                name="message-square"
+                color={PColors.Black}
+                size={32}
+              ></Feather>
               <View style={{ alignItems: "center" }}>
                 <BoldText size={24}>Enviar Mensagem</BoldText>
               </View>
@@ -229,7 +235,10 @@ export default function ProfileScreen() {
           />
           <View style={[!products?.length && styles.products]}>
             {products?.length ? (
-              <ProductHorizontalList products={products} hasTrash={isOwnProfile} />
+              <ProductHorizontalList
+                products={products}
+                hasTrash={isOwnProfile}
+              />
             ) : (
               <View style={styles.row}>
                 <Text> {noProduct}</Text>
@@ -289,7 +298,6 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );
@@ -324,10 +332,10 @@ const styles = StyleSheet.create({
   chat: {
     backgroundColor: "#F3F3F3",
     marginHorizontal: 12,
-    marginBottom:20,
+    marginBottom: 20,
     paddingVertical: 20,
     flexDirection: "row",
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
     justifyContent: "space-between",
   },
   myHeader: {

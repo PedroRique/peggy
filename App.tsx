@@ -37,6 +37,8 @@ import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
+import MessagesScreen from "./src/pages/MessagesScreen";
+import { ChatScreen } from "./src/pages/Chat";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -54,6 +56,7 @@ export type StackNavigation = {
     initialTab: LoanType;
   };
   Profile: {uid:string};
+  Chat: {chatroomId:string};
   Main: undefined;
   Product: undefined;
   Login: undefined;
@@ -75,6 +78,7 @@ const TabBarIconMapping: Record<string, string> = {
   Home: "home",
   Profile: "user",
   Loans: "repeat",
+  Messages: "message-square",
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -104,7 +108,9 @@ function Main() {
     >
       <Tab.Screen name="Loans" component={LoansScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />      
+      <Tab.Screen name="Messages" component={MessagesScreen} />
+
     </Tab.Navigator>
   );
 }
@@ -152,6 +158,7 @@ const Navigation = () => {
             <Stack.Screen name="NewProduct" component={NewProductScreen} />
             <Stack.Screen name="NewAddress" component={NewAddressScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
             <Stack.Screen
               name="NewLoanRequest"
               component={NewLoanRequestScreen}

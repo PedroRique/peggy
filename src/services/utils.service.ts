@@ -1,5 +1,5 @@
-import { User } from "firebase/auth";
-import { Query, doc, getDoc, getDocs } from "firebase/firestore";
+import { User, getAuth } from "firebase/auth";
+import { Query, addDoc, collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
 import { Address } from "../models/Address";
 import { LoanStatus, LoanWithInfo } from "../models/Loan";
 import { UserData } from "../models/UserData";
@@ -156,6 +156,35 @@ export const fetchUserDataById = async (
     throw error;
   }
 };
+export const auth = getAuth();
+export const database = getFirestore();
 
+export const createConversation = async (userId1: any, userId2: any) => {
+  const conversationRef = collection(FIREBASE_DB, 'conversations');
+  const newConversationDoc = await addDoc(conversationRef, {
+    members: [userId1, userId2], 
+  });
+  return newConversationDoc.id;
+};
+
+export const getUserConversations = async (userId: unknown) => {
+  const conversationsRef = collection(FIREBASE_DB, 'conversations');
+  const userConversationsQuery = query(
+    conversationsRef,
+    where('members', 'array-contains', userId)
+  );
+  const querySnapshot = await getDocs(userConversationsQuery);
+
+  const userConversations: { id: string; members: any; }[] = [];
+  querySnapshot.forEach((doc) => {
+    const conversationData = doc.data();
+    userConversations.push({
+      id: doc.id,
+      members: conversationData.members,
+    });
+  });
+
+  return userConversations;
+};
 
 
