@@ -2,11 +2,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserData } from "../../models/UserData";
 
 export interface UserState {
-  userData: UserData | null;
+  UserData: UserData | null;
+  profileUserData: UserData | null;
 }
 
 const initialState: UserState = {
-  userData: null,
+  UserData: null,
+  profileUserData: null,
 };
 
 export const userSlice = createSlice({
@@ -14,14 +16,19 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<UserData | null>) => {
-      state.userData = action.payload;
+      state.UserData = action.payload;
     },
-    setNameAndBio: (state, action: PayloadAction<{name: string, bio: string}>) => {
-      state.userData = {
-        ...state.userData,
-        name: action.payload.name, 
-        bio: action.payload.bio
-      };
+    setProfileUserData: (state, action: PayloadAction<UserData | null>) => {
+      state.profileUserData = action.payload;
+    },
+    setNameAndBio: (state, action: PayloadAction<{ name: string; bio: string }>) => {
+      if (state.profileUserData) {
+        state.profileUserData = {
+          ...state.profileUserData,
+          name: action.payload.name,
+          bio: action.payload.bio,
+        };
+      }
     },
   },
 });

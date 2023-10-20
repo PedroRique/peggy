@@ -28,6 +28,7 @@ import NewAddressScreen from "./src/pages/NewAddressScreen";
 import NewLoanRequestScreen from "./src/pages/NewLoanRequestScreen";
 import NewProductScreen from "./src/pages/NewProductScreen";
 import ProductScreen from "./src/pages/ProductScreen";
+import UserProfileScreen from "./src/pages/UserProfileScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import RegisterScreen from "./src/pages/RegisterScreen";
 import SearchScreen from "./src/pages/SearchScreen";
@@ -56,6 +57,7 @@ export type StackNavigation = {
     initialTab: LoanType;
   };
   Profile: {uid:string};
+  UserProfile: {uid:string};
   Chat: {chatroomId:string};
   Main: undefined;
   Product: undefined;
@@ -164,6 +166,7 @@ const Navigation = () => {
               component={NewLoanRequestScreen}
             />
             <Stack.Screen name="Nearby" component={NearbyScreen} />
+            <Stack.Screen name="UserProfile" component={UserProfileScreen} />
           </>
         ) : (
           <>

@@ -94,7 +94,7 @@ export default function ProductScreen() {
         <TouchableOpacity
           onPress={() => {
             if (product?.userId) {
-              navigation.navigate("Profile", {
+              navigation.navigate("UserProfile", {
                 uid: product.userId,
               });
             }
