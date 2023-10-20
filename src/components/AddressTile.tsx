@@ -22,7 +22,7 @@ type AddressTileProps = TouchableOpacityProps & {
 
 export default function AddressTile({
   address,
-  hasTrash = true,
+  hasTrash = false,
   onDelete = () => {},
   ...rest
 }: AddressTileProps) {
