@@ -28,7 +28,7 @@ export default function ProductScreen() {
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
+  const currentUserData = useSelector((state: AppState) => state.user.UserData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
   const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); // Alterado para inicializar como null

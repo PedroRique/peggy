@@ -119,7 +119,7 @@ export default function UserProfileScreen() {
       console.log("IDs antes de ordenar:", [profileUid, loggedUserId]);
       console.log("IDs combinados em ordem alfabética:", combinedIds);
   
-      navigation.navigate("Chat", { chatroomId: combinedIds, name: profileUserData?.name });
+      navigation.navigate("Chat", { chatroomId: combinedIds, name: profileUserData?.name, id1:profileUid , id2:loggedUserId });
     }
   };
   
