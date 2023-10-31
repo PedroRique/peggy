@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GiftedChat, IMessage } from "react-native-gifted-chat"; // Importe GiftedChat corretamente
+import { GiftedChat, IMessage } from "react-native-gifted-chat";
 import {
   collection,
   addDoc,
@@ -16,7 +16,8 @@ import { AppState } from "../store";
 export function ChatScreen({ route }: { route: any }) {
   const { chatroomId } = route.params;
   const currentUserUid = FIREBASE_AUTH.currentUser?.uid || "";
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
+  const currentUserData = useSelector((state: AppState) => state.user.UserData);
+  const profileUserData = useSelector((state: AppState) => state.user.profileUserData);
 
   const [localMessages, setLocalMessages] = useState<IMessage[]>([]);
 
@@ -27,10 +28,10 @@ export function ChatScreen({ route }: { route: any }) {
       chatroomId,
       "messages"
     );
-
+  
     const unsubscribe = onSnapshot(messagesRef, (querySnapshot) => {
       const loadedMessages: IMessage[] = [];
-
+  
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         loadedMessages.push({
@@ -44,12 +45,17 @@ export function ChatScreen({ route }: { route: any }) {
           },
         });
       });
-
+  
+      loadedMessages.sort((a, b) => a.createdAt - b.createdAt);
+      
+      loadedMessages.reverse();
+  
       setLocalMessages(loadedMessages);
     });
-
+  
     return unsubscribe;
   }, [chatroomId]);
+  
 
   const onSend = async (newMessages: IMessage[] = []) => {
     const messagesRef = collection(
@@ -84,7 +90,6 @@ export function ChatScreen({ route }: { route: any }) {
       });
     }
 
-    // Atualize o campo "lastMessage" na conversa para refletir a última mensagem.
     const conversaRef = doc(FIREBASE_DB, "conversations", chatroomId);
     await updateDoc(conversaRef, {
       lastMessage: {
@@ -99,7 +104,7 @@ export function ChatScreen({ route }: { route: any }) {
 
   return (
     <>
-      <Header title={currentUserData?.name} hasBorder hasBack />
+      <Header title={profileUserData?.name} hasBorder hasBack />
       <GiftedChat
         messages={localMessages}
         onSend={(newMessages) => onSend(newMessages)}

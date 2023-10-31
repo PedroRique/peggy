@@ -49,11 +49,13 @@ export default function UserProfileScreen() {
   const profileUserData = useSelector((state: AppState) => state.user.profileUserData);
   const [products, setProducts] = useState<Product[]>([]);
   const [rate, setRate] = useState<number>();
+  const [uid, setUid] = useState<string | undefined>(undefined);
   const loggedUserId = FIREBASE_AUTH.currentUser?.uid;
 
   useEffect(() => {
     if (route.params) {
       const { uid } = route.params as any;
+      setUid(uid); 
       const loadUserProfile = async () => {
         try {
           const userProfileData = await fetchUserDataById(uid);
@@ -68,7 +70,7 @@ export default function UserProfileScreen() {
           console.error("Erro ao carregar perfil da outra pessoa:", error);
         }
       };
-  
+
       loadUserProfile();
     }
   }, [route.params]);
@@ -106,14 +108,22 @@ export default function UserProfileScreen() {
   };
 
   const startChat = () => {
-    const profileUid = route.params;
-
-    const ids = [loggedUserId, profileUid];
-
-    ids.sort();
-    const combinedIds = ids.join('');
-    console.log("IDs combinados em ordem alfabética:", combinedIds);
-  }
+    if (uid && loggedUserId) { 
+      const profileUid = uid;
+  
+      const ids = [profileUid, loggedUserId];
+  
+      ids.sort(); 
+      const combinedIds = ids.join('');
+  
+      console.log("IDs antes de ordenar:", [profileUid, loggedUserId]);
+      console.log("IDs combinados em ordem alfabética:", combinedIds);
+  
+      navigation.navigate("Chat", { chatroomId: combinedIds, name: profileUserData?.name });
+    }
+  };
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <Header title={profileUserData?.name} hasBorder hasBack />
