@@ -39,4 +39,4 @@ export enum LoanStatus {
   RETURNED,
 }
 
-export type LoanType = 'lend' | 'borrow';
+export type LoanType = 'donating' | 'receiving';

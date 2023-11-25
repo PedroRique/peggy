@@ -21,7 +21,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
-  const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
+  const [progressLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
   const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
 
   const onRefresh = useCallback(async () => {
@@ -38,7 +38,8 @@ const LoansTab = ({ type }: { type: LoanType }) => {
     try {
       const result = await fetchLoansWithProductInfo(type);
 
-      checkForPendingRates(result);
+      //Comentando para voltar com o rating numa próxima release.
+      //checkForPendingRates(result);
       const groupedLoans = groupLoansBySection(result);
 
       setPendingLoans(groupedLoans.pending);
@@ -53,8 +54,8 @@ const LoansTab = ({ type }: { type: LoanType }) => {
     const toRateLoans = result.filter(
       (l) =>
         l.status === LoanStatus.RETURNED &&
-        ((l.type === "borrow" && !l.hasBorrowerRate) ||
-          (l.type === "lend" && !l.hasLenderRate))
+        ((l.type === "receiving" && !l.hasBorrowerRate) ||
+          (l.type === "donating" && !l.hasLenderRate))
     );
     if (toRateLoans.length) {
       setLoanToRate(toRateLoans[0]);
@@ -75,17 +76,17 @@ const LoansTab = ({ type }: { type: LoanType }) => {
     >
       <LoansSection
         title="Pendente"
-        emptyText="Nenhum empréstimo pendente."
+        emptyText="Nenhuma doação pendente."
         loans={pendingLoans}
       />
       <LoansSection
         title="Ativos"
-        emptyText="Nenhum empréstimo em progresso."
-        loans={progreesLoans}
+        emptyText="Nenhuma doação em progresso."
+        loans={progressLoans}
       />
       <LoansSection
         title="Histórico"
-        emptyText="Nenhum empréstimo no histórico."
+        emptyText="Nenhuma doação no histórico."
         loans={otherLoans}
       />
       {loanToRate && (
@@ -102,11 +103,11 @@ const LoansTab = ({ type }: { type: LoanType }) => {
 };
 
 const LendingTab = () => {
-  return <LoansTab type="lend" />;
+  return <LoansTab type="donating" />;
 };
 
 const BorrowingTab = () => {
-  return <LoansTab type="borrow" />;
+  return <LoansTab type="receiving" />;
 };
 
 function LoanTabs() {
@@ -115,9 +116,7 @@ function LoanTabs() {
   return (
     <Tab.Navigator
       initialRouteName={
-        route.params?.initialTab === "borrow"
-          ? "Pegando Emprestado"
-          : "Emprestando"
+        route.params?.initialTab === "receiving" ? "Recebendo" : "Doando"
       }
       screenOptions={{
         tabBarIndicatorStyle: {
@@ -125,8 +124,8 @@ function LoanTabs() {
         },
       }}
     >
-      <Tab.Screen name="Emprestando" component={LendingTab} />
-      <Tab.Screen name="Pegando Emprestado" component={BorrowingTab} />
+      <Tab.Screen name="Doando" component={LendingTab} />
+      <Tab.Screen name="Recebendo" component={BorrowingTab} />
     </Tab.Navigator>
   );
 }
