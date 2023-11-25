@@ -5,7 +5,7 @@ export const fetchCoordinatesFromAddress = async (address: string | number | boo
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         address
-      )}&key=AIzaSyBadXr4D0wLV8t40rEmzAj5PLKsB-Oqago`
+      )}&key=AIzaSyCTibYe1I54EqpM1pYBEXyPm2OXuSU5gjQ`
     );
 
     if (response.data.results.length > 0) {

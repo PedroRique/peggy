@@ -7,3 +7,8 @@ export interface Address {
   latitude?: number | null;
   longitude?: number | null;
 }
+
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
