@@ -62,7 +62,7 @@ export default function LoginScreen() {
       });
   };
 
-  const handleForgotPassword = () => {};
+  const handleForgotPassword = () => { };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,13 +87,17 @@ export default function LoginScreen() {
               value={password}
               onChangeText={setPassword}
             />
-
-            <BoldText
-              style={[styles.forgotPassword, styles.forgotText]}
-              onPress={handleForgotPassword}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Forgot");
+              }}
             >
-              Esqueceu a senha?
-            </BoldText>
+              <BoldText
+                style={[styles.forgotPassword, styles.forgotText]}
+              >
+                Esqueceu a senha?
+              </BoldText>
+            </TouchableOpacity>
           </View>
         </View>
         <View>
