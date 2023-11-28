@@ -121,7 +121,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={userData?.name} hasBorder hasMore />
+      <Header title={"Seu perfil"} hasBorder hasMore />
       <ScrollView>
         <View style={styles.avatarContainer}>
         <Avatar
@@ -132,7 +132,8 @@ export default function ProfileScreen() {
 
           <View>
             <View>
-              <Rate value={userData?.rate} color={PColors.Blue} />
+              <BoldText style={{ fontSize: '24px'}}>{userData?.name}</BoldText>
+              {/* <Rate value={userData?.rate} color={PColors.Blue} /> */}
             </View>
             {userData?.bio ? (
               <Text style={styles.avatarBio}>{userData?.bio}</Text>
@@ -150,7 +151,8 @@ export default function ProfileScreen() {
             )}
           </View>
         </View>
-        <View style={styles.peggiesContainer}>
+        {//Comentado temporariamente
+        /* <View style={styles.peggiesContainer}>
           <BoldText size={20} style={styles.peggiesText}>
             Você possui:
           </BoldText>
@@ -161,12 +163,12 @@ export default function ProfileScreen() {
             </Text>
             <BoldText size={16}>Peggies</BoldText>
           </View>
-        </View>
+        </View> */}
 
         {hasAddress && (
           <View style={styles.myContainer}>
             <SectionHeader
-              title="Seus produtos"
+              title="Doações"
               route="NewProduct"
               onAdd={getProfileInfo}
             />
@@ -193,7 +195,7 @@ export default function ProfileScreen() {
 
         <View style={styles.myContainer}>
           <SectionHeader
-            title="Seus endereços"
+            title="Pontos de encontro"
             route="NewAddress"
             onAdd={getProfileInfo}
           />

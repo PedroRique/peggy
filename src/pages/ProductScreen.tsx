@@ -28,7 +28,7 @@ export default function ProductScreen() {
   const categories = useSelector(
     (state: AppState) => state.category.categories
   );
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
+  const currentUserData = useSelector((state: AppState) => state.user.UserData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
   const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); // Alterado para inicializar como null
@@ -71,7 +71,8 @@ export default function ProductScreen() {
       >
         <View style={styles.productInner}>
           <Header hasBack color={PColors.White}>
-            <Rate value={rate} color={PColors.White} />
+            {//Comentado temporariamente
+            /* <Rate value={rate} color={PColors.White} /> */}
           </Header>
         </View>
       </ImageBackground>
@@ -112,10 +113,11 @@ export default function ProductScreen() {
 
       {!isLoading && currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
-          <PriceTag
+          {//Comentado temporariamente
+          /* <PriceTag
             price={Number(product?.price)}
             balance={currentUserData?.balance}
-          />
+          /> */}
           <View style={{ flex: 1 }}>
             <Button
               title="Pegar emprestado"

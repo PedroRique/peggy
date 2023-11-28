@@ -45,7 +45,7 @@ export default function NewLoanRequestScreen() {
   const borrowerUserData = useSelector(
     (state: AppState) => state.loan.selectedLoan?.borrower
   );
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
+  const currentUserData = useSelector((state: AppState) => state.user.UserData);
 
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
@@ -325,7 +325,8 @@ export default function NewLoanRequestScreen() {
               ></TextInput>
             </View>
           </View>
-          <View style={styles.row}>
+          {//Comentado temporariamente
+          /* <View style={styles.row}>
             <View style={{ flex: 2 }}>
               <CalendarDrop
                 label="Devolver no dia"
@@ -352,7 +353,7 @@ export default function NewLoanRequestScreen() {
                 mask={hourMask}
               ></TextInput>
             </View>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <View style={styles.footer}>

@@ -68,11 +68,11 @@ export default function UserProfileScreen() {
           console.error("Erro ao carregar perfil da outra pessoa:", error);
         }
       };
-  
+
       loadUserProfile();
     }
   }, [route.params]);
-  
+
 
   const noBio = "Este usuário não possui uma biografia.";
 
@@ -116,7 +116,7 @@ export default function UserProfileScreen() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={profileUserData?.name} hasBorder hasBack />
+      <Header hasBorder hasBack />
       <ScrollView>
         <View style={styles.avatarContainer}>
           <Avatar
@@ -125,7 +125,8 @@ export default function UserProfileScreen() {
           />
           <View>
             <View>
-              <Rate value={profileUserData?.rate} color={PColors.Blue} />
+              <BoldText style={{ fontSize: '24px' }}>{profileUserData?.name}</BoldText>
+              {/* <Rate value={profileUserData?.rate} color={PColors.Blue} /> */}
             </View>
             {profileUserData?.bio ? (
               <Text style={styles.avatarBio}>{profileUserData?.bio}</Text>
@@ -136,7 +137,8 @@ export default function UserProfileScreen() {
             )}
           </View>
         </View>
-        <View>
+        {//Comentado temporariamente
+        /* <View>
           <TouchableOpacity
             style={styles.chat}
             onPress={startChat}
@@ -150,10 +152,10 @@ export default function UserProfileScreen() {
               <BoldText size={24}>Enviar Mensagem</BoldText>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.myContainer}>
           <SectionHeader
-            title="Produtos"
+            title="Doações"
           />
           <View style={[!products?.length && styles.products]}>
             {products?.length ? (
@@ -178,7 +180,7 @@ export default function UserProfileScreen() {
         </View>
         <View style={styles.myContainer}>
           <SectionHeader
-            title="Endereços"
+            title="Pontos de encontro"
           />
           <View style={styles.addresses}>
             {profileUserData?.addresses?.length ? (
