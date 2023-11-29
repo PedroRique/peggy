@@ -55,18 +55,18 @@ export default function NewLoanRequestScreen() {
   const [giveBackTime, setGiveBackTime] = useState("");
   const [sentence, setSentence] = useState(<></>);
   const [formValid, setFormValid] = useState(false);
-  const [rate, setRate] = useState<number>();
+  // const [rate, setRate] = useState<number>();
   const [unavailableDates, setUnavailableDates] = useState<LoanDate[]>([]);
 
   useEffect(() => {
     getLenderUserData();
-    getProductRate();
+    // getProductRate();
   }, []);
 
-  const getProductRate = async () => {
-    const rate = await getRate(product?.ratings);
-    setRate(rate);
-  };
+  // const getProductRate = async () => {
+  //   const rate = await getRate(product?.ratings);
+  //   setRate(rate);
+  // };
 
   const fetchLoanDates = async (productId: string) => {
     const dates = await fetchAcceptedLoanDatesForProduct(productId);
@@ -275,12 +275,12 @@ export default function NewLoanRequestScreen() {
             <BoldText size={24} numberOfLines={2}>
               {product?.name}
             </BoldText>
-            <Rate value={rate} />
+            {/* <Rate value={rate} /> */}
           </View>
         )}
 
         <View style={styles.loanForm}>
-          <DropdownButton
+          {/* <DropdownButton
             label={"Buscar e devolver em"}
             placeholder={"Selecione um endereço"}
             options={
@@ -295,7 +295,7 @@ export default function NewLoanRequestScreen() {
             }
             editable={!loan}
             value={address}
-          />
+          /> */}
 
           <View style={styles.row}>
             <View style={{ flex: 2 }}>

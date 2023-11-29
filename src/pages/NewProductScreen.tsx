@@ -127,7 +127,7 @@ export default function NewProductScreen() {
 
   const [selectedAddress, setSelectedAddress] = useState("");
 
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
+  const currentUserData = useSelector((state: AppState) => state.user.UserData);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -197,7 +197,8 @@ export default function NewProductScreen() {
               }))
               : []}
             placeholder={"Selecione um endereço"} value={""} />
-          <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
+          {//comentado temporariamente
+          /* <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
             <SegmentedButton
               options={[
                 { name: "Doar", value: "doar" },
@@ -219,7 +220,7 @@ export default function NewProductScreen() {
               value={price}
               onChangeText={setPrice}
             />
-          )}
+          )} */}
 
         </View>
       </ScrollView>

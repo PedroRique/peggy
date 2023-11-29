@@ -90,19 +90,20 @@ export default function ProductScreen() {
         )}
 
         <Text style={styles.productDescription}>{product?.description}</Text>
+        <Text style={styles.productDescription}>{product?.selectedAddress}</Text>
 
         <View style={styles.userContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            if (product?.userId) {
-              navigation.navigate("UserProfile", {
-                uid: product.userId,
-              });
-            }
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              if (product?.userId) {
+                navigation.navigate("UserProfile", {
+                  uid: product.userId,
+                });
+              }
+            }}
           >
-  <Avatar imageUrl={lenderUserData?.photoURL} />
-</TouchableOpacity>
+            <Avatar imageUrl={lenderUserData?.photoURL} />
+          </TouchableOpacity>
 
           <View>
             <BoldText>Emprestado por</BoldText>
