@@ -85,7 +85,7 @@ export default function NewAddressScreen() {
             onChangeText={setStreet}
           />
 
-          <View style={styles.row}>
+          <View>
             <TextInput
               label="Número"
               placeholder="Digite o número"
@@ -172,5 +172,5 @@ const styles = StyleSheet.create({
   footer: {
     padding: 16,
   },
-  row: { display: "flex", gap: 12, flexDirection: "row" },
+
 });

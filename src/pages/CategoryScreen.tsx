@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   bannerInner: {
     height: 150,
     width: "100%",
-    paddingHorizontal: 16,
     backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   categoryBody: {

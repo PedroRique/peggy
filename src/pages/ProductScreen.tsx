@@ -31,7 +31,7 @@ export default function ProductScreen() {
   const currentUserData = useSelector((state: AppState) => state.user.UserData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
-  const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); // Alterado para inicializar como null
+  const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); 
   const [rate, setRate] = useState<number>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
   productInner: {
     height: 200,
     width: "100%",
-    paddingHorizontal: 16,
     backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   productBody: {
