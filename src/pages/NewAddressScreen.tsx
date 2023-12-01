@@ -10,10 +10,7 @@ import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
 import { PColors } from "../shared/Colors";
 import { CheckBox } from "react-native";
-import axios from "axios";
 import { Address } from "../models/Address";
-//import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
-import CalendarDropDown from "../components/Calendar";
 
 export default function NewAddressScreen() {
   const toast = useToast();
@@ -50,26 +47,16 @@ export default function NewAddressScreen() {
         addressData.referencePoint = referencePoint;
       }
 
-      // const coordinates = await fetchCoordinatesFromAddress(
-      //   addressData.number + " " + addressData.street + ", " + addressData.city
-      // );
-  
-      // if (coordinates) {
-      //   const updatedAddress = { ...addressData, ...coordinates };
-  
-      //   await addAddress(updatedAddress);
-      // } else {
-      //   console.log("Endereço não encontrado.");
-      // }
+    await addAddress(addressData);
 
-      toast.show("Endereço adicionado com sucesso!", { type: "success" });
-      navigation.goBack();
-      route.params.onAdd();
-    } catch (error) {
-      console.error(error);
-      toast.show("Falha ao criar o endereço.");
-    }
-  };
+    toast.show("Endereço adicionado com sucesso!", { type: "success" });
+    navigation.goBack();
+    route.params.onAdd();
+  } catch (error) {
+    console.error(error);
+    toast.show("Falha ao criar o endereço.");
+  }
+};
 
 
   return (

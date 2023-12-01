@@ -86,14 +86,20 @@ export const updateUserPushToken = async (pushToken?: string) => {
 export const addAddress = async (address: Address) => {
   try {
     const user = FIREBASE_AUTH.currentUser;
+    console.log("User:", user);
+
     if (user) {
       const ref = doc(FIREBASE_DB, "users", user.uid);
+      console.log("Reference:", ref);
+
       await updateDoc(ref, { addresses: arrayUnion(address) });
+      console.log("Address added successfully!");
     }
   } catch (error) {
     console.error(error);
   }
 };
+
 export const removeAddress = async (address: Address) => {
   try {
     const user = FIREBASE_AUTH.currentUser;
