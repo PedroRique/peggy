@@ -56,19 +56,25 @@ export default function CategoryScreen() {
           <BoldText size={32}>{selectedCategory?.name}</BoldText>
         </View>
 
-        <View style={styles.products}>
-          {products.map((product, i) => (
-            <ProductCard
-              key={i}
-              product={product}
-              onPress={() => {
-                dispatch(loanSlice.actions.setSelectedLoan(null));
-                dispatch(productSlice.actions.setSelectedProduct(product));
-                navigation.navigate("Product");
-              }}
-            ></ProductCard>
-          ))}
-        </View>
+        {products.length > 0 ? (
+          <View style={styles.products}>
+            {products.map((product, i) => (
+              <ProductCard
+                key={i}
+                product={product}
+                onPress={() => {
+                  dispatch(loanSlice.actions.setSelectedLoan(null));
+                  dispatch(productSlice.actions.setSelectedProduct(product));
+                  navigation.navigate("Product");
+                }}
+              ></ProductCard>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.noItensCategory}>
+            <BoldText>Não há itens ainda para essa categoria </BoldText>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -106,5 +112,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
+    justifyContent:"space-evenly"
+  },
+  noItensCategory: {
+    backgroundColor: PColors.LightBlue,
+    textAlign:"center",
+    borderRadius: 7,
+    padding: 16,
+    marginTop: 16,
+    gap: 6,
+    
   },
 });

@@ -9,6 +9,7 @@ import {
 import { Category } from "../models/Category";
 import { PColors } from "../shared/Colors";
 import { BoldText } from "./Text/BoldText";
+import React from "react";
 
 type CategoryTileProps = TouchableOpacityProps & { category: Category };
 
