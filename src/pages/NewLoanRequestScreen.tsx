@@ -79,25 +79,25 @@ export default function NewLoanRequestScreen() {
 
   useEffect(() => {
     setFormValid(
-      !!address &&
+      // !!address &&
         !!startDate &&
-        !!endDate &&
+        // !!endDate &&
         !!pickUpTime &&
-        !!giveBackTime &&
-        pickUpTime.length == 5 &&
-        giveBackTime.length == 5 &&
-        !isBefore(startDate, startOfDay(new Date())) &&
-        !isBefore(endDate, startDate)
+        // !!giveBackTime &&
+        pickUpTime.length == 5
+        // giveBackTime.length == 5 
+        // !isBefore(startDate, startOfDay(new Date())) &&
+        // !isBefore(endDate, startDate)
     );
-  }, [address, startDate, endDate, pickUpTime, giveBackTime]);
+  }, [startDate ,pickUpTime]);
 
   useEffect(() => {
     if (loan) {
       setStartDate(new Date(loan.startDate));
-      setEndDate(new Date(loan.endDate));
+      // setEndDate(new Date(loan.endDate));
       setPickUpTime(loan.pickUpTime);
-      setGiveBackTime(loan.giveBackTime);
-      setAddress(loan.address);
+      // setGiveBackTime(loan.giveBackTime);
+      // setAddress(loan.address);
     }
   }, [loan]);
 
@@ -124,9 +124,9 @@ export default function NewLoanRequestScreen() {
 
   const onCreate = () => {
     const req: LoanRequest = {
-      address,
-      endDate: endDate!.toISOString(),
-      giveBackTime,
+      // address,
+      // endDate: endDate!.toISOString(),
+      // giveBackTime,
       pickUpTime,
       borrowerUserId: FIREBASE_AUTH.currentUser?.uid || "",
       lenderUserId: product?.userId || "",

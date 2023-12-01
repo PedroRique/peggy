@@ -3,13 +3,13 @@ import { UserData } from "./UserData";
 
 export interface LoanDate {
   startDate: string;
-  endDate: string;
+  // endDate: string;
 }
 
 export interface LoanRequest extends LoanDate {
   pickUpTime: string;
-  giveBackTime: string;
-  address: string;
+  // giveBackTime: string;
+  // address: string;
   borrowerUserId: string;
   lenderUserId: string;
   productId: string;
