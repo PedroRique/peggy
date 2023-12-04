@@ -37,7 +37,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   const getLoans = async () => {
     try {
       const result = await fetchLoansWithProductInfo(type);
-
+      console.log(result);
       checkForPendingRates(result);
       const groupedLoans = groupLoansBySection(result);
 
