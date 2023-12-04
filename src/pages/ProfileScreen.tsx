@@ -30,6 +30,7 @@ import {
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { userSlice } from "../store/slices/user.slice";
+import { Address } from "../models/Address";
 const coin = require("../../assets/images/coin.png");
 
 const SectionHeader = ({
@@ -201,7 +202,7 @@ export default function ProfileScreen() {
           />
           <View style={styles.addresses}>
             {userData?.addresses?.length ? (
-              userData.addresses.map((address, i) => (
+              userData.addresses.map((address: Address, i: React.Key | null | undefined) => (
                 <AddressTile
                   key={i}
                   address={address}

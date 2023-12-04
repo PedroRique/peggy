@@ -139,7 +139,7 @@ export default function NewProductScreen() {
 
   const [selectedAddress, setSelectedAddress] = useState("");
 
-  const currentUserData = useSelector((state: AppState) => state.user.UserData);
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   return (
     <SafeAreaView style={styles.container}>
