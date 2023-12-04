@@ -37,6 +37,7 @@ import { convertUserToUserData } from "./src/services/utils.service";
 import { PColors } from "./src/shared/Colors";
 import { persistor, store } from "./src/store";
 import { userSlice } from "./src/store/slices/user.slice";
+import ForgotScreen from "./src/pages/ForgotScreen ";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -69,6 +70,7 @@ export type StackNavigation = {
   Category: undefined;
   Nearby: undefined;
   EditProfile: undefined;
+  Forgot: undefined;
 };
 
 const TabBarIconMapping: Record<string, string> = {
@@ -162,6 +164,7 @@ const Navigation = () => {
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Forgot" component={ForgotScreen} />
           </>
         )}
       </Stack.Navigator>

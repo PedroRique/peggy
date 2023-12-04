@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail, 
   updateProfile,
 } from "firebase/auth";
 import {
@@ -176,6 +177,14 @@ export const updateEditProfile = async ({
       await updateProfile(user, { displayName: name });
       await updateDoc(doc(FIREBASE_DB, "users", user.uid), { bio, name });
     }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendPasswordReset = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(FIREBASE_AUTH, email);
   } catch (error) {
     throw error;
   }
