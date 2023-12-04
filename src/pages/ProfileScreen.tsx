@@ -132,7 +132,7 @@ export default function ProfileScreen() {
 
           <View>
             <View>
-              <BoldText style={{ fontSize: '24px'}}>{userData?.name}</BoldText>
+              <BoldText style={styles.font}>{userData?.name}</BoldText>
               {/* <Rate value={userData?.rate} color={PColors.Blue} /> */}
             </View>
             {userData?.bio ? (
@@ -247,6 +247,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     backgroundColor: "white",
+  },
+  font:{
+    fontSize:24
   },
   avatarContainer: {
     display: "flex",
