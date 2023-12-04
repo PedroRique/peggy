@@ -94,13 +94,13 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Header>Vamos emprestar!</Header>
-
+{/* comentado temporariamente
         <View style={{ paddingHorizontal: 16 }}>
           <TextInput
             placeholder="O que você precisa, Pedro?"
             onFocus={() => navigation.navigate("Search")}
           />
-        </View>
+        </View> */}
 
         <NearbyTitle />
         <ProductHorizontalList products={sortedProducts} showDistance />

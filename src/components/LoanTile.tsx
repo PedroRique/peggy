@@ -21,7 +21,7 @@ type LoanTileProps = TouchableOpacityProps & {
 };
 
 export default function LoanTile({ loan, ...rest }: LoanTileProps) {
-  const userData = useSelector((state: AppState) => state.user.userData);
+  const userData = useSelector((state: AppState) => state.user.UserData);
 
   const [firstSentence, setFirstSentence] = useState<JSX.Element | null>(<></>);
   const [secondSentence, setSecondSentence] = useState<JSX.Element | null>(
@@ -33,7 +33,7 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
   }, [userData]);
 
   const getSentence = () => {
-    const { startDate, endDate, borrower, lender } = loan;
+    const { startDate, borrower, lender } = loan;
     const acceptedOrDenied =
       loan.status === LoanStatus.ACCEPTED || loan.status === LoanStatus.DENIED;
     const name =
@@ -54,7 +54,7 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
 
     
     const startDateFormatted = format(new Date(startDate), 'dd/MM/yyyy');
-    const endDateFormatted = format(new Date(endDate), 'dd/MM/yyyy');
+
 
     const secondSentence =
       loan.status !== LoanStatus.PENDING &&
@@ -63,7 +63,7 @@ export default function LoanTile({ loan, ...rest }: LoanTileProps) {
         <>em "Z"</>
       ) : (
         <>
-          de {startDateFormatted} até {endDateFormatted}
+          de {startDateFormatted}
         </>
       );
 

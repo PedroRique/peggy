@@ -205,21 +205,17 @@ export default function NewProductScreen() {
 
           <DropdownButton
             label={"Endereço do Produto"}
-            options={
-              currentUserData && currentUserData.addresses
-                ? currentUserData.addresses.map((address) => ({
-                    label: formatAddressLabel(address),
-                    onPress: () => {
-                      setSelectedAddress(formatAddressLabel(address));
-                    },
-                  }))
-                : []
-            }
-            placeholder={"Selecione um endereço"}
-            value={""}
-          />
-          {/* Comentando enquanto não temos empréstimo */}
-          {/* <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
+            options={currentUserData && currentUserData.addresses
+              ? currentUserData.addresses.map((address) => ({
+                label: formatAddressLabel(address),
+                onPress: () => {
+                  setSelectedAddress(formatAddressLabel(address));
+                },
+              }))
+              : []}
+            placeholder={"Selecione um endereço"} value={""} />
+          {//comentado temporariamente
+          /* <View style={selectedOption === "emprestar" ? { marginBottom: 16 } : null}>
             <SegmentedButton
               options={[
                 { name: "Doar", value: "doar" },
@@ -231,7 +227,7 @@ export default function NewProductScreen() {
                 setTransaction(selectedValue);
               }}
             />
-          </View> */}
+          </View> *}
 
           {selectedOption === "emprestar" && (
             <TextInput
@@ -240,7 +236,8 @@ export default function NewProductScreen() {
               value={price}
               onChangeText={setPrice}
             />
-          )}
+          )} */}
+
         </View>
       </ScrollView>
 

@@ -31,7 +31,7 @@ export default function ProductScreen() {
   const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   const [categoryLabel, setCategoryLabel] = useState("");
-  const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); // Alterado para inicializar como null
+  const [lenderUserData, setLenderUserData] = useState<UserData | null>(null); 
   const [rate, setRate] = useState<number>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -71,7 +71,8 @@ export default function ProductScreen() {
       >
         <View style={styles.productInner}>
           <Header hasBack color={PColors.White}>
-            <Rate value={rate} color={PColors.White} />
+            {//Comentado temporariamente
+            /* <Rate value={rate} color={PColors.White} /> */}
           </Header>
         </View>
       </ImageBackground>
@@ -89,19 +90,20 @@ export default function ProductScreen() {
         )}
 
         <Text style={styles.productDescription}>{product?.description}</Text>
+        <Text style={styles.productDescription}>{product?.selectedAddress}</Text>
 
         <View style={styles.userContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            if (product?.userId) {
-              navigation.navigate("Profile", {
-                uid: product.userId,
-              });
-            }
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              if (product?.userId) {
+                navigation.navigate("UserProfile", {
+                  uid: product.userId,
+                });
+              }
+            }}
           >
-  <Avatar imageUrl={lenderUserData?.photoURL} />
-</TouchableOpacity>
+            <Avatar imageUrl={lenderUserData?.photoURL} />
+          </TouchableOpacity>
 
           <View>
             <BoldText>Emprestado por</BoldText>
@@ -112,10 +114,11 @@ export default function ProductScreen() {
 
       {!isLoading && currentUserData?.uid !== lenderUserData?.uid && (
         <View style={styles.productFooter}>
-          <PriceTag
+          {//Comentado temporariamente
+          /* <PriceTag
             price={Number(product?.price)}
             balance={currentUserData?.balance}
-          />
+          /> */}
           <View style={{ flex: 1 }}>
             <Button
               title="Pegar emprestado"
@@ -149,7 +152,6 @@ const styles = StyleSheet.create({
   productInner: {
     height: 200,
     width: "100%",
-    paddingHorizontal: 16,
     backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   productBody: {

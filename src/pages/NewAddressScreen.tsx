@@ -9,11 +9,7 @@ import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import { addAddress } from "../services/user.service";
 import { PColors } from "../shared/Colors";
-import { CheckBox } from "react-native";
-import axios from "axios";
 import { Address } from "../models/Address";
-//import { fetchCoordinatesFromAddress } from "../components/googleMapsAPI";
-import CalendarDropDown from "../components/Calendar";
 
 export default function NewAddressScreen() {
   const toast = useToast();
@@ -29,10 +25,6 @@ export default function NewAddressScreen() {
   useEffect(() => {
     setFormValid(!!street && !!number && (!addReferencePoint || !!referencePoint));
   }, [street, number, addReferencePoint, referencePoint]);
-
-  const handleReferencePointToggle = () => {
-    setAddReferencePoint(!addReferencePoint);
-  };
 
   const createAddress = async () => {
     try {
@@ -50,26 +42,16 @@ export default function NewAddressScreen() {
         addressData.referencePoint = referencePoint;
       }
 
-      // const coordinates = await fetchCoordinatesFromAddress(
-      //   addressData.number + " " + addressData.street + ", " + addressData.city
-      // );
-  
-      // if (coordinates) {
-      //   const updatedAddress = { ...addressData, ...coordinates };
-  
-      //   await addAddress(updatedAddress);
-      // } else {
-      //   console.log("Endereço não encontrado.");
-      // }
+    await addAddress(addressData);
 
-      toast.show("Endereço adicionado com sucesso!", { type: "success" });
-      navigation.goBack();
-      route.params.onAdd();
-    } catch (error) {
-      console.error(error);
-      toast.show("Falha ao criar o endereço.");
-    }
-  };
+    toast.show("Endereço adicionado com sucesso!", { type: "success" });
+    navigation.goBack();
+    route.params.onAdd();
+  } catch (error) {
+    console.error(error);
+    toast.show("Falha ao criar o endereço.");
+  }
+};
 
 
   return (
@@ -85,7 +67,7 @@ export default function NewAddressScreen() {
             onChangeText={setStreet}
           />
 
-          <View style={styles.row}>
+          <View>
             <TextInput
               label="Número"
               placeholder="Digite o número"
@@ -99,24 +81,13 @@ export default function NewAddressScreen() {
               onChangeText={setComplement}
             />
 
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <Text>Deseja adicionar ponto de referência?</Text>
-            <CheckBox
-              value={addReferencePoint}
-              onValueChange={handleReferencePointToggle}
-            />
-          </View>
-
-          {addReferencePoint && (
             <TextInput
-              label="Ponto de referência"
+              label="Ponto de referência (opcional)"
               placeholder="Digite um ponto de referência"
               value={referencePoint}
               onChangeText={setreferencePoint}
             />
-          )}
+         </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
@@ -172,5 +143,5 @@ const styles = StyleSheet.create({
   footer: {
     padding: 16,
   },
-  row: { display: "flex", gap: 12, flexDirection: "row" },
+
 });

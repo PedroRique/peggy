@@ -45,7 +45,7 @@ export default function NewLoanRequestScreen() {
   const borrowerUserData = useSelector(
     (state: AppState) => state.loan.selectedLoan?.borrower
   );
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
+  const currentUserData = useSelector((state: AppState) => state.user.UserData);
 
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
@@ -55,18 +55,18 @@ export default function NewLoanRequestScreen() {
   const [giveBackTime, setGiveBackTime] = useState("");
   const [sentence, setSentence] = useState(<></>);
   const [formValid, setFormValid] = useState(false);
-  const [rate, setRate] = useState<number>();
+  // const [rate, setRate] = useState<number>();
   const [unavailableDates, setUnavailableDates] = useState<LoanDate[]>([]);
 
   useEffect(() => {
     getLenderUserData();
-    getProductRate();
+    // getProductRate();
   }, []);
 
-  const getProductRate = async () => {
-    const rate = await getRate(product?.ratings);
-    setRate(rate);
-  };
+  // const getProductRate = async () => {
+  //   const rate = await getRate(product?.ratings);
+  //   setRate(rate);
+  // };
 
   const fetchLoanDates = async (productId: string) => {
     const dates = await fetchAcceptedLoanDatesForProduct(productId);
@@ -79,25 +79,25 @@ export default function NewLoanRequestScreen() {
 
   useEffect(() => {
     setFormValid(
-      !!address &&
+      // !!address &&
         !!startDate &&
-        !!endDate &&
+        // !!endDate &&
         !!pickUpTime &&
-        !!giveBackTime &&
-        pickUpTime.length == 5 &&
-        giveBackTime.length == 5 &&
-        !isBefore(startDate, startOfDay(new Date())) &&
-        !isBefore(endDate, startDate)
+        // !!giveBackTime &&
+        pickUpTime.length == 5
+        // giveBackTime.length == 5 
+        // !isBefore(startDate, startOfDay(new Date())) &&
+        // !isBefore(endDate, startDate)
     );
-  }, [address, startDate, endDate, pickUpTime, giveBackTime]);
+  }, [startDate ,pickUpTime]);
 
   useEffect(() => {
     if (loan) {
       setStartDate(new Date(loan.startDate));
-      setEndDate(new Date(loan.endDate));
+      // setEndDate(new Date(loan.endDate));
       setPickUpTime(loan.pickUpTime);
-      setGiveBackTime(loan.giveBackTime);
-      setAddress(loan.address);
+      // setGiveBackTime(loan.giveBackTime);
+      // setAddress(loan.address);
     }
   }, [loan]);
 
@@ -124,9 +124,9 @@ export default function NewLoanRequestScreen() {
 
   const onCreate = () => {
     const req: LoanRequest = {
-      address,
-      endDate: endDate!.toISOString(),
-      giveBackTime,
+      // address,
+      // endDate: endDate!.toISOString(),
+      // giveBackTime,
       pickUpTime,
       borrowerUserId: FIREBASE_AUTH.currentUser?.uid || "",
       lenderUserId: product?.userId || "",
@@ -276,12 +276,12 @@ export default function NewLoanRequestScreen() {
             <BoldText size={24} numberOfLines={2}>
               {product?.name}
             </BoldText>
-            <Rate value={rate} />
+            {/* <Rate value={rate} /> */}
           </View>
         )}
 
         <View style={styles.loanForm}>
-          <DropdownButton
+          {/* <DropdownButton
             label={"Buscar e devolver em"}
             placeholder={"Selecione um endereço"}
             options={
@@ -296,7 +296,7 @@ export default function NewLoanRequestScreen() {
             }
             editable={!loan}
             value={address}
-          />
+          /> */}
 
           <View style={styles.row}>
             <View style={{ flex: 2 }}>
@@ -326,7 +326,8 @@ export default function NewLoanRequestScreen() {
               ></TextInput>
             </View>
           </View>
-          <View style={styles.row}>
+          {//Comentado temporariamente
+          /* <View style={styles.row}>
             <View style={{ flex: 2 }}>
               <CalendarDrop
                 label="Devolver no dia"
@@ -353,7 +354,7 @@ export default function NewLoanRequestScreen() {
                 mask={hourMask}
               ></TextInput>
             </View>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <View style={styles.footer}>

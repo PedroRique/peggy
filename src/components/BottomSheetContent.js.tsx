@@ -80,9 +80,7 @@ const BottomSheetContent: React.FC<BottomSheetContentProps> = ({ onClose, option
       </ScrollView>
       {selectedOptions && (
         <View style={styles.footer}>
-          <footer>
           <Button onPress={handleApplyButtonPress} title='Aplicar' />
-          </footer>
       </View>
       )}
     </View>
@@ -96,10 +94,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     position: 'absolute',
-    bottom: '-20.7px',
-    left: '-20.7px',
-    right: '-20.7px',
-    maxHeight: '600px',
+    bottom: -20.7, 
+    left: -20.7,
+    right: -20.7, 
+    maxHeight: 600,
   },
   header: {
     flexDirection: 'row',
