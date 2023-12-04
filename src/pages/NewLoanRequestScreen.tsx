@@ -136,7 +136,7 @@ export default function NewLoanRequestScreen() {
 
     createLoan(req, product)
       .then(() => {
-        navigation.navigate("Loans", { initialTab: "borrow" });
+        navigation.navigate("Loans", { initialTab: "receiving" });
         toast.show("Solicitação feita com sucesso!", { type: "success" });
       })
       .catch(() => {
@@ -239,7 +239,8 @@ export default function NewLoanRequestScreen() {
         <View style={{ flex: 1 }}>
           <Button
             title={buttonTitle}
-            onPress={() => onUpdateStatus(LoanStatus.PROGRESS)}
+            //Alterando o status enquanto não temos empréstimo, não tem o status de progress.
+            onPress={() => onUpdateStatus(LoanStatus.RETURNED)}
           />
         </View>
       );

@@ -11,10 +11,7 @@ import { Address } from "../models/Address";
 import { LoanStatus } from "../models/Loan";
 import { Product } from "../models/Product";
 import { removeProduct } from "../services/product.service";
-import {
-  calculateDistance,
-  convertFloatToDistance,
-} from "../services/utils.service";
+import { convertFloatToDistance } from "../services/utils.service";
 import { PColors } from "../shared/Colors";
 import ConfirmationModal from "./ConfirmationModal";
 import { BoldText } from "./Text/BoldText";
@@ -27,7 +24,6 @@ interface ProductCardProps extends TouchableOpacityProps {
   hasName?: boolean;
   hasTrash?: boolean;
   size?: number;
-  address?: Address;
 }
 
 export const ProductCard = ({
@@ -40,32 +36,10 @@ export const ProductCard = ({
   hasShadow = true,
   hasName = true,
   hasTrash = false,
-  address,
   ...rest
 }: ProductCardProps) => {
   const [isRemoved, setIsRemoved] = useState(false);
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
-
-  const distance = useMemo(() => {
-    if (address && product) {
-      const { latitude, longitude } = address;
-      const { coordinates } = product;
-      if (
-        latitude &&
-        longitude &&
-        coordinates?.latitude &&
-        coordinates?.longitude
-      ) {
-        const distance = calculateDistance(
-          latitude,
-          longitude,
-          coordinates.latitude,
-          coordinates.longitude
-        );
-        return convertFloatToDistance(distance);
-      }
-    }
-  }, [address, product]);
 
   const handleDeleteConfirm = () => {
     setIsConfirmationVisible(false);
@@ -108,7 +82,9 @@ export const ProductCard = ({
             {showDistance && (
               <View style={styles.distanceContainer}>
                 <Feather name="map-pin" size={16} color={PColors.Blue} />
-                <Text style={styles.distance}>{distance}</Text>
+                <Text style={styles.distance}>
+                  {convertFloatToDistance(product.distance || 0)}
+                </Text>
               </View>
             )}
           </ImageBackground>

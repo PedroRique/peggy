@@ -11,4 +11,5 @@ export interface Product {
   price: number;
   ratings?: string[];
   locked?: boolean;
+  distance?: number;
 }

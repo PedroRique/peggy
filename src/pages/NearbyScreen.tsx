@@ -1,31 +1,32 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import _ from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { StackTypes } from "../../App";
-import DropdownButton from "../components/DropdownButton.js";
 import { Header } from "../components/Header";
 import { ProductCard } from "../components/ProductCard";
-import {
-  fetchProductCoordinates,
-  fetchProducts,
-} from "../services/product.service";
-import { formatAddressLabel } from "../services/utils.service";
+import { Address } from "../models/Address";
+import { fetchProducts } from "../services/product.service";
+import { addDistanceToProducts } from "../services/utils.service";
 import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
-import { Address } from "../models/Address";
+import { GetPosition } from "../components/GetPosition";
 
 export const NearbyScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackTypes>();
   const products = useSelector((state: AppState) => state.product.nearProducts);
+  const position = useSelector((state: AppState) => state.user.position);
 
-  const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
+  const sortedProducts = useMemo(() => {
+    return addDistanceToProducts(products, position);
+  }, [products, position]);
+
+  // const [showMyAddressesDropDown, setShowMyAddressesDropDown] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<Address>();
-
-  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   useEffect(() => {
     fetchProducts()
@@ -39,12 +40,15 @@ export const NearbyScreen = () => {
 
   return (
     <View style={styles.Container}>
+      <GetPosition />
       <Header title={"Por perto"} hasBack />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.dropdownContainer}>
+        {/* Comentando temporariamente */}
+        {/* <View style={styles.dropdownContainer}>
           <DropdownButton
             label={"Onde você está?"}
+            value=""
             options={
               currentUserData && currentUserData.addresses
                 ? currentUserData.addresses.map((address) => ({
@@ -57,26 +61,22 @@ export const NearbyScreen = () => {
             }
             placeholder={"Selecione um endereço"}
           />
-        </View>
+        </View> */}
         <View style={styles.center}>
           <FlatList
             style={styles.products}
-            data={products}
+            data={sortedProducts}
             numColumns={2}
             columnWrapperStyle={{ justifyContent: "space-evenly" }}
             renderItem={({ item }) => (
               <ProductCard
                 key={item.uid}
                 product={item}
-                address={selectedAddress}
                 showDistance
                 onPress={async () => {
                   dispatch(loanSlice.actions.setSelectedLoan(null));
                   dispatch(productSlice.actions.setSelectedProduct(item));
                   navigation.navigate("Product");
-
-                  const coordinates = await fetchProductCoordinates(item.uid!);
-                  console.log("Coordinates for product:", coordinates);
                 }}
               ></ProductCard>
             )}

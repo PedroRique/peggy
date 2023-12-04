@@ -1,9 +1,11 @@
 import { User } from "firebase/auth";
 import { Query, doc, getDoc, getDocs } from "firebase/firestore";
-import { Address } from "../models/Address";
-import { LoanStatus, LoanWithInfo } from "../models/Loan";
-import { UserData } from "../models/UserData";
+import _ from "lodash";
 import { FIREBASE_DB } from "../../firebaseConfig";
+import { Address, Coordinates } from "../models/Address";
+import { LoanStatus, LoanWithInfo } from "../models/Loan";
+import { Product } from "../models/Product";
+import { UserData } from "../models/UserData";
 
 export const commonFetch = async <T>(q: Query) => {
   const snap = await getDocs(q);
@@ -34,7 +36,6 @@ export const formatAddressCoordenadas = (address: Address): string => {
 
   return `${latitude} ${longitude}`;
 };
-
 
 export const convertUserToUserData = (user: User | null): UserData | null => {
   if (!user) return null;
@@ -98,16 +99,59 @@ export const getDateObject = (date: string): Date | null => {
   return dateObject;
 };
 
-
 export const getDatesBetween = (startDate: string, endDate: string) => {
   let daysBetween: string[] = [];
-  for (let currentDate = new Date(startDate); currentDate <= new Date(endDate); currentDate.setDate(currentDate.getDate() + 1)) {
+  for (
+    let currentDate = new Date(startDate);
+    currentDate <= new Date(endDate);
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
     const formattedDate = currentDate.toISOString().split("T")[0];
     daysBetween.push(formattedDate);
   }
 
   return daysBetween;
-}
+};
+
+export const addDistanceToProducts = (
+  products: Product[],
+  position: Coordinates | null
+) => {
+  return _.orderBy(
+    products.map((p) => {
+      return {
+        ...p,
+        distance: calculateProductDistanceToPosition(p, position),
+      };
+    }),
+    ["distance"]
+  );
+};
+
+export const calculateProductDistanceToPosition = (
+  product: Product,
+  position: Coordinates | null
+) => {
+  if (position) {
+    const { latitude, longitude } = position;
+    if (latitude && longitude && product) {
+      const { coordinates } = product;
+      if (
+        latitude &&
+        longitude &&
+        coordinates?.latitude &&
+        coordinates?.longitude
+      ) {
+        return calculateDistance(
+          latitude,
+          longitude,
+          coordinates.latitude,
+          coordinates.longitude
+        );
+      }
+    }
+  }
+};
 
 export const calculateDistance = (
   lat1: number,
@@ -142,7 +186,7 @@ export const fetchUserDataById = async (
   userId: string
 ): Promise<UserData | null> => {
   try {
-    const userDocRef = doc(FIREBASE_DB, "users", userId); 
+    const userDocRef = doc(FIREBASE_DB, "users", userId);
 
     const userDocSnapshot = await getDoc(userDocRef);
 
@@ -156,6 +200,3 @@ export const fetchUserDataById = async (
     throw error;
   }
 };
-
-
-

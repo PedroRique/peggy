@@ -1,6 +1,6 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,8 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
 import { userSlice } from "../store/slices/user.slice";
+import { GetPosition } from "../components/GetPosition";
+import { addDistanceToProducts } from "../services/utils.service";
 
 const NearbyTitle = () => {
   const navigation = useNavigation<StackTypes>();
@@ -52,6 +54,11 @@ export default function HomeScreen() {
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState<Product[]>();
+  const position = useSelector((state: AppState) => state.user.position);
+
+  const sortedProducts = useMemo(() => {
+    return products ? addDistanceToProducts(products, position) : [];
+  }, [products, position]);
 
   useEffect(() => {
     init();
@@ -80,6 +87,8 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <GetPosition />
+
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -94,7 +103,7 @@ export default function HomeScreen() {
         </View> */}
 
         <NearbyTitle />
-        <ProductHorizontalList products={products} showDistance />
+        <ProductHorizontalList products={sortedProducts} showDistance />
 
         <CategoriesTitle />
         <ScrollView contentContainerStyle={styles.categoriesList}>
@@ -143,6 +152,5 @@ const styles = StyleSheet.create({
     display: "flex",
     gap: 16,
     paddingHorizontal: 16,
-    
   },
 });

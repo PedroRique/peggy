@@ -1,13 +1,16 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserData } from "../../models/UserData";
+import { Coordinates } from "../../models/Address";
 
 export interface UserState {
-  UserData: UserData | null;
+  userData: UserData | null;
+  position: Coordinates | null;
   profileUserData: UserData | null;
 }
 
 const initialState: UserState = {
-  UserData: null,
+  userData: null,
+  position: null,
   profileUserData: null,
 };
 
@@ -16,7 +19,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<UserData | null>) => {
-      state.UserData = action.payload;
+      state.userData = action.payload;
     },
     setProfileUserData: (state, action: PayloadAction<UserData | null>) => {
       state.profileUserData = action.payload;
@@ -29,6 +32,12 @@ export const userSlice = createSlice({
           bio: action.payload.bio,
         };
       }
+    },
+    setUserPosition: (
+      state,
+      action: PayloadAction<{ position: Coordinates }>
+    ) => {
+      state.position = action.payload.position;
     },
   },
 });
