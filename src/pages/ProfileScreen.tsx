@@ -61,7 +61,7 @@ const SectionHeader = ({
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
-  const userData = useSelector((state: AppState) => state.user.UserData);
+  const userData = useSelector((state: AppState) => state.user.userData);
   const [products, setProducts] = useState<Product[]>([]);
 
   const noBio = "Você não possui uma biografia.";
@@ -142,10 +142,12 @@ export default function ProfileScreen() {
               <Text style={styles.avatarBio}>
                 {noBio}{" "}
                 <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("EditProfile");
-                  }}
-                >
+                    onPress={() => {
+                      navigation.navigate("EditProfile", {
+                        onAdd: () => getProfileInfo(),
+                      });
+                    }}
+                  >
                   <Text color={PColors.Blue}>Adicione.</Text>
                 </TouchableOpacity>
               </Text>

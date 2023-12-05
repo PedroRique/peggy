@@ -1,10 +1,10 @@
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
-import { StackTypes } from "../../App";
+import { StackNavigation, StackTypes } from "../../App";
 import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
@@ -19,6 +19,7 @@ import CalendarDrop from "../components/Calendar";
 export default function EditProfileScreen() {
   const dispatch = useDispatch();
   const toast = useToast();
+  const route = useRoute<RouteProp<StackNavigation, "EditProfile">>();
   const navigation = useNavigation<StackTypes>();
   const userData = useSelector((state: AppState) => state.user.userData);
 
@@ -37,7 +38,8 @@ export default function EditProfileScreen() {
         toast.show("Perfil atualizado com sucesso!", {
           type: "success",
         });
-        navigation.navigate("Profile");
+        navigation.goBack();
+        route.params.onAdd();
       })
       .catch((e) => {
         toast.show("Ocorreu um erro ao tentar atualizar seu perfil", {

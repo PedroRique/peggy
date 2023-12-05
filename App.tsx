@@ -55,9 +55,12 @@ export type StackNavigation = {
   Loans?: {
     initialTab: LoanType;
   };
-  Profile: {uid:string};
-  UserProfile: {uid:string};
-  Chat: {chatroomId:string};
+  Profile: {
+    uid: string;
+    onAdd: () => void;
+  };
+  UserProfile: { uid: string };
+  Chat: { chatroomId: string };
   Main: undefined;
   Product: undefined;
   Login: undefined;
@@ -72,7 +75,9 @@ export type StackNavigation = {
   NewLoanRequest: undefined;
   Category: undefined;
   Nearby: undefined;
-  EditProfile: undefined;
+  EditProfile:  {
+    onAdd: () => void;
+  };
   Forgot: undefined;
 };
 

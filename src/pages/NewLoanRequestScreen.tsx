@@ -45,7 +45,7 @@ export default function NewLoanRequestScreen() {
   const borrowerUserData = useSelector(
     (state: AppState) => state.loan.selectedLoan?.borrower
   );
-  const currentUserData = useSelector((state: AppState) => state.user.UserData);
+  const currentUserData = useSelector((state: AppState) => state.user.userData);
 
   const [lenderUserData, setLenderUserData] = useState<UserData>();
   const [address, setAddress] = useState<string>("");
@@ -80,16 +80,16 @@ export default function NewLoanRequestScreen() {
   useEffect(() => {
     setFormValid(
       // !!address &&
-        !!startDate &&
-        // !!endDate &&
-        !!pickUpTime &&
-        // !!giveBackTime &&
-        pickUpTime.length == 5
-        // giveBackTime.length == 5 
-        // !isBefore(startDate, startOfDay(new Date())) &&
-        // !isBefore(endDate, startDate)
+      !!startDate &&
+      // !!endDate &&
+      !!pickUpTime &&
+      // !!giveBackTime &&
+      pickUpTime.length == 5
+      // giveBackTime.length == 5 
+      // !isBefore(startDate, startOfDay(new Date())) &&
+      // !isBefore(endDate, startDate)
     );
-  }, [startDate ,pickUpTime]);
+  }, [startDate, pickUpTime]);
 
   useEffect(() => {
     if (loan) {
@@ -154,9 +154,8 @@ export default function NewLoanRequestScreen() {
     [LoanStatus.PENDING]: isLoanRequest()
       ? "Empreste para"
       : "Quero pegar emprestado de",
-    [LoanStatus.ACCEPTED]: `Empréstimo aprovado ${
-      isLoanRequest() ? "para" : "por"
-    }`,
+    [LoanStatus.ACCEPTED]: `Empréstimo aprovado ${isLoanRequest() ? "para" : "por"
+      }`,
     [LoanStatus.DENIED]: `Empréstimo negado ${isLoanRequest() ? "a" : "por"}`,
     [LoanStatus.PROGRESS]: isLoanRequest()
       ? "Emprestando para"
@@ -175,8 +174,8 @@ export default function NewLoanRequestScreen() {
       name = isLoanRequest()
         ? borrowerUserData?.name
         : loan.status === LoanStatus.CANCELED
-        ? "Você"
-        : lenderUserData?.name;
+          ? "Você"
+          : lenderUserData?.name;
 
       sentenceTxt = sentenceMap[loan.status];
     }
@@ -209,14 +208,20 @@ export default function NewLoanRequestScreen() {
             <View style={{ flex: 1 }}>
               <Button
                 title="Negar"
-                onPress={() => onUpdateStatus(LoanStatus.DENIED)}
+                onPress={() => {
+                  onUpdateStatus(LoanStatus.DENIED);
+                  navigation.navigate("Loans");
+                }}
                 outlined
               />
             </View>
             <View style={{ flex: 1 }}>
               <Button
                 title="Aceitar"
-                onPress={() => onUpdateStatus(LoanStatus.ACCEPTED)}
+                onPress={() => {
+                  onUpdateStatus(LoanStatus.ACCEPTED);
+                  navigation.navigate("Loans");
+                }}
               />
             </View>
           </>
@@ -226,7 +231,10 @@ export default function NewLoanRequestScreen() {
           <View style={{ flex: 1 }}>
             <Button
               title="Cancelar"
-              onPress={() => onUpdateStatus(LoanStatus.CANCELED)}
+              onPress={() => {
+                onUpdateStatus(LoanStatus.CANCELED);
+                navigation.goBack();
+              }}
             />
           </View>
         );

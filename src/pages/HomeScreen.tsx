@@ -18,7 +18,7 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { categorySlice } from "../store/slices/category.slice";
 import { userSlice } from "../store/slices/user.slice";
-import { GetPosition } from "../components/GetPosition";
+// import { GetPosition } from "../components/GetPosition";
 import { addDistanceToProducts } from "../services/utils.service";
 
 const NearbyTitle = () => {
@@ -87,7 +87,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <GetPosition />
+      {/* <GetPosition /> */}
 
       <ScrollView
         contentContainerStyle={styles.scrollContainer}

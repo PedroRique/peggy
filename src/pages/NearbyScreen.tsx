@@ -13,7 +13,7 @@ import { PColors } from "../shared/Colors";
 import { AppState } from "../store";
 import { loanSlice } from "../store/slices/loan.slice";
 import { productSlice } from "../store/slices/product.slice";
-import { GetPosition } from "../components/GetPosition";
+// import { GetPosition } from "../components/GetPosition";
 
 export const NearbyScreen = () => {
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ export const NearbyScreen = () => {
 
   return (
     <View style={styles.Container}>
-      <GetPosition />
+      {/* <GetPosition /> */}
       <Header title={"Por perto"} hasBack />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
