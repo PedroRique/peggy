@@ -1,13 +1,16 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GestureResponderEvent, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import { StackTypes } from "../../App";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { ModalMore } from "./ModalMore";
 import { BoldText } from "./Text/BoldText";
+import { fetchCurrentUserData } from "../services/user.service";
+import { userSlice } from "../store/slices/user.slice";
+import { useDispatch } from "react-redux";
 
 export interface MenuAction {
   label: string;
@@ -45,13 +48,26 @@ export const Header = ({
     setModalVisible(false);
   };
 
+  const dispatch = useDispatch();
+
+  const getProfileInfo = () => {
+    getUserData();
+  };
+
+  const getUserData = async () => {
+    const result = await fetchCurrentUserData();
+    dispatch(userSlice.actions.setUserData(result || null));
+  };
+
   const botoes: MenuAction[] = [
     {
       label: "Editar Perfil",
       icon: "edit",
       action: () => {
         hideModal();
-        navigation.navigate("EditProfile");
+        navigation.navigate("EditProfile", {
+          onAdd: () => getProfileInfo(),
+        });
       },
     },
     {
@@ -119,3 +135,4 @@ const styles = StyleSheet.create({
     top: 30,
   },
 });
+

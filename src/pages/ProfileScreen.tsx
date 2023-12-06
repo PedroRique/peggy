@@ -122,7 +122,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Seu perfil"} hasBorder hasMore />
+      <Header title={"Seu perfil"} hasBorder hasMore/>
       <ScrollView>
         <View style={styles.avatarContainer}>
         <Avatar
