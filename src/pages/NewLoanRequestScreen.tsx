@@ -153,22 +153,22 @@ export default function NewLoanRequestScreen() {
   const sentenceMap = {
     [LoanStatus.PENDING]: isLoanRequest()
       ? "Empreste para"
-      : "Quero pegar emprestado de",
-    [LoanStatus.ACCEPTED]: `Empréstimo aprovado ${
+      : "Quero uma doação de",
+    [LoanStatus.ACCEPTED]: `Doação aprovada ${
       isLoanRequest() ? "para" : "por"
     }`,
-    [LoanStatus.DENIED]: `Empréstimo negado ${isLoanRequest() ? "a" : "por"}`,
+    [LoanStatus.DENIED]: `Doação negada ${isLoanRequest() ? "a" : "por"}`,
     [LoanStatus.PROGRESS]: isLoanRequest()
       ? "Emprestando para"
       : "Pegando emprestado de",
-    [LoanStatus.CANCELED]: "Empréstimo cancelado por",
+    [LoanStatus.CANCELED]: "Doação cancelada por",
     [LoanStatus.RETURNED]: isLoanRequest()
-      ? "Emprestou para"
-      : "Pegou emprestado de",
+      ? "Doou para"
+      : "Recebeu doação de",
   };
 
   const getSentence = (loan: LoanWithInfo | null) => {
-    let sentenceTxt = "Quero pegar emprestado de";
+    let sentenceTxt = "Quero uma doação de";
     let name: string | null | undefined = lenderUserData?.name;
 
     if (loan) {

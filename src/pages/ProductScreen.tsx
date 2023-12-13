@@ -121,7 +121,7 @@ export default function ProductScreen() {
           /> */}
           <View style={{ flex: 1 }}>
             <Button
-              title="Pegar emprestado"
+              title="Solicitar doação"
               disabled={
                 !!((currentUserData?.balance || 0) < Number(product?.price))
               }

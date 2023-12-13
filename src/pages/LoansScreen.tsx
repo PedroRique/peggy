@@ -21,7 +21,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [otherLoans, setOtherLoans] = useState<LoanWithInfo[]>([]);
-  const [progressLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
+  const [progreesLoans, setProgressLoans] = useState<LoanWithInfo[]>([]);
   const [pendingLoans, setPendingLoans] = useState<LoanWithInfo[]>([]);
 
   const onRefresh = useCallback(async () => {
@@ -38,8 +38,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
     try {
       const result = await fetchLoansWithProductInfo(type);
 
-      //Comentando para voltar com o rating numa próxima release.
-      //checkForPendingRates(result);
+      checkForPendingRates(result);
       const groupedLoans = groupLoansBySection(result);
 
       setPendingLoans(groupedLoans.pending);
@@ -82,7 +81,7 @@ const LoansTab = ({ type }: { type: LoanType }) => {
       <LoansSection
         title="Ativos"
         emptyText="Nenhuma doação em progresso."
-        loans={progressLoans}
+        loans={progreesLoans}
       />
       <LoansSection
         title="Histórico"
@@ -103,11 +102,11 @@ const LoansTab = ({ type }: { type: LoanType }) => {
 };
 
 const LendingTab = () => {
-  return <LoansTab type="donating" />;
+  return <LoansTab type="lend" />;
 };
 
 const BorrowingTab = () => {
-  return <LoansTab type="receiving" />;
+  return <LoansTab type="borrow" />;
 };
 
 function LoanTabs() {
@@ -115,15 +114,15 @@ function LoanTabs() {
 
   return (
     <Tab.Navigator
-      initialRouteName={
-        route.params?.initialTab === "receiving" ? "Recebendo" : "Doando"
-      }
-      screenOptions={{
-        tabBarIndicatorStyle: {
-          backgroundColor: PColors.Orange,
-        },
-      }}
-    >
+    initialRouteName={
+      route.params?.initialTab === "receiving" ? "Recebendo" : "Doando"
+    }
+    screenOptions={{
+      tabBarIndicatorStyle: {
+        backgroundColor: PColors.Orange,
+      },
+    }}
+  >
       <Tab.Screen name="Doando" component={LendingTab} />
       <Tab.Screen name="Recebendo" component={BorrowingTab} />
     </Tab.Navigator>
@@ -133,7 +132,7 @@ function LoanTabs() {
 export default function LoansScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Empréstimos"} hasBorder />
+      <Header title={"Doações"} hasBorder />
       <LoanTabs></LoanTabs>
     </SafeAreaView>
   );

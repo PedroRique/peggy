@@ -25,18 +25,18 @@ const LoanStatusMessage = ({
 
 export const LOAN_TILE_STATUS_MESSAGES = {
   [LoanStatus.PENDING]: (props: StatusMessagesProps) => (
-    <LoanStatusMessage middleText="quer pegar emprestado" {...props} />
+    <LoanStatusMessage middleText="quer uma doação de" {...props} />
   ),
   [LoanStatus.ACCEPTED]: (props: StatusMessagesProps) => (
     <LoanStatusMessage
-      middleText="aprovou o empréstimo de"
+      middleText="aprovou a doação de"
       emoji={"👌"}
       {...props}
     />
   ),
   [LoanStatus.DENIED]: (props: StatusMessagesProps) => (
     <LoanStatusMessage
-      middleText="negou o empréstimo de"
+      middleText="negou a doação de"
       emoji={"😕"}
       {...props}
     />
@@ -46,13 +46,13 @@ export const LOAN_TILE_STATUS_MESSAGES = {
   ),
   [LoanStatus.CANCELED]: (props: StatusMessagesProps) => (
     <LoanStatusMessage
-      middleText="cancelou o empréstimo de"
+      middleText="cancelou a doação de"
       emoji={"😕"}
       {...props}
     />
   ),
   [LoanStatus.RETURNED]: (props: StatusMessagesProps) => (
-    <LoanStatusMessage middleText="pegou emprestado" emoji="👏" {...props} />
+    <LoanStatusMessage middleText="recebeu" emoji="👏" {...props} />
   ),
 };
 

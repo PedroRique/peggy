@@ -230,7 +230,7 @@ export default function ProfileScreen() {
                     Para que você possa adicionar items, primeiro adicione um
                     endereço. Seus endereços serão seus{" "}
                     <BoldText>pontos de encontro</BoldText> com quem desejar
-                    pegar emprestado algum item seu.
+                    doar algum item seu.
                   </Text>
                 </View>
               </View>
