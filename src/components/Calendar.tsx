@@ -111,7 +111,9 @@ const CalendarDrop: React.FC<CalendarDropProps> = ({
                 name="x"
                 size={30}
                 color={PColors.Black}
-                onPress={closeModal}
+                onPress={() => {
+                  closeModal();  
+                }}
               />
             </View>
             <Calendar

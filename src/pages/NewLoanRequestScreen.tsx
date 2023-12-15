@@ -57,7 +57,7 @@ export default function NewLoanRequestScreen() {
   const [formValid, setFormValid] = useState(false);
   // const [rate, setRate] = useState<number>();
   const [unavailableDates, setUnavailableDates] = useState<LoanDate[]>([]);
-
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     getLenderUserData();
     // getProductRate();
@@ -306,9 +306,7 @@ export default function NewLoanRequestScreen() {
                 editable={!loan}
                 value={startDate}
                 unavailableDates={unavailableDates}
-                onClose={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
+                onClose={() => setModalVisible(false)}
                 onSelectDate={function (date: Date | null): void {
                   setStartDate(date);
                 }}
